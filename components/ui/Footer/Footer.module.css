@@ -1,0 +1,88 @@
+.footer {
+  position: relative;
+  overflow: hidden;
+  color: var(--paper);
+  /* The brochure cover gradient, green into grey. */
+  background: linear-gradient(170deg, var(--green-deep) 0%, #2f4724 45%, #545a50 100%);
+}
+
+.texture {
+  position: absolute;
+  inset: 0;
+  /* The back-cover pattern: dark lines fading out toward the grey, as printed. */
+  color: #0b120a;
+  opacity: 0.42;
+  pointer-events: none;
+}
+
+.inner {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.4fr repeat(3, 1fr);
+  gap: 2.5rem var(--gutter);
+  padding-block: clamp(5rem, 9vw, 8rem) 4rem;
+}
+
+.logo {
+  width: clamp(150px, 16vw, 230px);
+  filter: brightness(0) invert(0.95) !important;
+}
+.tag {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-style: normal;
+  font-size: 0.95rem;
+}
+.col h2 {
+  margin-bottom: 0.75rem;
+  opacity: 0.6;
+}
+.col ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.col a {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.5s var(--ease-out);
+}
+.col a:hover,
+.col a:focus-visible {
+  background-size: 100% 1px;
+}
+
+.base {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  justify-content: space-between;
+  padding-block: 1.25rem 1.75rem;
+  border-top: 1px solid var(--rule-light);
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+@media (max-width: 900px) {
+  .inner {
+    grid-template-columns: 1fr 1fr;
+  }
+  .brand {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 520px) {
+  .inner {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,323 @@
+/* Built for the dark green contact section: paper text, green-bright accents. */
+.form {
+  display: grid;
+  gap: 1.75rem;
+  color: var(--paper);
+}
+
+/* ── Progress ── */
+.progress {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: rgba(243, 241, 234, 0.6);
+}
+.bar {
+  position: relative;
+  flex: 1;
+  height: 1px;
+  background: rgba(243, 241, 234, 0.2);
+}
+.bar span {
+  position: absolute;
+  inset: 0;
+  background: var(--green-bright);
+  transform-origin: 0 50%;
+  transition: transform 0.7s var(--ease-out);
+}
+
+/* ── Steps ── */
+.step {
+  display: grid;
+  gap: 1.25rem;
+}
+.step[hidden] {
+  display: none;
+}
+.step[data-active] {
+  animation: stepIn 0.7s var(--ease-out) both;
+}
+.step[data-dir='-1'][data-active] {
+  animation-name: stepBack;
+}
+@keyframes stepIn {
+  from {
+    opacity: 0;
+    transform: translateX(28px);
+  }
+}
+@keyframes stepBack {
+  from {
+    opacity: 0;
+    transform: translateX(-28px);
+  }
+}
+
+.stepTitle {
+  font-family: var(--font-serif);
+  font-weight: 380;
+  font-size: clamp(1.7rem, 3vw, 2.6rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  outline: none;
+}
+
+.hint {
+  font-size: 0.9rem;
+  color: rgba(243, 241, 234, 0.6);
+}
+
+.fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.8rem;
+}
+
+.stack {
+  display: grid;
+  gap: 1.6rem;
+}
+
+/* ── Chips (checkbox / radio pills) ── */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+.chip {
+  position: relative;
+  cursor: pointer;
+}
+.chip input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  margin: 0;
+  cursor: pointer;
+}
+.chip span {
+  display: inline-block;
+  padding: 0.7rem 1.15rem;
+  border: 1px solid rgba(243, 241, 234, 0.35);
+  border-radius: 999px;
+  font-size: 0.95rem;
+  line-height: 1.2;
+  transition:
+    background-color 0.3s linear,
+    border-color 0.3s linear,
+    color 0.3s linear,
+    transform 0.5s var(--ease-out);
+}
+.chip:hover span {
+  border-color: var(--paper);
+}
+.chip input:checked + span {
+  background: var(--green-bright);
+  border-color: var(--green-bright);
+  color: var(--green-ink);
+  transform: scale(1.03);
+}
+.chip input:focus-visible + span {
+  outline: 2px solid var(--paper);
+  outline-offset: 3px;
+}
+
+/* ── Text fields: just an underline ── */
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.4rem 1.5rem;
+}
+.field {
+  display: grid;
+  gap: 0.45rem;
+}
+.fieldLabel {
+  font-size: var(--fs-meta);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(243, 241, 234, 0.6);
+}
+.fieldLabel em {
+  font-style: normal;
+  letter-spacing: 0.08em;
+  text-transform: none;
+  opacity: 0.7;
+}
+.field input,
+.field textarea {
+  width: 100%;
+  padding: 0.6rem 0 0.7rem;
+  border: 0;
+  border-bottom: 1px solid rgba(243, 241, 234, 0.35);
+  background: transparent;
+  color: var(--paper);
+  font: inherit;
+  font-size: 1.1rem;
+  border-radius: 0;
+  transition: border-color 0.3s linear;
+}
+.field textarea {
+  resize: vertical;
+  min-height: 6.5rem;
+  line-height: 1.5;
+}
+.field input::placeholder,
+.field textarea::placeholder {
+  color: rgba(243, 241, 234, 0.35);
+}
+.field input:focus,
+.field textarea:focus {
+  outline: none;
+  border-bottom-color: var(--green-bright);
+}
+.field [aria-invalid] {
+  border-bottom-color: #f0a37a;
+}
+
+.error {
+  font-size: 0.85rem;
+  color: #f0a37a;
+}
+.failure {
+  padding: 0.9rem 1.1rem;
+  border: 1px solid rgba(240, 163, 122, 0.6);
+  border-radius: 12px;
+  font-size: 0.95rem;
+}
+.failure a {
+  border-bottom: 1px solid currentColor;
+}
+
+.honeypot {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+/* ── Actions ── */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.5rem;
+}
+.next {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1.1rem 1.9rem;
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--green-deep);
+  font-weight: 600;
+  font-size: 1rem;
+  transition:
+    background-color 0.4s var(--ease-out),
+    gap 0.4s var(--ease-out);
+}
+.next:hover,
+.next:focus-visible {
+  background: var(--green-bright);
+  color: var(--green-ink);
+  gap: 1.1rem;
+}
+.next:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+.back {
+  font-weight: 500;
+  color: rgba(243, 241, 234, 0.75);
+}
+.back:hover {
+  color: var(--paper);
+}
+.whatsapp {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 1.05rem 1.6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(243, 241, 234, 0.4);
+  font-weight: 500;
+  transition: border-color 0.3s linear, background-color 0.3s linear;
+}
+.whatsapp::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #25d366;
+}
+.whatsapp:hover {
+  border-color: var(--paper);
+  background: rgba(243, 241, 234, 0.06);
+}
+
+/* ── Sent ── */
+.thanks {
+  position: relative;
+  min-height: 22rem;
+  border-radius: 20px;
+  overflow: hidden;
+  background: rgba(243, 241, 234, 0.06);
+  border: 1px solid rgba(243, 241, 234, 0.15);
+}
+.thanksInner {
+  display: grid;
+  gap: 1rem;
+  padding: clamp(1.75rem, 4vw, 3rem);
+}
+.thanksInner :global(.t-meta) {
+  color: var(--green-bright);
+}
+.thanksTitle {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+.thanksBody {
+  max-width: 42ch;
+  color: rgba(243, 241, 234, 0.75);
+}
+.thanksBody a {
+  color: var(--paper);
+  border-bottom: 1px solid currentColor;
+}
+
+@media (max-width: 768px) {
+  .grid2 {
+    grid-template-columns: 1fr;
+  }
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .actions > * {
+    justify-content: center;
+    text-align: center;
+  }
+  .actions :global(span[style*='inline-block']) {
+    display: block !important;
+  }
+  .next {
+    width: 100%;
+    justify-content: center;
+  }
+  .back {
+    order: 3;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .step[data-active] {
+    animation: none;
+  }
+}

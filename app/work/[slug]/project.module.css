@@ -1,0 +1,129 @@
+.header {
+  padding-top: calc(var(--nav-h) + clamp(2rem, 6vw, 5rem));
+  padding-bottom: clamp(3rem, 6vw, 6rem);
+}
+.header :global(.section-head) {
+  margin-bottom: clamp(2rem, 5vw, 4rem);
+}
+
+.title {
+  font-size: clamp(3rem, 11vw, 13rem);
+  max-width: 14ch;
+}
+
+.intro {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gutter);
+  row-gap: 2rem;
+  margin-top: clamp(2rem, 4vw, 4rem);
+  align-items: start;
+}
+.subtitle {
+  grid-column: 1 / span 6;
+}
+.facts {
+  grid-column: 8 / -1;
+}
+.facts dl {
+  display: grid;
+  border-top: 1px solid var(--rule);
+}
+.facts dl > div {
+  display: grid;
+  grid-template-columns: 8rem 1fr;
+  gap: 1rem;
+  padding-block: 0.9rem;
+  border-bottom: 1px solid var(--rule);
+  align-items: baseline;
+}
+.facts dt {
+  color: var(--fg-muted);
+}
+.facts dd {
+  margin: 0;
+}
+.facts a {
+  border-bottom: 1px solid var(--rule);
+}
+
+.heroVisual :global(.t-meta) {
+  white-space: normal;
+}
+
+.overview {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gutter);
+  row-gap: 1.5rem;
+}
+.overview h2 {
+  grid-column: 1 / span 3;
+  color: var(--fg-muted);
+}
+.overviewText {
+  grid-column: 4 / span 8;
+  display: grid;
+  gap: 2rem;
+}
+.approach {
+  display: grid;
+  gap: 1rem;
+  max-width: 56ch;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+}
+.approach h3 {
+  color: var(--accent);
+}
+.gallery figure {
+  margin: 0;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gutter);
+  margin-top: clamp(5rem, 10vw, 10rem);
+  align-items: start;
+}
+.g1 {
+  grid-column: 1 / span 5;
+}
+.g2 {
+  grid-column: 7 / -1;
+  justify-self: end;
+  width: 100%;
+  margin-top: clamp(4rem, 12vw, 12rem);
+}
+
+.relatedGrid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gutter);
+  align-items: start;
+}
+.relatedGrid > :first-child {
+  grid-column: 1 / span 5;
+}
+.relatedGrid > :nth-child(2) {
+  grid-column: 7 / -1;
+  margin-top: clamp(3rem, 8vw, 8rem);
+}
+
+@media (max-width: 768px) {
+  .subtitle,
+  .facts,
+  .overview h2,
+  .overviewText,
+  .g1,
+  .g2,
+  .relatedGrid > :first-child,
+  .relatedGrid > :nth-child(2) {
+    grid-column: 1 / -1;
+  }
+  .g2,
+  .relatedGrid > :nth-child(2) {
+    margin-top: 3rem;
+  }
+}

@@ -1,0 +1,177 @@
+.header {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 800;
+  color: var(--fg);
+  transition:
+    transform 0.6s var(--ease-out),
+    color 0.7s var(--ease-in-out);
+  /* backwards fill only: a lingering transform would trap the fixed mobile menu inside the header */
+  animation: navIn 0.9s var(--ease-out) 0.25s backwards;
+}
+.header[data-hidden]:not([data-open]):not(:focus-within) {
+  transform: translateY(-110%);
+}
+@media (prefers-reduced-motion: reduce) {
+  .header[data-hidden]:not([data-open]):not(:focus-within) {
+    transform: none;
+  }
+}
+
+@keyframes navIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+.bar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--nav-h);
+  padding-inline: var(--margin);
+}
+
+/* A soft backing appears once the page has scrolled, so the nav stays legible. */
+.bar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--bg);
+  opacity: 0;
+  transition:
+    opacity 0.4s linear,
+    background-color 0.7s var(--ease-in-out);
+  z-index: -1;
+}
+.header[data-scrolled] .bar::before {
+  opacity: 0.92;
+}
+
+.logo {
+  display: block;
+  width: clamp(112px, 10vw, 148px);
+}
+
+.desktop ul {
+  display: flex;
+  gap: clamp(1.25rem, 2.6vw, 2.75rem);
+}
+
+.link {
+  position: relative;
+  font-size: var(--fs-nav);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  padding-block: 0.4rem;
+}
+.link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: 100% 50%;
+  transition: transform 0.5s var(--ease-out);
+}
+.link:hover::after,
+.link[aria-current='page']::after {
+  transform: scaleX(1);
+  transform-origin: 0 50%;
+}
+
+.toggle {
+  display: none;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+}
+.burger,
+.burger::before {
+  display: block;
+  width: 26px;
+  height: 1.5px;
+  background: currentColor;
+  transition: transform 0.5s var(--ease-out);
+}
+.burger {
+  position: relative;
+  transform: translateY(-4px);
+}
+.burger::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+}
+.header[data-open] .burger {
+  transform: translateY(0) rotate(45deg);
+}
+.header[data-open] .burger::before {
+  transform: translateY(-8px) rotate(-90deg);
+}
+
+/* Mobile menu */
+.menu {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: calc(var(--nav-h) + 3rem) var(--margin) 2rem;
+  background: var(--green-deep);
+  color: var(--paper);
+}
+.menu[hidden] {
+  display: none;
+}
+.menuLink {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: clamp(2.75rem, 13vw, 5rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+}
+.menu li {
+  overflow: hidden;
+}
+.menu li a {
+  animation: menuIn 0.8s var(--ease-out) both;
+  animation-delay: calc(var(--i) * 60ms + 80ms);
+}
+@keyframes menuIn {
+  from {
+    transform: translateY(105%);
+  }
+}
+.menuMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.9rem;
+  opacity: 0.75;
+}
+.header[data-open] {
+  color: var(--paper);
+}
+.header[data-open] .bar::before {
+  opacity: 0;
+}
+.header[data-open] .logo img {
+  filter: brightness(0) invert(0.95);
+}
+
+@media (max-width: 768px) {
+  .desktop {
+    display: none;
+  }
+  .toggle {
+    display: grid;
+  }
+}

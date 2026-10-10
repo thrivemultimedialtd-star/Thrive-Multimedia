@@ -1,0 +1,128 @@
+.frame {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  background: var(--ph-bg);
+  color: var(--ph-fg);
+}
+
+.inner {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+  background:
+    radial-gradient(120% 90% at 85% 10%, var(--ph-hi) 0%, transparent 55%),
+    radial-gradient(90% 80% at 10% 100%, var(--ph-lo) 0%, transparent 60%);
+}
+
+/* Circle motifs echo the transition system and the Thrive mark's geometry. */
+.orb {
+  position: absolute;
+  width: 62%;
+  aspect-ratio: 1;
+  right: -14%;
+  bottom: -22%;
+  border-radius: 50%;
+  border: 1px solid var(--ph-line);
+}
+.orbSmall {
+  position: absolute;
+  width: 18%;
+  aspect-ratio: 1;
+  left: 12%;
+  top: 16%;
+  border-radius: 50%;
+  background: var(--ph-line);
+  opacity: 0.6;
+}
+
+.ghost {
+  position: absolute;
+  left: 6%;
+  bottom: 12%;
+  right: 6%;
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 6vw, 6.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  opacity: 0.22;
+}
+
+.label {
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  top: 1rem;
+  display: flex;
+  white-space: nowrap;
+  overflow: hidden;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.62rem;
+  opacity: 0.75;
+}
+.dot {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* Tones drawn from the brochure palette */
+.green {
+  --ph-bg: #6a9a36;
+  --ph-fg: #f3f1ea;
+  --ph-hi: #8cbc52;
+  --ph-lo: #41661f;
+  --ph-line: rgba(243, 241, 234, 0.35);
+}
+.deep {
+  --ph-bg: #24391a;
+  --ph-fg: #e7ecd9;
+  --ph-hi: #3d5d29;
+  --ph-lo: #172511;
+  --ph-line: rgba(127, 181, 63, 0.4);
+}
+.charcoal {
+  --ph-bg: #2d2d2b;
+  --ph-fg: #f3f1ea;
+  --ph-hi: #4d4d4d;
+  --ph-lo: #1b1b1a;
+  --ph-line: rgba(243, 241, 234, 0.22);
+}
+.mist {
+  --ph-bg: #8a8f86;
+  --ph-fg: #f3f1ea;
+  --ph-hi: #a9ae9f;
+  --ph-lo: #6c7a5c;
+  --ph-line: rgba(243, 241, 234, 0.35);
+}
+.paper {
+  --ph-bg: #e3dfd3;
+  --ph-fg: #2b2b2b;
+  --ph-hi: #f3f1ea;
+  --ph-lo: #c9d3b6;
+  --ph-line: rgba(43, 43, 43, 0.18);
+}
+.clay {
+  --ph-bg: #c9b79c;
+  --ph-fg: #2b2b2b;
+  --ph-hi: #e2d4bd;
+  --ph-lo: #9fae7f;
+  --ph-line: rgba(43, 43, 43, 0.2);
+}
+
+/* Project images */
+.photo {
+  object-fit: cover;
+}
+.hasImage .inner {
+  background: none;
+}
+/* Whole-mark display (logos): inset so the mark breathes inside the frame. */
+.photo.contain {
+  object-fit: contain;
+  padding: 14%;
+}

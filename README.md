@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Thrive Multimedia
 
-## Getting Started
+Website for Thrive Multimedia, a full-service design agency in Abuja working across print, web and multimedia.
 
-First, run the development server:
+## Stack
+
+- Next.js 16 (App Router) + React 19 + TypeScript
+- CSS Modules, no UI or animation libraries
+- A custom motion system in `lib/motion/`: one shared requestAnimationFrame ticker, scroll and pointer tracking, and a 15×17 circle grid behind the page transitions, image reveals and section switches
+- Resend for the project brief form (optional in development)
+
+## Getting started
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build   # production build
+npm run lint
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Environment variables
 
-## Learn More
+Copy `.env.example` to `.env.local`:
 
-To learn more about Next.js, take a look at the following resources:
+| Variable | Purpose |
+| --- | --- |
+| `RESEND_API_KEY` | Emails project briefs to thrivemultimedialtd@gmail.com. Without it, briefs are logged to the server console. |
+| `BRIEF_FROM` | Sender address once a domain is verified in Resend (e.g. `Thrive website <briefs@yourdomain.com>`). |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Where things live
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Path | What |
+| --- | --- |
+| `content/` | All site copy: services, projects, clients, story, contact details, chat script |
+| `public/brochure/` | Project images, client logos and the cover pattern, extracted from the Thrive brochure |
+| `components/sections/` | Home page sections (hero, approach, work, services, markets, about, contact) |
+| `components/motion/` | Reusable motion primitives (TextReveal, IrisReveal, TransitionGrid, PageTransition, SectionSwitch, Cursor…) |
+| `components/contact/BriefForm/` | The four-step project brief |
+| `components/chat/ChatGuide/` | The "Ask Thrive" studio guide (scripted, no AI) |
+| `app/actions/sendBrief.ts` | Server action that validates and emails briefs |
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Brief budget and timeline options are in `lib/brief.ts`. Chat answers and keyword rules are in `content/chat.ts`.

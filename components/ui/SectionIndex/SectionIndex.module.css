@@ -1,0 +1,150 @@
+.index {
+  position: fixed;
+  z-index: 780;
+  /* Sits in the page gutter: only the dots show until you reach for it. */
+  right: 14px;
+  top: 50%;
+  translate: 0 -50%;
+  color: var(--fg);
+  transition:
+    opacity 0.5s linear,
+    translate 0.6s var(--ease-out),
+    color 0.7s var(--ease-in-out);
+}
+.index[data-hidden] {
+  opacity: 0;
+  translate: 12px -50%;
+  pointer-events: none;
+}
+
+.toggle {
+  display: none;
+}
+
+.list {
+  display: grid;
+  gap: 0.15rem;
+  justify-items: end;
+  padding: 0.6rem 0.7rem;
+  border-radius: 14px;
+  transition:
+    background-color 0.35s linear,
+    box-shadow 0.35s linear;
+}
+/* A soft backing so the names stay legible over any section. */
+.index:hover .list,
+.index:focus-within .list {
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 12px 40px -18px rgba(0, 0, 0, 0.45);
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.35rem 0;
+  font-size: var(--fs-meta);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/* Names stay tucked away until you reach for the index, like Blackbook's list. */
+.name {
+  opacity: 0;
+  translate: 8px 0;
+  white-space: nowrap;
+  transition:
+    opacity 0.3s linear,
+    translate 0.5s var(--ease-out);
+}
+.index:hover .name,
+.index:focus-within .name {
+  opacity: 1;
+  translate: 0 0;
+}
+
+.num {
+  opacity: 0;
+  font-variant-numeric: tabular-nums;
+  transition: opacity 0.3s linear;
+}
+.index:hover .num,
+.index:focus-within .num {
+  opacity: 0.45;
+}
+.index:hover .item[aria-current] .num,
+.index:focus-within .item[aria-current] .num,
+.item:hover .num {
+  opacity: 1;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  transition:
+    background-color 0.3s linear,
+    scale 0.5s var(--ease-out);
+}
+.item[aria-current] .dot {
+  background: var(--accent);
+  border-color: var(--accent);
+  scale: 1.35;
+}
+
+/* Mobile: a small "Sections" pill that opens the list. */
+@media (max-width: 768px) {
+  /* Bottom-left on mobile; the chat launcher owns the bottom-right corner. */
+  .index {
+    top: auto;
+    right: auto;
+    left: 12px;
+    bottom: 12px;
+    translate: 0 0;
+  }
+  .index[data-hidden] {
+    translate: 0 12px;
+  }
+  .toggle {
+    display: block;
+    padding: 0.7rem 1.1rem;
+    border-radius: 999px;
+    background: var(--charcoal);
+    color: var(--paper);
+    box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.5);
+  }
+  .list {
+    position: absolute;
+    left: 0;
+    justify-items: start;
+    bottom: calc(100% + 0.6rem);
+    padding: 0.9rem 1.1rem;
+    border-radius: 16px;
+    background: var(--charcoal);
+    color: var(--paper);
+    box-shadow: 0 20px 40px -16px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    translate: 0 8px;
+    pointer-events: none;
+    transition:
+      opacity 0.3s linear,
+      translate 0.4s var(--ease-out);
+  }
+  .index[data-open] .list {
+    opacity: 1;
+    translate: 0 0;
+    pointer-events: auto;
+  }
+  .name,
+  .num {
+    opacity: 1;
+    translate: 0 0;
+  }
+  .index:hover .list,
+  .index:focus-within .list {
+    background: var(--charcoal);
+  }
+}

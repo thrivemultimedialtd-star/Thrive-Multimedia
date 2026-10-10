@@ -1,0 +1,118 @@
+.contact {
+  position: relative;
+  min-height: 100svh;
+  color: var(--paper);
+  overflow: hidden;
+  isolation: isolate;
+  padding-block: clamp(7rem, 16vw, 16rem) clamp(5rem, 9vw, 8rem);
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+
+.inner {
+  position: relative;
+}
+
+.head {
+  border-top-color: var(--rule-light);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-stretch: 112%;
+  font-size: clamp(3.2rem, 10.4vw, 13rem);
+  line-height: 0.86;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  margin-bottom: clamp(4rem, 8vw, 8rem);
+}
+/* Indent the middle line for a little rhythm. */
+.title > span:nth-of-type(3) {
+  padding-left: 0.45em;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gutter);
+  row-gap: 3rem;
+  align-items: start;
+}
+
+.formCol {
+  grid-column: 1 / span 7;
+  display: grid;
+  gap: 2.5rem;
+}
+
+.details {
+  grid-column: 9 / -1;
+  display: grid;
+  gap: 2.5rem;
+  align-content: start;
+  padding-top: 0.4rem;
+}
+
+.block {
+  display: grid;
+  gap: 0.45rem;
+  justify-items: start;
+}
+.block h3 {
+  color: rgba(243, 241, 234, 0.55);
+  margin-bottom: 0.35rem;
+}
+
+.big {
+  font-family: var(--font-serif);
+  font-size: clamp(1.2rem, 1.9vw, 1.85rem);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  overflow-wrap: anywhere;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.6s var(--ease-out);
+}
+.nowrap {
+  white-space: nowrap;
+}
+.big:hover,
+.big:focus-visible {
+  background-size: 100% 1px;
+}
+
+.copy {
+  margin-top: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 0.45rem 0.9rem;
+  border: 1px solid var(--rule-light);
+  border-radius: 999px;
+  transition: background-color 0.4s linear;
+}
+.copy:hover {
+  background: rgba(243, 241, 234, 0.1);
+}
+
+.address {
+  font-style: normal;
+  display: grid;
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+  .formCol,
+  .details {
+    grid-column: 1 / -1;
+  }
+}

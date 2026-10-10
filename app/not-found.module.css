@@ -1,0 +1,12 @@
+.nf {
+  min-height: 100svh;
+  display: grid;
+  align-content: center;
+  gap: 1.5rem;
+  padding-top: var(--nav-h);
+}
+.link {
+  justify-self: start;
+  border-bottom: 1px solid currentColor;
+  font-weight: 500;
+}

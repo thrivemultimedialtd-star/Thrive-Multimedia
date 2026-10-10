@@ -1,0 +1,325 @@
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding: calc(var(--nav-h) + 1.25rem) var(--margin) 0;
+  overflow: hidden;
+  isolation: isolate;
+  --band: 14svh;
+  /* The lead (Huriya Air) frame; the other two lock onto it. */
+  --tee-w: clamp(200px, 19vw, 360px);
+  --tee-top: calc(var(--nav-h) + 8svh);
+  --tee-right: 4vw;
+}
+
+/* ── Gradient band (the brochure cover pattern) ── */
+.band {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: var(--band);
+  z-index: -2;
+  background: linear-gradient(100deg, var(--thrive-green) 0%, #5b7d3a 38%, #7d8577 100%);
+  transform-origin: 50% 100%;
+  transform: scaleY(calc(1 - var(--out, 0) * 0.55));
+  clip-path: inset(0 0 0 0);
+  transition: clip-path 1.4s var(--ease-in-out);
+}
+:global(html[data-js]) .hero:not([data-band]) .band {
+  clip-path: inset(0 100% 0 0);
+}
+.texture {
+  position: absolute;
+  inset: 0;
+  /* Dark ink lines over the green gradient, as on the brochure cover. */
+  color: var(--green-ink);
+  opacity: 0.5;
+}
+
+/* ── Meta and footer (rise in last) ── */
+.metaTop,
+.foot {
+  transition:
+    opacity 0.9s linear,
+    transform 1s var(--ease-out);
+}
+:global(html[data-js]) .hero:not([data-meta]) .metaTop,
+:global(html[data-js]) .hero:not([data-meta]) .foot {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.metaTop {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+/* ── Type ── */
+.type {
+  align-self: center;
+  position: relative;
+  z-index: 2;
+  will-change: transform;
+  padding-block: 2rem 3rem;
+}
+
+.title {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-weight: inherit;
+}
+
+.thrive {
+  width: max-content;
+  /* Desktop: the wordmark owns the left ~60%, the photos the right. */
+  font-size: clamp(4.25rem, 13.5vw, 15rem);
+  color: var(--charcoal);
+  margin-left: -0.04em;
+}
+
+/* Justified to THRIVE's width by Hero.tsx (--mm-track). */
+.multimedia {
+  width: max-content;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  /* Scales with the wordmark so the justified tracking keeps the same proportions at every size. */
+  font-size: clamp(0.9rem, 4.2vw, 5rem);
+  letter-spacing: var(--mm-track, 0.62em);
+  margin-right: calc(var(--mm-track, 0.62em) * -1);
+  text-transform: uppercase;
+  line-height: 1;
+  margin-top: 0.5em;
+  color: var(--logo-grey);
+  transition: letter-spacing 2s var(--ease-out);
+}
+:global(html[data-js]) .multimedia:not([data-revealed]) {
+  letter-spacing: calc(var(--mm-track, 0.62em) * 1.6);
+}
+
+.line {
+  max-width: 24ch;
+  margin-top: clamp(1.5rem, 3vw, 2.5rem);
+  color: var(--charcoal);
+  text-wrap: balance;
+}
+
+/* ── Actions + cue ── */
+.foot {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  min-height: var(--band);
+  padding-block: 1rem;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+  /* Lift the buttons out of the band so they sit on paper. */
+  translate: 0 calc(var(--band) * -1 - 1rem);
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1.05rem 1.7rem;
+  border-radius: 999px;
+  background: var(--charcoal);
+  color: var(--paper);
+  font-weight: 600;
+  font-size: 0.98rem;
+  box-shadow: 0 14px 30px -16px rgba(23, 37, 17, 0.6);
+  transition:
+    background-color 0.5s var(--ease-out),
+    gap 0.5s var(--ease-out);
+}
+.cta:hover,
+.cta:focus-visible {
+  background: var(--thrive-green);
+  gap: 1.1rem;
+}
+
+.secondary {
+  font-weight: 500;
+  font-size: 0.95rem;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 0.15rem;
+}
+
+.cue {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--paper);
+}
+.cueLine {
+  position: relative;
+  width: 1px;
+  height: 2.25rem;
+  background: rgba(243, 241, 234, 0.35);
+  overflow: hidden;
+}
+.cueLine::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--paper);
+  animation: cue 2.4s var(--ease-in-out) infinite;
+}
+@keyframes cue {
+  0% {
+    transform: translateY(-100%);
+  }
+  60%,
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+/* ── Collage (desktop: layered to the right of the type) ── */
+.collage {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  will-change: transform;
+}
+.frame {
+  position: absolute;
+  will-change: translate;
+  box-shadow: 0 30px 60px -30px rgba(23, 37, 17, 0.4);
+}
+/* Huriya Air: the lead image, beside the type. Only the E of THRIVE crosses it. */
+.f0 {
+  right: var(--tee-right);
+  top: var(--tee-top);
+  width: var(--tee-w);
+  aspect-ratio: 4 / 5;
+}
+/* Market Monie: overlaps the Huriya frame's bottom-left corner. */
+.f1 {
+  right: calc(var(--tee-right) + var(--tee-w) * 0.58);
+  top: calc(var(--tee-top) + var(--tee-w) * 1.25 - var(--tee-w) * 0.3);
+  width: calc(var(--tee-w) * 0.72);
+  aspect-ratio: 4 / 3;
+  z-index: 2;
+}
+/* The Place: a small portrait hanging off Huriya's bottom-right corner. */
+.f2 {
+  right: calc(var(--tee-right) - var(--tee-w) * 0.12);
+  top: calc(var(--tee-top) + var(--tee-w) * 1.25 - var(--tee-w) * 0.18);
+  width: calc(var(--tee-w) * 0.36);
+  aspect-ratio: 3 / 4;
+  z-index: 3;
+}
+
+/* ── Mobile: an ordered column; nothing floats over the text ── */
+@media (max-width: 768px) {
+  .hero {
+    --band: 10svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1.25rem;
+    padding-top: calc(var(--nav-h) + 0.5rem);
+  }
+  .metaAlt {
+    display: none;
+  }
+
+  .collage {
+    position: relative;
+    inset: auto;
+    height: min(58vw, 34svh);
+    flex: none;
+  }
+  .f0 {
+    right: 0;
+    top: 0;
+    width: auto;
+    height: 100%;
+  }
+  .f1 {
+    top: auto;
+    right: auto;
+    left: 0;
+    bottom: 0;
+    width: 44%;
+  }
+  .f2 {
+    display: none;
+  }
+
+  .type {
+    padding-block: 0;
+    align-self: stretch;
+  }
+  .title {
+    display: flex;
+  }
+  /* Fill the content width exactly: THRIVE is about 4.4× its font size wide. */
+  .thrive {
+    font-size: calc((100vw - 2 * var(--margin)) / 4.45);
+  }
+  .multimedia {
+    font-size: 4.2vw;
+  }
+  .line {
+    margin-top: 1.25rem;
+    max-width: 22ch;
+  }
+
+  .foot {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 0;
+    min-height: auto;
+  }
+  .actions {
+    translate: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.9rem;
+    padding-bottom: 1.25rem;
+  }
+  .ctaWrap {
+    display: block !important;
+  }
+  .cta {
+    width: 100%;
+    justify-content: center;
+  }
+  .secondary {
+    align-self: center;
+  }
+  .cue {
+    height: var(--band);
+    margin-inline: calc(var(--margin) * -1);
+    padding-left: calc(var(--margin) + 3rem);
+  }
+  .cueLine {
+    height: 1.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .band {
+    transform: none;
+    transition: opacity 0.4s linear;
+  }
+  :global(html[data-js]) .hero:not([data-band]) .band {
+    clip-path: none;
+    opacity: 0;
+  }
+  .multimedia {
+    transition: none;
+  }
+}

@@ -1,0 +1,10 @@
+.logo {
+  height: auto;
+  transition: filter 0.7s var(--ease-in-out);
+}
+
+:global([data-theme='green']) .logo,
+:global([data-theme='charcoal']) .logo,
+:global([data-theme='ink']) .logo {
+  filter: brightness(0) invert(0.95);
+}

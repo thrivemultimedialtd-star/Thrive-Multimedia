@@ -1,0 +1,61 @@
+.layout {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gutter);
+  row-gap: 4rem;
+  align-items: start;
+}
+
+.copy {
+  grid-column: 1 / span 5;
+  display: grid;
+  gap: 1.75rem;
+  position: sticky;
+  top: calc(var(--nav-h) + 2rem);
+}
+
+.caps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.caps li {
+  padding: 0.45rem 0.95rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  font-size: 0.85rem;
+}
+
+.work {
+  grid-column: 7 / -1;
+  display: grid;
+  gap: clamp(3rem, 7vw, 7rem);
+}
+.second {
+  width: 82%;
+  margin-left: auto;
+}
+
+/* Alternate sides for rhythm */
+.service:nth-of-type(odd) .copy {
+  grid-column: 8 / -1;
+  grid-row: 1;
+}
+.service:nth-of-type(odd) .work {
+  grid-column: 1 / span 6;
+  grid-row: 1;
+}
+
+@media (max-width: 900px) {
+  .copy,
+  .work,
+  .service:nth-of-type(odd) .copy,
+  .service:nth-of-type(odd) .work {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    position: static;
+  }
+  .second {
+    width: 100%;
+  }
+}

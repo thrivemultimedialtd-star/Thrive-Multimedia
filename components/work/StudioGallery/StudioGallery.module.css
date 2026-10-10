@@ -1,0 +1,79 @@
+.title {
+  margin-bottom: clamp(3rem, 7vw, 6rem);
+}
+
+/* Asymmetric rhythm: pieces keep their own proportions and step across the grid. */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gutter);
+  row-gap: clamp(3rem, 7vw, 7rem);
+  align-items: start;
+}
+
+.frame {
+  position: relative;
+}
+
+.caption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
+  margin-top: 0.9rem;
+}
+.caption :global(.t-meta) {
+  color: var(--fg-muted);
+}
+.brand {
+  font-family: var(--font-serif);
+  font-size: clamp(1.1rem, 1.5vw, 1.35rem);
+}
+
+.i0 {
+  grid-column: 1 / span 6;
+}
+.i1 {
+  grid-column: 8 / span 4;
+  margin-top: clamp(3rem, 8vw, 8rem);
+}
+.i2 {
+  grid-column: 2 / span 4;
+}
+.i3 {
+  grid-column: 7 / span 5;
+  margin-top: clamp(2rem, 5vw, 5rem);
+}
+.i4 {
+  grid-column: 1 / span 5;
+}
+.i5 {
+  grid-column: 7 / -1;
+  margin-top: clamp(3rem, 9vw, 9rem);
+}
+.i6 {
+  grid-column: 3 / span 4;
+}
+.i7 {
+  grid-column: 8 / span 4;
+  margin-top: clamp(2rem, 6vw, 6rem);
+}
+
+@media (max-width: 768px) {
+  .grid > .item {
+    margin-top: 0;
+  }
+  .i0,
+  .i2,
+  .i4,
+  .i6 {
+    grid-column: 1 / span 10;
+  }
+  .i1,
+  .i3,
+  .i5,
+  .i7 {
+    grid-column: 3 / -1;
+  }
+}

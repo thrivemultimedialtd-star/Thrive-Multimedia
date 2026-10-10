@@ -1,0 +1,25 @@
+.header {
+  padding-top: calc(var(--nav-h) + clamp(2rem, 6vw, 5rem));
+  padding-bottom: clamp(4rem, 9vw, 9rem);
+}
+.header :global(.section-head) {
+  margin-bottom: clamp(2rem, 5vw, 4rem);
+}
+
+.title {
+  font-size: clamp(3.6rem, 15vw, 16rem);
+  margin-left: -0.04em;
+}
+
+.lede {
+  max-width: 34ch;
+  margin-top: clamp(2rem, 4vw, 3.5rem);
+  margin-left: auto;
+  margin-right: 8.33%;
+}
+
+@media (max-width: 768px) {
+  .lede {
+    margin-right: 0;
+  }
+}

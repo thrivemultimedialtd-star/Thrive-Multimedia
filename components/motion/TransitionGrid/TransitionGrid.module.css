@@ -1,0 +1,14 @@
+.grid {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  contain: strict;
+}
+
+.fixed {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100lvh;
+}

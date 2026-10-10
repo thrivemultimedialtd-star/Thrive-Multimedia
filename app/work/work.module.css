@@ -1,0 +1,54 @@
+.lists {
+  margin-top: clamp(4rem, 8vw, 8rem);
+}
+
+.columns {
+  display: grid;
+  gap: clamp(4rem, 8vw, 7rem);
+}
+
+.col h2 {
+  margin-bottom: 2rem;
+}
+
+/* Logo wall: every cell the same size, logos optically balanced by logoHeight(). */
+.logoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(170px, 42vw), 1fr));
+  border-top: 1px solid var(--rule);
+  border-left: 1px solid var(--rule);
+}
+.logoGrid li {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  justify-items: center;
+  align-items: center;
+  gap: 1rem;
+  min-height: 11rem;
+  padding: 1.75rem 1rem 1rem;
+  border-right: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  text-align: center;
+  transition: background-color 0.4s linear;
+}
+.logoGrid img {
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  opacity: 0.82;
+  transition:
+    opacity 0.3s linear,
+    transform 0.6s var(--ease-out);
+}
+.logoGrid span {
+  font-size: 0.75rem;
+  line-height: 1.35;
+  color: var(--fg-muted);
+}
+.logoGrid li:hover {
+  background: var(--paper-2);
+}
+.logoGrid li:hover img {
+  opacity: 1;
+  transform: scale(1.05);
+}

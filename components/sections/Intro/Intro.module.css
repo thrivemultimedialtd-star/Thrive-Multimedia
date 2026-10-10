@@ -1,0 +1,36 @@
+.intro {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: calc(var(--nav-h) + 4rem) var(--margin) 6rem;
+  color: var(--paper);
+}
+
+.inner {
+  display: grid;
+  justify-items: center;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  text-align: center;
+}
+
+.eyebrow {
+  color: var(--green-bright);
+}
+
+/* Sasha's lede: a quiet, centred statement that ends on a colon. */
+.lede {
+  font-family: var(--font-serif);
+  font-weight: 340;
+  font-size: clamp(2rem, 4.6vw, 4.6rem);
+  line-height: 1.06;
+  letter-spacing: -0.025em;
+  font-variation-settings: 'opsz' 144, 'SOFT' 40;
+}
+
+.body {
+  max-width: 52ch;
+  margin-top: clamp(1rem, 3vw, 2.5rem);
+  font-size: clamp(0.95rem, 1.05vw, 1.05rem);
+  line-height: 1.7;
+  color: rgba(243, 241, 234, 0.55);
+}

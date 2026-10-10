@@ -1,0 +1,108 @@
+.stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  max-width: 640px;
+  margin-inline: auto;
+  --together: 0;
+}
+
+.circle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 48%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 17%;
+  mix-blend-mode: multiply;
+  will-change: translate;
+  transition:
+    scale 0.7s var(--ease-out),
+    opacity 0.5s linear;
+}
+.circle[data-focus] {
+  scale: 1.08;
+  z-index: 2;
+}
+.circle[data-dim] {
+  opacity: 0.55;
+}
+
+.creative {
+  background: rgba(106, 154, 54, 0.62);
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+.brand {
+  background: rgba(201, 183, 156, 0.75);
+  justify-content: flex-start;
+  align-items: flex-end;
+  text-align: right;
+}
+.digital {
+  background: rgba(138, 143, 134, 0.6);
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+.media {
+  background: rgba(36, 57, 26, 0.45);
+  justify-content: flex-end;
+  align-items: flex-end;
+  text-align: right;
+}
+/* Bottom circles: skills above the label so text stays at the outer edge. */
+.digital,
+.media {
+  flex-direction: column-reverse;
+}
+
+.label {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-stretch: 110%;
+  font-size: clamp(0.9rem, 1.8vw, 1.4rem);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--charcoal);
+  mix-blend-mode: normal;
+}
+.skills {
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 0.4s linear,
+    transform 0.6s var(--ease-out);
+}
+.circle[data-focus] .skills {
+  opacity: 0.85;
+  transform: none;
+}
+
+/* The overlap: where everything meets. Appears as the circles come together. */
+.core {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 16%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: var(--charcoal);
+  color: var(--paper);
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(0.6rem, 1.2vw, 0.9rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  scale: var(--together);
+  opacity: var(--together);
+}

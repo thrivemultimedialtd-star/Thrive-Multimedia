@@ -1,0 +1,149 @@
+.track {
+  position: relative;
+  /* One viewport per stage plus room for the hand-off. */
+  height: calc((var(--stages) + 1) * 100svh);
+}
+
+.panel {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  color: var(--paper);
+  /* The ink field closes into a circle at the end of the sequence. */
+  --close: 0;
+  isolation: isolate;
+}
+.panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: #0b120a;
+  clip-path: circle(calc((1 - var(--close)) * 75%) at 50% 50%);
+}
+
+.head {
+  position: absolute;
+  z-index: 3;
+  inset: calc(var(--nav-h) + 1.25rem) var(--margin) auto;
+  display: flex;
+  justify-content: space-between;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--rule-light);
+  opacity: calc(0.6 - var(--close) * 2);
+}
+
+.marker {
+  position: absolute;
+  z-index: 3;
+  left: var(--margin);
+  top: 50%;
+  width: 10px;
+  height: 40svh;
+  transform: translateY(-50%);
+  opacity: calc(0.5 - var(--close) * 2);
+}
+.marker::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 5px;
+  background: rgba(243, 241, 234, 0.07);
+}
+
+.stages {
+  position: absolute;
+  inset: 0;
+}
+
+.stage {
+  position: absolute;
+  inset: 0;
+}
+
+/* Centred word + line, as on Sasha's approach. */
+.text {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: clamp(1.25rem, 2.5vw, 2rem);
+  padding: var(--nav-h) var(--margin) 2rem;
+  text-align: center;
+  opacity: calc(1 - var(--close) * 1.6);
+}
+
+.word {
+  will-change: transform, opacity;
+  text-shadow: 0 8px 40px rgba(11, 18, 10, 0.55);
+}
+
+.copy {
+  display: grid;
+  justify-items: center;
+  gap: 0.9rem;
+  will-change: transform, opacity;
+}
+.line {
+  max-width: 30ch;
+  font-size: clamp(1.15rem, 1.6vw, 1.5rem);
+  line-height: 1.35;
+  text-shadow: 0 2px 20px rgba(11, 18, 10, 0.9);
+}
+.body {
+  max-width: 44ch;
+  font-size: clamp(0.9rem, 1vw, 1rem);
+  line-height: 1.6;
+  color: rgba(243, 241, 234, 0.6);
+  text-shadow: 0 2px 16px rgba(11, 18, 10, 0.9);
+}
+
+/* Before the first tick, only the first stage is visible. */
+:global(html[data-motion='full']) .stage:not(:first-child) .word,
+:global(html[data-motion='full']) .stage:not(:first-child) .copy {
+  opacity: 0;
+}
+
+@media (max-width: 900px) {
+  .track {
+    height: calc((var(--stages) * 0.6 + 1) * 100svh);
+  }
+  .word {
+    font-size: clamp(3.6rem, 18vw, 7rem);
+  }
+  .marker {
+    width: 8px;
+  }
+}
+
+/* Reduced motion: no pin; the four stages stack, each over its settled visual. */
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    height: auto;
+    background: #0b120a;
+  }
+  .panel {
+    position: relative;
+    height: auto;
+  }
+  .panel::before,
+  .marker {
+    display: none;
+  }
+  .head {
+    position: relative;
+    inset: auto;
+    margin: 0 var(--margin);
+    padding-top: calc(var(--nav-h) + 1rem);
+  }
+  .stages {
+    position: relative;
+  }
+  .stage {
+    position: relative;
+    min-height: 90svh;
+  }
+}
