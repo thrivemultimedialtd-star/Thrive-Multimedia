@@ -9,7 +9,6 @@ import IrisReveal from '@/components/motion/IrisReveal/IrisReveal';
 import Magnetic from '@/components/motion/Magnetic';
 import TransitionLink from '@/components/motion/TransitionLink';
 import Placeholder from '@/components/ui/Placeholder/Placeholder';
-import Texture from '@/components/ui/Texture';
 import Reveal from '@/components/motion/Reveal/Reveal';
 import RotatingWord from './RotatingWord';
 import CircleBurst from './CircleBurst';
@@ -24,7 +23,7 @@ const collage = [
 const depths = [0.6, 1.1, 1.5];
 
 /**
- * Staged entrance: band → (nav, via CSS) → THRIVE → MULTIMEDIA → line → collage → meta + actions.
+ * Staged entrance: (nav, via CSS) → THRIVE → MULTIMEDIA → line → collage → meta + actions.
  * On scroll the type lifts faster than the page and the collage lags behind, handing over to the intro.
  */
 export default function Hero() {
@@ -76,7 +75,6 @@ export default function Hero() {
       whenFontsReady().then(() => {
         if (cancelled) return;
         stop = timeline([
-          { at: 0, run: () => el.setAttribute('data-band', '') },
           { at: 1150, run: () => el.setAttribute('data-collage', '') },
           { at: 1500, run: () => el.setAttribute('data-meta', '') },
           { at: 2300, run: () => setAlive(true) },
@@ -101,7 +99,6 @@ export default function Hero() {
       const p = clamp(scroll.y / vh);
       if (type.current) type.current.style.transform = `translate3d(0, ${(-p * (env.mobile ? 8 : 22)).toFixed(2)}vh, 0)`;
       if (collageRef.current) collageRef.current.style.transform = `translate3d(0, ${(-p * 6).toFixed(2)}vh, 0)`;
-      el.style.setProperty('--out', p.toFixed(3));
 
       const touch = env.touch;
       const nx = !touch && pointer.active ? pointer.x / window.innerWidth - 0.5 : 0;
@@ -194,9 +191,6 @@ export default function Hero() {
 
   return (
     <section ref={root} id="top" className={styles.hero} data-section-theme="paper" aria-labelledby="hero-title">
-      <div className={styles.band} aria-hidden="true">
-        <Texture className={styles.texture} size="900px auto" />
-      </div>
 
       <div className={styles.metaTop}>
         <span className="t-meta">{hero.meta[0]}</span>
@@ -277,10 +271,6 @@ export default function Hero() {
             <span className={styles.tipTouch}>Tap</span> anywhere
           </span>
         </div>
-        <span className={`t-meta ${styles.cue}`}>
-          <span className={styles.cueLine} aria-hidden="true" />
-          {hero.cue}
-        </span>
       </div>
     </section>
   );

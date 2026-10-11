@@ -1,8 +1,8 @@
 .intro {
-  min-height: 100svh;
+  /* Sized to its content (not a full screen) so it follows the hero without a gap. */
   display: grid;
   place-items: center;
-  padding: calc(var(--nav-h) + 4rem) var(--margin) 6rem;
+  padding: clamp(1.5rem, 3vw, 3rem) var(--margin) clamp(5rem, 9vw, 8rem);
   color: var(--paper);
 }
 

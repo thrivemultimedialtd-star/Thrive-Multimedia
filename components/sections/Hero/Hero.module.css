@@ -1,39 +1,17 @@
 .hero {
   position: relative;
-  min-height: 100svh;
+  /* Slightly under a full screen, so the next section follows without a large gap. */
+  min-height: 88svh;
   display: grid;
-  grid-template-rows: auto 1fr auto;
+  /* meta · space · type · buttons · space: the wordmark-and-buttons group sits centred */
+  grid-template-rows: auto 1fr auto auto 1fr;
   padding: calc(var(--nav-h) + 1.25rem) var(--margin) 0;
   overflow: hidden;
   isolation: isolate;
-  --band: 14svh;
   /* The lead (Huriya Air) frame; the other two lock onto it. */
   --tee-w: clamp(200px, 19vw, 360px);
   --tee-top: calc(var(--nav-h) + 8svh);
   --tee-right: 4vw;
-}
-
-/* ── Gradient band (the brochure cover pattern) ── */
-.band {
-  position: absolute;
-  inset: auto 0 0 0;
-  height: var(--band);
-  z-index: -2;
-  background: linear-gradient(100deg, var(--thrive-green) 0%, #5b7d3a 38%, #7d8577 100%);
-  transform-origin: 50% 100%;
-  transform: scaleY(calc(1 - var(--out, 0) * 0.55));
-  clip-path: inset(0 0 0 0);
-  transition: clip-path 1.4s var(--ease-in-out);
-}
-:global(html[data-js]) .hero:not([data-band]) .band {
-  clip-path: inset(0 100% 0 0);
-}
-.texture {
-  position: absolute;
-  inset: 0;
-  /* Dark ink lines over the green gradient, as on the brochure cover. */
-  color: var(--green-ink);
-  opacity: 0.5;
 }
 
 /* ── Meta and footer (rise in last) ── */
@@ -61,7 +39,8 @@
   position: relative;
   z-index: 2;
   will-change: transform;
-  padding-block: 2rem 3rem;
+  grid-row: 3;
+  padding-block: 1rem 0;
 }
 
 .title {
@@ -105,24 +84,22 @@
   text-wrap: balance;
 }
 
-/* ── Actions + cue ── */
+/* ── Actions ── */
 .foot {
+  grid-row: 4;
   position: relative;
   z-index: 3;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1.5rem;
-  min-height: var(--band);
-  padding-block: 1rem;
+  padding-block: 2.25rem 1.5rem;
 }
 
 .actions {
   display: flex;
   align-items: center;
   gap: 1.75rem;
-  /* Lift the buttons out of the band so they sit on paper. */
-  translate: 0 calc(var(--band) * -1 - 1rem);
 }
 
 .cta {
@@ -151,36 +128,6 @@
   font-size: 0.95rem;
   border-bottom: 1px solid currentColor;
   padding-bottom: 0.15rem;
-}
-
-.cue {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  color: var(--paper);
-}
-.cueLine {
-  position: relative;
-  width: 1px;
-  height: 2.25rem;
-  background: rgba(243, 241, 234, 0.35);
-  overflow: hidden;
-}
-.cueLine::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--paper);
-  animation: cue 2.4s var(--ease-in-out) infinite;
-}
-@keyframes cue {
-  0% {
-    transform: translateY(-100%);
-  }
-  60%,
-  100% {
-    transform: translateY(100%);
-  }
 }
 
 /* ── Playful layer ── */
@@ -257,11 +204,10 @@
 /* ── Mobile: an ordered column; nothing floats over the text ── */
 @media (max-width: 768px) {
   .hero {
-    --band: 10svh;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    gap: 1.25rem;
+    justify-content: space-evenly;
+    gap: 1rem;
     padding-top: calc(var(--nav-h) + 0.5rem);
   }
   .metaAlt {
@@ -314,11 +260,10 @@
     flex-direction: column;
     align-items: stretch;
     gap: 0;
-    padding: 0;
+    padding: 0 0 3.5rem;
     min-height: auto;
   }
   .actions {
-    translate: none;
     flex-direction: column;
     align-items: stretch;
     gap: 0.9rem;
@@ -335,25 +280,9 @@
   .tip {
     align-self: center;
   }
-  .cue {
-    height: var(--band);
-    margin-inline: calc(var(--margin) * -1);
-    padding-left: calc(var(--margin) + 3rem);
-  }
-  .cueLine {
-    height: 1.5rem;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .band {
-    transform: none;
-    transition: opacity 0.4s linear;
-  }
-  :global(html[data-js]) .hero:not([data-band]) .band {
-    clip-path: none;
-    opacity: 0;
-  }
   .multimedia {
     transition: none;
   }

@@ -6,7 +6,6 @@ export const hero = {
   lineLead: 'We turn ideas into',
   rotate: ['brands', 'websites', 'films', 'signage', 'campaigns'],
   lineTail: 'people remember, across print, web and multimedia.',
-  cue: 'Scroll on for the work',
   meta: ['Print · Web · Multimedia', 'Full-service design agency'], // p.2
   cta: 'See the work',
   secondary: 'Start a project',
