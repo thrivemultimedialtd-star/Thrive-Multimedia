@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useLayoutEffect, useRef } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { hero } from '@/content/story';
 import { projects } from '@/content/projects';
 import { clamp, damp, env, page, pointer, scroll, subscribe, timeline, whenFontsReady } from '@/lib/motion';
@@ -10,6 +10,9 @@ import Magnetic from '@/components/motion/Magnetic';
 import TransitionLink from '@/components/motion/TransitionLink';
 import Placeholder from '@/components/ui/Placeholder/Placeholder';
 import Texture from '@/components/ui/Texture';
+import Reveal from '@/components/motion/Reveal/Reveal';
+import RotatingWord from './RotatingWord';
+import CircleBurst from './CircleBurst';
 import styles from './Hero.module.css';
 
 // Brochure work: Huriya Air leads, Market Monie overlaps it, The Place tucks underneath (desktop only).
@@ -30,6 +33,9 @@ export default function Hero() {
   const title = useRef<HTMLHeadingElement>(null);
   const collageRef = useRef<HTMLDivElement>(null);
   const layers = useRef<Array<HTMLDivElement | null>>([]);
+  // Set once the entrance has finished: the playful layer (rotating word, living letters, burst tip) starts then.
+  const [alive, setAlive] = useState(false);
+  const [burstUsed, setBurstUsed] = useState(false);
 
   // "MULTIMEDIA" is justified to the exact width of "THRIVE", like the logo lockup.
   useLayoutEffect(() => {
@@ -73,6 +79,7 @@ export default function Hero() {
           { at: 0, run: () => el.setAttribute('data-band', '') },
           { at: 1150, run: () => el.setAttribute('data-collage', '') },
           { at: 1500, run: () => el.setAttribute('data-meta', '') },
+          { at: 2300, run: () => setAlive(true) },
         ]);
       });
     });
@@ -109,6 +116,81 @@ export default function Hero() {
       });
     });
   }, []);
+
+  // Living THRIVE letters: they lift, stretch and turn green near the pointer, then spring back.
+  // Touch: a tap on the wordmark sends a ripple; scrolling sways them slightly.
+  useEffect(() => {
+    const h = title.current;
+    if (!alive || !h || env.reducedMotion) return;
+    const thrive = h.querySelector<HTMLElement>(`.${styles.thrive}`);
+    if (!thrive) return;
+    const masks = [...thrive.querySelectorAll<HTMLElement>('[aria-hidden="true"] > span > span')];
+    if (!masks.length) return;
+    const st = masks.map(() => ({ f: 0, k: 0 }));
+    let centres: number[] = [];
+    const measure = () => {
+      centres = masks.map((m) => m.offsetLeft + m.offsetWidth / 2);
+    };
+    measure();
+    window.addEventListener('resize', measure);
+
+    let rippleAt = -1;
+    let clock = 0;
+    const onTap = () => {
+      rippleAt = clock;
+    };
+    thrive.addEventListener('pointerdown', onTap);
+
+    const C = [35, 35, 35];
+    const G = [106, 154, 54];
+    let resting = true;
+    const stop = subscribe((dt) => {
+      clock += dt;
+      const vh = scroll.vh || window.innerHeight;
+      if (scroll.y > vh * 1.2) return;
+      const box = thrive.getBoundingClientRect();
+      const cy = box.top + box.height / 2;
+      const size = parseFloat(getComputedStyle(thrive).fontSize) || 100;
+      const sway = env.touch ? clamp(scroll.velocity / 3000, -1, 1) * 4 : 0;
+      let moving = false;
+      masks.forEach((m, i) => {
+        const cx = box.left + (centres[i] ?? 0);
+        let target = 0;
+        let lean = 0;
+        if (!env.touch && pointer.active) {
+          const dx = pointer.x - cx;
+          const d = Math.hypot(dx, pointer.y - cy);
+          target = clamp(1 - d / 260) ** 2;
+          lean = clamp(dx / 260, -1, 1);
+        }
+        if (rippleAt >= 0) {
+          const t = clock - rippleAt - i * 0.06;
+          if (t > 0 && t < 0.5) target = Math.max(target, Math.sin((t / 0.5) * Math.PI));
+        }
+        const s = st[i];
+        s.f = damp(s.f, target, target > s.f ? 14 : 6, dt);
+        s.k = damp(s.k, lean * s.f * -6 + sway, 8, dt);
+        if (s.f > 0.002 || Math.abs(s.k) > 0.01) moving = true;
+        const mix = (a: number, b: number) => Math.round(a + (b - a) * s.f);
+        m.style.transform = `translateY(${(-s.f * 0.14 * size).toFixed(2)}px) scaleY(${(1 + s.f * 0.12).toFixed(4)}) skewX(${s.k.toFixed(2)}deg)`;
+        m.style.color = s.f > 0.002 ? `rgb(${mix(C[0], G[0])},${mix(C[1], G[1])},${mix(C[2], G[2])})` : '';
+      });
+      if (rippleAt >= 0 && clock - rippleAt > 0.5 + masks.length * 0.06) rippleAt = -1;
+      if (!moving && !resting) {
+        resting = true;
+        masks.forEach((m) => (m.style.transform = ''));
+      } else if (moving) resting = false;
+    });
+    return () => {
+      stop();
+      window.removeEventListener('resize', measure);
+      thrive.removeEventListener('pointerdown', onTap);
+      masks.forEach((m) => {
+        m.style.transform = '';
+        m.style.color = '';
+      });
+    };
+  }, [alive]);
 
   return (
     <section ref={root} id="top" className={styles.hero} data-section-theme="paper" aria-labelledby="hero-title">
@@ -160,8 +242,15 @@ export default function Hero() {
             className={styles.multimedia}
           />
         </h1>
-        <TextReveal text={hero.line} split="words" trigger="load" delay={1000} stagger={30} className={`t-lead ${styles.line}`} />
+        <Reveal as="p" trigger="load" delay={1000} distance={14} className={`t-lead ${styles.line}`}>
+          <span className="visually-hidden">{hero.line}</span>
+          <span aria-hidden="true">
+            {hero.lineLead} <RotatingWord words={hero.rotate} active={alive} /> {hero.lineTail}
+          </span>
+        </Reveal>
       </div>
+
+      <CircleBurst area={root} className={styles.burst} onBurst={() => setBurstUsed(true)} />
 
       <div className={styles.foot}>
         <div className={styles.actions}>
@@ -183,6 +272,10 @@ export default function Hero() {
           <TransitionLink href="/contact" className={styles.secondary}>
             {hero.secondary}
           </TransitionLink>
+          <span className={`t-meta ${styles.tip}`} data-show={(alive && !burstUsed) || undefined} aria-hidden="true">
+            ✦ <span className={styles.tipDesk}>Click</span>
+            <span className={styles.tipTouch}>Tap</span> anywhere
+          </span>
         </div>
         <span className={`t-meta ${styles.cue}`}>
           <span className={styles.cueLine} aria-hidden="true" />

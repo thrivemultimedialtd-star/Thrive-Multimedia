@@ -2,6 +2,10 @@
 
 export const hero = {
   line: 'We turn ideas into brands people remember, across print, web and multimedia.', // p.2
+  // The line is shown as lead + rotating word + tail. Each word is a brochure service.
+  lineLead: 'We turn ideas into',
+  rotate: ['brands', 'websites', 'films', 'signage', 'campaigns'],
+  lineTail: 'people remember, across print, web and multimedia.',
   cue: 'Scroll on for the work',
   meta: ['Print · Web · Multimedia', 'Full-service design agency'], // p.2
   cta: 'See the work',
