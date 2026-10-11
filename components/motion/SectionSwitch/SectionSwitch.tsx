@@ -13,6 +13,9 @@ const REVEAL_MS = 1800;
 const DOWN_LINE = 0.62;
 // Scrolling up: when the current section's top drops below this line, switch back.
 const UP_LINE = 0.38;
+// Only arriving at these sections plays the switch while scrolling (in either direction across
+// their top boundary); every other boundary is plain scrolling. The section index always uses it.
+const AUTO_SWITCH = new Set(['services']);
 
 /**
  * Blackbook-style switch between sections on the home page. It plays automatically
@@ -130,6 +133,7 @@ export default function SectionSwitch() {
           lastTops = tops;
           if (!prev) return;
           for (let i = 1; i < sections.length; i++) {
+            if (!AUTO_SWITCH.has(sections[i].id)) continue;
             // Down: section i rose past the line → switch forward to it.
             if (scroll.direction === 1 && prev[i] > vh * DOWN_LINE && tops[i] <= vh * DOWN_LINE) {
               switchTo(sections[i].id);
