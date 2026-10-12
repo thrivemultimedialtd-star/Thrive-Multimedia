@@ -114,8 +114,9 @@ export default function Hero() {
     });
   }, []);
 
-  // Living THRIVE letters: they lift, stretch and turn green near the pointer, then spring back.
-  // Touch: a tap on the wordmark sends a ripple; scrolling sways them slightly.
+  // Living THRIVE letters. A gentle wave always travels across the word (green on its crest) and
+  // MULTIMEDIA's spacing breathes. On top: letters lift, stretch and turn green near the pointer;
+  // on touch, a tap sends a ripple and scrolling sways them slightly.
   useEffect(() => {
     const h = title.current;
     if (!alive || !h || env.reducedMotion) return;
@@ -140,16 +141,20 @@ export default function Hero() {
 
     const C = [35, 35, 35];
     const G = [106, 154, 54];
-    let resting = true;
+    const WAVE_PERIOD = 3.6; // seconds for the crest to travel round
+    const BREATH_PERIOD = 6;
+    h.dataset.alive = '';
     const stop = subscribe((dt) => {
       clock += dt;
       const vh = scroll.vh || window.innerHeight;
-      if (scroll.y > vh * 1.2) return;
+      if (scroll.y > vh * 1.2 || document.hidden) return;
+      // The wave fades in over ~1.2s after the entrance.
+      const amp = clamp(clock / 1.2);
+      h.style.setProperty('--mm-breath', (Math.sin((clock * Math.PI * 2) / BREATH_PERIOD) * 0.06 * amp).toFixed(4));
       const box = thrive.getBoundingClientRect();
       const cy = box.top + box.height / 2;
       const size = parseFloat(getComputedStyle(thrive).fontSize) || 100;
       const sway = env.touch ? clamp(scroll.velocity / 3000, -1, 1) * 4 : 0;
-      let moving = false;
       masks.forEach((m, i) => {
         const cx = box.left + (centres[i] ?? 0);
         let target = 0;
@@ -167,21 +172,22 @@ export default function Hero() {
         const s = st[i];
         s.f = damp(s.f, target, target > s.f ? 14 : 6, dt);
         s.k = damp(s.k, lean * s.f * -6 + sway, 8, dt);
-        if (s.f > 0.002 || Math.abs(s.k) > 0.01) moving = true;
-        const mix = (a: number, b: number) => Math.round(a + (b - a) * s.f);
-        m.style.transform = `translateY(${(-s.f * 0.14 * size).toFixed(2)}px) scaleY(${(1 + s.f * 0.12).toFixed(4)}) skewX(${s.k.toFixed(2)}deg)`;
-        m.style.color = s.f > 0.002 ? `rgb(${mix(C[0], G[0])},${mix(C[1], G[1])},${mix(C[2], G[2])})` : '';
+        const w = Math.sin((clock * Math.PI * 2) / WAVE_PERIOD - i * 0.7);
+        const waveLift = (w * 0.5 + 0.5) * amp;
+        const waveGlow = Math.max(0, w) ** 2 * 0.7 * amp;
+        const tint = Math.max(s.f, waveGlow);
+        const mix = (a: number, b: number) => Math.round(a + (b - a) * tint);
+        m.style.transform = `translateY(${(-(s.f * 0.14 + waveLift * 0.085) * size).toFixed(2)}px) scaleY(${(1 + s.f * 0.12).toFixed(4)}) skewX(${s.k.toFixed(2)}deg)`;
+        m.style.color = tint > 0.002 ? `rgb(${mix(C[0], G[0])},${mix(C[1], G[1])},${mix(C[2], G[2])})` : '';
       });
       if (rippleAt >= 0 && clock - rippleAt > 0.5 + masks.length * 0.06) rippleAt = -1;
-      if (!moving && !resting) {
-        resting = true;
-        masks.forEach((m) => (m.style.transform = ''));
-      } else if (moving) resting = false;
     });
     return () => {
       stop();
       window.removeEventListener('resize', measure);
       thrive.removeEventListener('pointerdown', onTap);
+      delete h.dataset.alive;
+      h.style.removeProperty('--mm-breath');
       masks.forEach((m) => {
         m.style.transform = '';
         m.style.color = '';

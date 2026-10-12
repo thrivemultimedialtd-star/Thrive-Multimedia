@@ -65,13 +65,17 @@
   font-weight: 500;
   /* Scales with the wordmark so the justified tracking keeps the same proportions at every size. */
   font-size: clamp(0.9rem, 4.2vw, 5rem);
-  letter-spacing: var(--mm-track, 0.62em);
-  margin-right: calc(var(--mm-track, 0.62em) * -1);
+  /* --mm-breath (±0.06) is set every frame by Hero.tsx once the entrance has finished. */
+  letter-spacing: calc(var(--mm-track, 0.62em) * (1 + var(--mm-breath, 0)));
+  margin-right: calc(var(--mm-track, 0.62em) * (1 + var(--mm-breath, 0)) * -1);
   text-transform: uppercase;
   line-height: 1;
   margin-top: 0.5em;
   color: var(--logo-grey);
   transition: letter-spacing 2s var(--ease-out);
+}
+.title[data-alive] .multimedia {
+  transition: none;
 }
 :global(html[data-js]) .multimedia:not([data-revealed]) {
   letter-spacing: calc(var(--mm-track, 0.62em) * 1.6);
