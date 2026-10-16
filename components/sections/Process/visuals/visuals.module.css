@@ -1,11 +1,10 @@
-/* Every stage visual fills the panel behind the text and is clipped by the closing hand-off circle. */
+/* Every stage visual fills the panel behind the text. */
 .layer {
   position: absolute;
   inset: 0;
   opacity: 0;
   pointer-events: none;
   overflow: hidden;
-  clip-path: circle(calc((1 - var(--close, 0)) * 75%) at 50% 50%);
 }
 
 .canvas {

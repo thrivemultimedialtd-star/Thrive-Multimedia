@@ -1,3 +1,11 @@
+.work {
+  /* Its own paper colours (data-theme="paper" sets the variables), so it shows immediately as the
+     dark approach panel scrolls away, before the page colour catches up. */
+  background: var(--bg);
+  color: var(--fg);
+  padding-top: clamp(4rem, 8vw, 7rem);
+}
+
 .intro {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));

@@ -1,7 +1,7 @@
 .track {
   position: relative;
-  /* One viewport per stage plus room for the hand-off. */
-  height: calc((var(--stages) + 1) * 100svh);
+  /* One viewport per stage, plus a short hold on the last one before the panel scrolls away. */
+  height: calc((var(--stages) + 0.4) * 100svh);
 }
 
 .panel {
@@ -10,8 +10,6 @@
   height: 100svh;
   overflow: hidden;
   color: var(--paper);
-  /* The ink field closes into a circle at the end of the sequence. */
-  --close: 0;
   isolation: isolate;
 }
 .panel::before {
@@ -20,7 +18,6 @@
   inset: 0;
   z-index: -1;
   background: #0b120a;
-  clip-path: circle(calc((1 - var(--close)) * 75%) at 50% 50%);
 }
 
 .head {
@@ -31,7 +28,7 @@
   justify-content: space-between;
   padding-top: 0.9rem;
   border-top: 1px solid var(--rule-light);
-  opacity: calc(0.6 - var(--close) * 2);
+  opacity: 0.6;
 }
 
 .marker {
@@ -42,7 +39,7 @@
   width: 10px;
   height: 40svh;
   transform: translateY(-50%);
-  opacity: calc(0.5 - var(--close) * 2);
+  opacity: 0.5;
 }
 .marker::before {
   content: '';
@@ -73,7 +70,6 @@
   gap: clamp(1.25rem, 2.5vw, 2rem);
   padding: var(--nav-h) var(--margin) 2rem;
   text-align: center;
-  opacity: calc(1 - var(--close) * 1.6);
 }
 
 .word {
@@ -109,7 +105,7 @@
 
 @media (max-width: 900px) {
   .track {
-    height: calc((var(--stages) * 0.6 + 1) * 100svh);
+    height: calc((var(--stages) * 0.6 + 0.4) * 100svh);
   }
   .word {
     font-size: clamp(3.6rem, 18vw, 7rem);

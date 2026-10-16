@@ -11,7 +11,7 @@ import LogoStickers from './visuals/LogoStickers';
 import type { StageVisual } from './visuals/types';
 import styles from './Process.module.css';
 
-const HANDOFF = 0.86; // last 14% of the track: the panel closes into a circle
+const DWELL = 0.9; // the last 10% of the track holds DELIVER before the panel scrolls away
 const visualsFor = [CircleNetwork, GlowRing, PatternReveal, LogoStickers];
 
 /**
@@ -45,7 +45,6 @@ export default function Process({ id = 'process' }: { id?: string }) {
     const n = stages.length;
     let last = -1;
     let shown = -1;
-    let handedOff = false;
 
     // Each stage dwells, then crosses to the next over ~16% of its segment.
     const stepped = (q: number) => {
@@ -59,7 +58,7 @@ export default function Process({ id = 'process' }: { id?: string }) {
       const p = progressPinned(el);
       if (p === last) return;
       last = p;
-      const q = clamp(p / HANDOFF);
+      const q = clamp(p / DWELL);
       const f = q * (n - 1);
       const s = stepped(q);
       const sCopy = stepped(clamp(q - 0.02));
@@ -87,16 +86,6 @@ export default function Process({ id = 'process' }: { id?: string }) {
         counter.current.textContent = String(active + 1).padStart(2, '0');
       }
       grid.current?.setProgress(q);
-
-      // Hand-off: the panel closes into a circle and the page returns to paper.
-      const h = clamp((p - HANDOFF) / (1 - HANDOFF));
-      panel.current?.style.setProperty('--close', ease.inOutCubic(h).toFixed(4));
-      const nowHanded = h > 0.02;
-      if (nowHanded !== handedOff) {
-        handedOff = nowHanded;
-        el.dataset.sectionTheme = nowHanded ? 'paper' : 'ink';
-        window.dispatchEvent(new Event('thrive:theme'));
-      }
     };
 
     let stopTick: (() => void) | null = null;
