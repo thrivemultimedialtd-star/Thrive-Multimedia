@@ -11,15 +11,14 @@ const HOLD_MS = 1400;
 const REVEAL_MS = 1800;
 // Scrolling down: when the next section's top rises past this line, switch to it.
 const DOWN_LINE = 0.62;
-// Scrolling up: when the current section's top drops below this line, switch back.
-const UP_LINE = 0.38;
-// Only arriving at these sections plays the switch while scrolling (in either direction across
-// their top boundary); every other boundary is plain scrolling. The section index always uses it.
+// Only arriving at these sections while scrolling DOWN plays the switch; scrolling back up is
+// always plain scrolling, so a section never goes dark as you return to it.
+// The section index always uses it.
 const AUTO_SWITCH = new Set(['services']);
 
 /**
  * Blackbook-style switch between sections on the home page. It plays automatically
- * whenever you scroll from one section into the next (either direction) and when you
+ * when you scroll down into Services (never when scrolling back up) and when you
  * use the section index: the view dissolves into a fully dark screen, holds with the
  * Thrive mark and the destination's name, then the destination appears through
  * circular holes opening from the centre.
@@ -137,13 +136,6 @@ export default function SectionSwitch() {
             // Down: section i rose past the line → switch forward to it.
             if (scroll.direction === 1 && prev[i] > vh * DOWN_LINE && tops[i] <= vh * DOWN_LINE) {
               switchTo(sections[i].id);
-              return;
-            }
-            // Up: section i dropped below the line → switch back to the last screen of section i-1.
-            if (scroll.direction === -1 && prev[i] < vh * UP_LINE && tops[i] >= vh * UP_LINE) {
-              const prevTop = docTop(sections[i - 1].el);
-              const lastScreen = Math.max(prevTop, docTop(sections[i].el) - vh);
-              switchTo(sections[i - 1].id, { top: lastScreen });
               return;
             }
           }

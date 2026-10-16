@@ -11,7 +11,7 @@ import styles from './StudioGallery.module.css';
  */
 export default function StudioGallery() {
   return (
-    <section className={`wrap section ${styles.gallery}`} data-section-theme="paper" aria-labelledby="studio-title">
+    <section className="wrap section" data-section-theme="paper" aria-labelledby="studio-title">
       <Reveal variant="rule" className="section-head">
         <span className="t-meta">More from the studio</span>
         <span className="t-meta">{String(studioGallery.length).padStart(2, '0')} pieces</span>

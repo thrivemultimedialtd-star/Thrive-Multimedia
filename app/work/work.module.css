@@ -1,5 +1,6 @@
 .lists {
-  margin-top: clamp(4rem, 8vw, 8rem);
+  /* Extra space above as padding (not margin) so the section's own background fills the gap. */
+  padding-top: calc(var(--section) + clamp(4rem, 8vw, 8rem));
 }
 
 .columns {
