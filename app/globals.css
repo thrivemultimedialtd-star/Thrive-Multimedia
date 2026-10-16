@@ -48,14 +48,16 @@
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 }
 
-[data-theme='green'] {
+[data-theme='green'],
+[data-section-theme='green'] {
   --bg: var(--green-deep);
   --fg: var(--paper);
   --fg-muted: rgba(243, 241, 234, 0.66);
   --rule: var(--rule-light);
   --accent: var(--green-bright);
 }
-[data-theme='charcoal'] {
+[data-theme='charcoal'],
+[data-section-theme='charcoal'] {
   --bg: var(--charcoal);
   --fg: var(--paper);
   --fg-muted: rgba(243, 241, 234, 0.6);
@@ -63,19 +65,28 @@
   --accent: var(--green-bright);
 }
 /* Near-black green: the dark the page transition fades into. Used by the approach sequence. */
-[data-theme='ink'] {
+[data-theme='ink'],
+[data-section-theme='ink'] {
   --bg: #0b120a;
   --fg: var(--paper);
   --fg-muted: rgba(243, 241, 234, 0.62);
   --rule: var(--rule-light);
   --accent: var(--green-bright);
 }
-[data-theme='paper'] {
+[data-theme='paper'],
+[data-section-theme='paper'] {
   --bg: var(--paper);
   --fg: var(--charcoal);
   --fg-muted: rgba(35, 35, 35, 0.62);
   --rule: var(--rule-dark);
   --accent: var(--thrive-green);
+}
+
+/* Themed sections paint their own colours, so they look right wherever they are on screen.
+   (SectionTheme still sets <body data-theme> from the section under the nav, for the nav and cursor.) */
+[data-section-theme] {
+  background-color: var(--bg);
+  color: var(--fg);
 }
 
 /* ───────────────────────── Base ───────────────────────── */

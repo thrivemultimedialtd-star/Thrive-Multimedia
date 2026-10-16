@@ -4,8 +4,9 @@ import { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 
 /**
- * Sections declare data-section-theme="paper|green|charcoal". Whichever section crosses
- * the middle of the viewport sets <body data-theme>, and the colours ease across in CSS.
+ * Sections declare data-section-theme="paper|ink|green|charcoal" and paint their own colours
+ * (globals.css). Whichever section is under the nav sets <body data-theme>, so the fixed nav,
+ * logo and cursor always match what they sit on.
  */
 export default function SectionTheme() {
   const pathname = usePathname();
@@ -14,7 +15,7 @@ export default function SectionTheme() {
     const body = document.body;
     const active = new Set<Element>();
     const apply = () => {
-      // Prefer the most recently entered section if two overlap the midline.
+      // Prefer the most recently entered section if two overlap the band.
       const last = [...active].pop() as HTMLElement | undefined;
       body.dataset.theme = last?.dataset.sectionTheme ?? 'paper';
     };
@@ -23,7 +24,7 @@ export default function SectionTheme() {
         entries.forEach((e) => (e.isIntersecting ? active.add(e.target) : active.delete(e.target)));
         apply();
       },
-      { rootMargin: '-50% 0px -50% 0px' },
+      { rootMargin: '-6% 0px -93% 0px' }, // a thin band just under the nav
     );
     const sections = document.querySelectorAll('[data-section-theme]');
     sections.forEach((s) => io.observe(s));
