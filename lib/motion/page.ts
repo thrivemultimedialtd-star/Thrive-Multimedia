@@ -1,6 +1,6 @@
 // Page-level state shared between the transition system and the content it reveals.
-// While the transition grid covers the screen, entrance animations wait so they play
-// in view rather than behind the circles.
+// While a transition (the home page section switch) covers the screen, entrance animations
+// wait so they play in view rather than behind it.
 
 type Navigate = (href: string, opts?: { origin?: { x: number; y: number }; fromCovered?: boolean }) => void;
 

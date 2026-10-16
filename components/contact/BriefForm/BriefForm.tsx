@@ -28,18 +28,16 @@ export default function BriefForm() {
   const honeypot = useRef<HTMLInputElement>(null);
   const headings = useRef<Array<HTMLHeadingElement | null>>([]);
   const thanksGrid = useRef<CircleGrid | null>(null);
-  const firstRender = useRef(true);
+  const shownStep = useRef(1);
 
   useEffect(() => {
     startedAt.current = Date.now();
   }, []);
 
-  // Move focus to the new step's heading (not on first render, so the page doesn't jump).
+  // Move focus to the new step's heading, only when the step actually changes.
   useEffect(() => {
-    if (firstRender.current) {
-      firstRender.current = false;
-      return;
-    }
+    if (shownStep.current === step) return;
+    shownStep.current = step;
     headings.current[step - 1]?.focus({ preventScroll: true });
   }, [step]);
 

@@ -17,6 +17,8 @@ interface Props {
   duration?: number; // ms per unit
   className?: string;
   id?: string;
+  /** IntersectionObserver margin for trigger="view" (e.g. '0px 0px 10% 0px' to start early). */
+  rootMargin?: string;
 }
 
 /**
@@ -33,9 +35,10 @@ export default function TextReveal({
   duration = 1100,
   className,
   id,
+  rootMargin,
 }: Props) {
   const ref = useRef<HTMLElement>(null);
-  useReveal(ref, { trigger, delay });
+  useReveal(ref, { trigger, delay, rootMargin });
 
   const lines = Array.isArray(text) ? text : [text];
   const full = lines.join(' ');

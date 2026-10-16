@@ -13,6 +13,7 @@ interface Props {
   distance?: number; // px for 'up'
   className?: string;
   style?: CSSProperties;
+  rootMargin?: string;
 }
 
 /** Generic in-view reveal for supporting content. Quieter than TextReveal by design. */
@@ -25,9 +26,10 @@ export default function Reveal({
   distance = 28,
   className,
   style,
+  rootMargin,
 }: Props) {
   const ref = useRef<HTMLElement>(null);
-  useReveal(ref, { trigger, delay });
+  useReveal(ref, { trigger, delay, rootMargin });
   const Tag = as as 'div';
   return (
     <Tag

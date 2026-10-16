@@ -4,6 +4,8 @@
   place-items: center;
   padding: clamp(1.5rem, 3vw, 3rem) var(--margin) clamp(5rem, 9vw, 8rem);
   color: var(--paper);
+  /* Dark from the moment it scrolls in, rather than waiting for the page colour to change. */
+  background: #0b120a;
 }
 
 .inner {

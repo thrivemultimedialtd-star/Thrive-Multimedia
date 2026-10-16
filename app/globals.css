@@ -104,8 +104,8 @@ body {
   overflow-x: clip;
   /* SectionTheme changes data-theme on <body>; colours ease across. */
   transition:
-    background-color 0.7s var(--ease-in-out),
-    color 0.7s var(--ease-in-out);
+    background-color 0.4s var(--ease-in-out),
+    color 0.4s var(--ease-in-out);
 }
 
 h1,
