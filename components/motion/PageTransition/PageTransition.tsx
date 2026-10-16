@@ -12,9 +12,13 @@ const REVEAL_MS = 1200;
 // The wave: a bright Thrive-green front that deepens to near-black behind it.
 const RAMP = { from: '#7fb53f', to: '#0b120a', start: 0.3 };
 
+// Project pages (/work/<slug>) open instantly, without the circle cover.
+const isProject = (path: string) => /^\/work\/[^/]+\/?$/.test(path);
+
 /**
  * Route transitions through the full-screen circle grid:
  * cover from the click point → swap route underneath → iris open from the centre.
+ * Opening a project page skips the transition.
  */
 export default function PageTransition() {
   const router = useRouter();
@@ -25,6 +29,7 @@ export default function PageTransition() {
   const expected = useRef<string | null>(null);
   const arrived = useRef<(() => void) | null>(null);
   const lastPath = useRef(pathname);
+  const instant = useRef<string | null>(null);
   const [dims, setDims] = useState({ cols: 15, rows: 17 });
   const [announce, setAnnounce] = useState('');
 
@@ -64,12 +69,21 @@ export default function PageTransition() {
   useEffect(() => {
     if (pathname === lastPath.current) return;
     lastPath.current = pathname;
+    if (instant.current === pathname) {
+      // A project opened without the transition: start at the top and focus the new page.
+      instant.current = null;
+      window.scrollTo(0, 0);
+      document.getElementById('main')?.focus({ preventScroll: true });
+      setAnnounce(document.title);
+      return;
+    }
     if (expected.current !== null) {
       arrived.current?.();
       return;
     }
     // Back/forward or any navigation we didn't start: snap to covered, then open.
-    if (busy.current) return;
+    // Project pages keep the browser's own behaviour, with no circles.
+    if (busy.current || isProject(pathname)) return;
     busy.current = true;
     setActive(true);
     page.setCovered(true);
@@ -90,6 +104,11 @@ export default function PageTransition() {
         return;
       }
       if (busy.current) return;
+      if (isProject(target.pathname)) {
+        instant.current = target.pathname;
+        router.push(target.pathname + target.search + target.hash, { scroll: false });
+        return;
+      }
       busy.current = true;
       setActive(true);
       const grid = gridRef.current;

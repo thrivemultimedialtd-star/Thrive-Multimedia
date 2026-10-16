@@ -1,31 +1,16 @@
 .track {
-  position: relative;
-  height: 220svh;
-}
-
-.panel {
-  position: sticky;
-  top: 0;
-  height: 100svh;
-  overflow: hidden;
   display: grid;
   place-items: center;
-  --p: 0;
+  padding: clamp(6rem, 12vw, 10rem) var(--margin);
+  border-top: 1px solid var(--rule);
 }
 
 .link {
-  position: relative;
-  z-index: 1;
   display: grid;
   justify-items: center;
   gap: 1.25rem;
   text-align: center;
-  padding: 2rem var(--margin);
   color: var(--charcoal);
-  transition: color 0.5s linear;
-}
-.panel[data-covered] .link {
-  color: var(--paper);
 }
 
 .name {
@@ -36,30 +21,30 @@
   line-height: 0.9;
   letter-spacing: -0.035em;
   text-transform: uppercase;
-  transform: scale(calc(0.86 + var(--p) * 0.14));
+  transition: color 0.4s linear;
 }
 
 .hint {
-  opacity: calc(1 - var(--p) * 1.5);
+  display: inline-flex;
+  gap: 0.6rem;
+  color: var(--fg-muted);
+}
+.hint span {
+  transition: transform 0.5s var(--ease-out);
+}
+
+.link:hover .name,
+.link:focus-visible .name {
+  color: var(--thrive-green);
+}
+.link:hover .hint span,
+.link:focus-visible .hint span {
+  transform: translateX(6px);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .track {
-    height: auto;
-  }
-  .panel {
-    position: relative;
-    height: auto;
-    padding-block: 8rem;
-    background: var(--green-deep);
-  }
-  .link {
-    color: var(--paper);
-  }
-  .name {
-    transform: none;
-  }
-  .hint {
-    display: none;
+  .name,
+  .hint span {
+    transition: none;
   }
 }
