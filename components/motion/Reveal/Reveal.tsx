@@ -29,7 +29,7 @@ export default function Reveal({
   rootMargin,
 }: Props) {
   const ref = useRef<HTMLElement>(null);
-  useReveal(ref, { trigger, delay, rootMargin });
+  useReveal(ref, { trigger, delay: Math.min(delay, 200), rootMargin });
   const Tag = as as 'div';
   return (
     <Tag

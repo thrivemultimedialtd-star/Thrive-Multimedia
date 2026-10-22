@@ -1,7 +1,6 @@
 import { projects } from '@/content/projects';
 import TextReveal from '@/components/motion/TextReveal/TextReveal';
 import Reveal from '@/components/motion/Reveal/Reveal';
-import Magnetic from '@/components/motion/Magnetic';
 import TransitionLink from '@/components/motion/TransitionLink';
 import ProjectGrid from '@/components/work/ProjectGrid/ProjectGrid';
 import styles from './SelectedWork.module.css';
@@ -31,14 +30,12 @@ export default function SelectedWork({ count = 5 }: { count?: number }) {
       <ProjectGrid projects={projects.slice(0, count)} />
 
       <div className={styles.more}>
-        <Magnetic>
-          <TransitionLink href="/work" className={styles.moreLink} data-cursor="open" data-cursor-label="All">
-            <span>All work</span>
-            <span className={styles.arrow} aria-hidden="true">
-              →
-            </span>
-          </TransitionLink>
-        </Magnetic>
+        <TransitionLink href="/work" className={styles.moreLink}>
+          <span>All work</span>
+          <span className={styles.arrow} aria-hidden="true">
+            →
+          </span>
+        </TransitionLink>
       </div>
     </section>
   );

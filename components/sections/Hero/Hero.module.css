@@ -18,8 +18,8 @@
 .metaTop,
 .foot {
   transition:
-    opacity 0.9s linear,
-    transform 1s var(--ease-out);
+    opacity 0.4s ease-out,
+    transform 0.4s ease-out;
 }
 :global(html[data-js]) .hero:not([data-meta]) .metaTop,
 :global(html[data-js]) .hero:not([data-meta]) .foot {
@@ -65,20 +65,12 @@
   font-weight: 500;
   /* Scales with the wordmark so the justified tracking keeps the same proportions at every size. */
   font-size: clamp(0.9rem, 4.2vw, 5rem);
-  /* --mm-breath (±0.06) is set every frame by Hero.tsx once the entrance has finished. */
-  letter-spacing: calc(var(--mm-track, 0.62em) * (1 + var(--mm-breath, 0)));
-  margin-right: calc(var(--mm-track, 0.62em) * (1 + var(--mm-breath, 0)) * -1);
+  letter-spacing: var(--mm-track, 0.62em);
+  margin-right: calc(var(--mm-track, 0.62em) * -1);
   text-transform: uppercase;
   line-height: 1;
   margin-top: 0.5em;
   color: var(--logo-grey);
-  transition: letter-spacing 2s var(--ease-out);
-}
-.title[data-alive] .multimedia {
-  transition: none;
-}
-:global(html[data-js]) .multimedia:not([data-revealed]) {
-  letter-spacing: calc(var(--mm-track, 0.62em) * 1.6);
 }
 
 .line {
@@ -118,8 +110,8 @@
   font-size: 0.98rem;
   box-shadow: 0 14px 30px -16px rgba(23, 37, 17, 0.6);
   transition:
-    background-color 0.5s var(--ease-out),
-    gap 0.5s var(--ease-out);
+    background-color 0.25s ease-out,
+    gap 0.25s ease-out;
 }
 .cta:hover,
 .cta:focus-visible {
@@ -134,11 +126,6 @@
   padding-bottom: 0.15rem;
 }
 
-/* ── Playful layer ── */
-.thrive :global([aria-hidden='true']) > span > span {
-  transform-origin: 50% 100%;
-  will-change: transform;
-}
 /* ── Collage (desktop: layered to the right of the type) ── */
 .collage {
   position: absolute;

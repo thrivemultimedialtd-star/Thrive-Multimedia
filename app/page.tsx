@@ -6,8 +6,6 @@ import ServiceList from '@/components/sections/ServiceList/ServiceList';
 import Markets from '@/components/sections/Markets/Markets';
 import AboutSection from '@/components/sections/About/AboutSection';
 import ContactSection from '@/components/sections/Contact/ContactSection';
-import SectionIndex from '@/components/ui/SectionIndex/SectionIndex';
-import SectionSwitch from '@/components/motion/SectionSwitch/SectionSwitch';
 
 export default function Home() {
   return (
@@ -20,8 +18,6 @@ export default function Home() {
       <Markets />
       <AboutSection />
       <ContactSection />
-      <SectionIndex />
-      <SectionSwitch />
     </>
   );
 }

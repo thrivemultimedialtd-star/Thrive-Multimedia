@@ -21,7 +21,7 @@
   line-height: 0.9;
   letter-spacing: -0.035em;
   text-transform: uppercase;
-  transition: color 0.4s linear;
+  transition: color 0.25s ease-out;
 }
 
 .hint {
@@ -30,7 +30,7 @@
   color: var(--fg-muted);
 }
 .hint span {
-  transition: transform 0.5s var(--ease-out);
+  transition: transform 0.25s ease-out;
 }
 
 .link:hover .name,

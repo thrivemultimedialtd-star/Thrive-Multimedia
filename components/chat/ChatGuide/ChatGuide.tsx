@@ -3,8 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { chatNodes, matchQuestion, type ChatOption } from '@/content/chat';
-import { ease, env, page, scroll, subscribe, tween, type CircleGrid } from '@/lib/motion';
-import TransitionGrid from '@/components/motion/TransitionGrid/TransitionGrid';
+import { env, page, scroll, subscribe } from '@/lib/motion';
 import styles from './ChatGuide.module.css';
 
 type Message = { id: number; from: 'bot' | 'you'; text: string };
@@ -24,7 +23,6 @@ export default function ChatGuide() {
   const panel = useRef<HTMLDivElement>(null);
   const thread = useRef<HTMLDivElement>(null);
   const input = useRef<HTMLInputElement>(null);
-  const grid = useRef<CircleGrid | null>(null);
   const root = useRef<HTMLDivElement>(null);
   const nextId = useRef(0);
   const run = useRef(0); // cancels an in-flight reply when a new one starts
@@ -41,7 +39,7 @@ export default function ChatGuide() {
     for (const text of node.says) {
       if (!env.reducedMotion) {
         setTyping(true);
-        await new Promise((r) => setTimeout(r, Math.min(450 + text.length * 4, 1100)));
+        await new Promise((r) => setTimeout(r, Math.min(200 + text.length, 400)));
         if (token !== run.current) return;
         setTyping(false);
       }
@@ -64,18 +62,6 @@ export default function ChatGuide() {
       say('start');
     }
   }, [open, say]);
-
-  // Open the panel through the site's circle grid, from the launcher's corner.
-  useEffect(() => {
-    if (!open) return;
-    const g = grid.current;
-    if (!g || env.reducedMotion) {
-      g?.setProgress(1);
-      return;
-    }
-    g.setProgress(0);
-    return tween({ duration: 650, ease: ease.linear, onUpdate: (v) => g.setProgress(v) });
-  }, [open]);
 
   // Focus in on open, back to the launcher on close; Escape closes.
   useEffect(() => {
@@ -163,21 +149,6 @@ export default function ChatGuide() {
         aria-label="Thrive studio guide"
         hidden={!open}
       >
-        <div className={styles.grid} aria-hidden="true">
-          <TransitionGrid
-            cols={8}
-            rows={11}
-            mode="iris"
-            color="#0b120a"
-            spread={0.7}
-            origin={{ x: 1, y: 1 }}
-            initial={0}
-            onReady={(g) => {
-              grid.current = g;
-            }}
-          />
-        </div>
-
         <header className={styles.head}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/brand/thrive-mark.png" alt="" width={28} height={28} className={styles.headMark} />

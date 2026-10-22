@@ -36,7 +36,8 @@ export function useReveal(
     if (trigger === 'load') {
       whenFontsReady().then(() => !cancelled && fire());
     } else {
-      stopView = onceInView(el, fire, rootMargin);
+      // Start just before the element is on screen, so content never waits to appear.
+      stopView = onceInView(el, fire, rootMargin ?? '0px 0px 5% 0px');
     }
     return () => {
       cancelled = true;

@@ -42,7 +42,7 @@ export const page = {
   /** Switch to a section on the current page (Blackbook-style). Falls back to a plain jump. */
   switchSection(id: string) {
     if (sectionSwitcher) sectionSwitcher(id);
-    else document.getElementById(id)?.scrollIntoView();
+    else document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   },
   /** Navigate through the circle transition. Falls back to a normal navigation. */
   navigate(href: string, opts?: Parameters<Navigate>[1]) {

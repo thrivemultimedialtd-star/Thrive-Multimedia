@@ -8,18 +8,16 @@
 
 .frame {
   position: relative;
-  will-change: transform;
 }
 
 .image {
   position: relative;
-  will-change: transform;
   aspect-ratio: var(--ratio, 4 / 3);
 }
 
 .inner {
   position: absolute;
-  inset: -12px; /* room for the pointer lean without exposing edges */
+  inset: 0;
 }
 
 .meta {
@@ -28,7 +26,6 @@
   column-gap: 1rem;
   align-items: baseline;
   margin-top: 1.25rem;
-  will-change: transform;
 }
 
 .number {
@@ -66,7 +63,7 @@
   background-size: 0% 1px;
   background-position: 0 92%;
   background-repeat: no-repeat;
-  transition: background-size 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: background-size 0.3s ease-out;
 }
 .link:hover .title :global(span),
 .link:focus-visible .title :global(span) {
@@ -97,5 +94,23 @@
   .full .image,
   .wide .image {
     --ratio: 4 / 3;
+  }
+}
+
+/* Hover: a gentle image zoom (CSS only). */
+.inner {
+  transition: transform 0.3s ease-out;
+}
+.link:hover .inner,
+.link:focus-visible .inner {
+  transform: scale(1.03);
+}
+@media (prefers-reduced-motion: reduce) {
+  .inner {
+    transition: none;
+  }
+  .link:hover .inner,
+  .link:focus-visible .inner {
+    transform: none;
   }
 }

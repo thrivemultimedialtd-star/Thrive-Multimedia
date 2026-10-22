@@ -6,7 +6,7 @@
   display: grid;
   justify-items: end;
   gap: 0.8rem;
-  transition: opacity 0.3s linear;
+  transition: opacity 0.3s ease-out;
 }
 .root[data-hidden] {
   opacity: 0;
@@ -26,9 +26,8 @@
   font-weight: 600;
   font-size: 0.92rem;
   transition:
-    padding 0.5s var(--ease-out),
-    background-color 0.3s linear;
-  animation: pulse 2.4s var(--ease-out) 2.5s 1 both;
+    padding 0.25s ease-out,
+    background-color 0.2s ease-out;
 }
 .launcher:hover,
 .launcher:focus-visible {
@@ -44,8 +43,8 @@
   overflow: hidden;
   max-width: 8rem;
   transition:
-    max-width 0.5s var(--ease-out),
-    opacity 0.3s linear;
+    max-width 0.25s ease-out,
+    opacity 0.2s ease-out;
 }
 .root[data-compact]:not([data-open]) .launcher {
   padding: 0.75rem;
@@ -54,19 +53,6 @@
   max-width: 0;
   opacity: 0;
 }
-@keyframes pulse {
-  0% {
-    box-shadow:
-      0 16px 36px -14px rgba(0, 0, 0, 0.55),
-      0 0 0 0 rgba(127, 181, 63, 0.55);
-  }
-  100% {
-    box-shadow:
-      0 16px 36px -14px rgba(0, 0, 0, 0.55),
-      0 0 0 18px rgba(127, 181, 63, 0);
-  }
-}
-
 /* ── Panel ── */
 .panel {
   position: relative;
@@ -82,17 +68,16 @@
   border: 1px solid rgba(243, 241, 234, 0.14);
   box-shadow: 0 30px 70px -24px rgba(0, 0, 0, 0.6);
   isolation: isolate;
+  animation: panelIn 0.2s ease-out both;
 }
 .panel[hidden] {
   display: none;
 }
-
-/* The circle grid opens from the launcher's corner, revealing the panel content. */
-.grid {
-  position: absolute;
-  inset: 0;
-  z-index: 5;
-  pointer-events: none;
+@keyframes panelIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
 }
 
 .head {
@@ -130,8 +115,8 @@
   border-radius: 50%;
   color: rgba(243, 241, 234, 0.7);
   transition:
-    background-color 0.3s linear,
-    color 0.3s linear;
+    background-color 0.2s ease-out,
+    color 0.2s ease-out;
 }
 .iconBtn:hover,
 .iconBtn:focus-visible {
@@ -160,7 +145,7 @@
   font-size: 0.92rem;
   line-height: 1.5;
   white-space: pre-line;
-  animation: bubbleIn 0.45s var(--ease-out) both;
+  animation: bubbleIn 0.2s ease-out both;
 }
 .bot {
   justify-self: start;
@@ -177,7 +162,7 @@
 @keyframes bubbleIn {
   from {
     opacity: 0;
-    transform: translateY(8px) scale(0.98);
+    transform: translateY(4px);
   }
 }
 
@@ -217,7 +202,7 @@
   flex-wrap: wrap;
   gap: 0.45rem;
   padding-top: 0.4rem;
-  animation: bubbleIn 0.45s var(--ease-out) both;
+  animation: bubbleIn 0.2s ease-out both;
 }
 .option {
   padding: 0.55rem 0.9rem;
@@ -228,8 +213,8 @@
   line-height: 1.2;
   text-align: left;
   transition:
-    background-color 0.25s linear,
-    color 0.25s linear;
+    background-color 0.25s ease-out,
+    color 0.25s ease-out;
 }
 .option:hover,
 .option:focus-visible {
@@ -270,7 +255,7 @@
   color: var(--green-ink);
   font-size: 1.1rem;
   font-weight: 700;
-  transition: opacity 0.2s linear;
+  transition: opacity 0.2s ease-out;
 }
 .send:disabled {
   opacity: 0.35;
@@ -300,12 +285,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .launcher,
+  .panel,
   .bubble,
   .options {
     animation: none;
-  }
-  .grid {
-    display: none;
   }
 }

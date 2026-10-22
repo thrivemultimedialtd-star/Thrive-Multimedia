@@ -1,58 +1,24 @@
 .root {
   display: block;
-}
-
-.lineWrap {
-  display: block;
-}
-
-.word {
-  display: inline-block;
-  white-space: nowrap;
-}
-
-.space {
-  display: inline-block;
-  width: 0.26em;
-}
-
-/* Masks extend a little so descenders and accents aren't cropped. */
-.mask {
-  display: inline-block;
-  overflow: hidden;
-  vertical-align: top;
-  padding-bottom: 0.08em;
-  margin-bottom: -0.08em;
+  transition:
+    opacity 0.45s ease-out,
+    transform 0.45s ease-out;
 }
 
 .line {
   display: block;
 }
 
-.unit {
-  display: inline-block;
-  will-change: transform;
-}
-
-/* Only hide content once JS is known to be running. */
-:global(html[data-js]) .root:not([data-revealed]) .unit {
-  transform: translate3d(0, 112%, 0) rotate(2deg);
-}
-
-.root[data-revealed] .unit {
-  transform: none;
-  transition: transform var(--dur, 1100ms) cubic-bezier(0.16, 1, 0.3, 1);
-  transition-delay: calc(var(--i) * var(--stagger, 45ms));
+:global(html[data-js]) .root:not([data-revealed]) {
+  opacity: 0;
+  transform: translateY(12px);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  :global(html[data-js]) .root:not([data-revealed]) .unit {
-    transform: none;
-    opacity: 0;
+  .root {
+    transition: opacity 0.3s ease-out;
   }
-  .root[data-revealed] .unit {
-    opacity: 1;
-    transition: opacity 0.4s linear;
-    transition-delay: 0ms;
+  :global(html[data-js]) .root:not([data-revealed]) {
+    transform: none;
   }
 }

@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { nav, contact, site } from '@/content/site';
-import { scroll, subscribe } from '@/lib/motion';
 import TransitionLink from '@/components/motion/TransitionLink';
 import Logo from '../Logo';
 import styles from './Navigation.module.css';
@@ -21,23 +20,12 @@ export default function Navigation() {
     setOpen(false);
   }
 
-  // Step out of the way while reading down; come back on any upward scroll.
+  // The nav always stays visible; it only gains a soft backing once the page has scrolled.
   useEffect(() => {
-    let hidden = false;
-    return subscribe(() => {
-      const el = header.current;
-      if (!el) return;
-      const shouldHide = scroll.y > 160 && scroll.direction === 1 && Math.abs(scroll.velocity) > 40;
-      const shouldShow = scroll.direction === -1 || scroll.y < 160;
-      if (shouldHide && !hidden) {
-        hidden = true;
-        el.dataset.hidden = '';
-      } else if (shouldShow && hidden) {
-        hidden = false;
-        delete el.dataset.hidden;
-      }
-      el.toggleAttribute('data-scrolled', scroll.y > 40);
-    });
+    const onScroll = () => header.current?.toggleAttribute('data-scrolled', window.scrollY > 40);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   useEffect(() => {

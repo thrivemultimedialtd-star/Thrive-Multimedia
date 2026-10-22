@@ -23,7 +23,7 @@ export default function StudioGallery() {
             <figure>
               <div className={styles.frame} style={{ aspectRatio: `${item.image.width} / ${item.image.height}` }}>
                 <IrisReveal delay={(i % 3) * 80}>
-                  <Placeholder label={item.brand} image={item.image} sizes="(max-width: 768px) 100vw, 40vw" parallax={0.06} />
+                  <Placeholder label={item.brand} image={item.image} sizes="(max-width: 768px) 100vw, 40vw" />
                 </IrisReveal>
               </div>
               <Reveal as="figcaption" delay={180} distance={10} className={styles.caption}>

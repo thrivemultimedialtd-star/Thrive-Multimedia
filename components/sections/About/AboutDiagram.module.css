@@ -4,7 +4,6 @@
   aspect-ratio: 1;
   max-width: 640px;
   margin-inline: auto;
-  --together: 0;
 }
 
 .circle {
@@ -20,13 +19,9 @@
   gap: 0.35rem;
   padding: 17%;
   mix-blend-mode: multiply;
-  will-change: translate;
-  transition:
-    scale 0.7s var(--ease-out),
-    opacity 0.5s linear;
+  transition: opacity 0.2s ease-out;
 }
 .circle[data-focus] {
-  scale: 1.08;
   z-index: 2;
 }
 .circle[data-dim] {
@@ -75,17 +70,13 @@
   font-size: 0.75rem;
   letter-spacing: 0.05em;
   opacity: 0;
-  transform: translateY(6px);
-  transition:
-    opacity 0.4s linear,
-    transform 0.6s var(--ease-out);
+  transition: opacity 0.2s ease-out;
 }
 .circle[data-focus] .skills {
   opacity: 0.85;
-  transform: none;
 }
 
-/* The overlap: where everything meets. Appears as the circles come together. */
+/* The overlap: where everything meets. */
 .core {
   position: absolute;
   left: 50%;
@@ -103,6 +94,11 @@
   font-size: clamp(0.6rem, 1.2vw, 0.9rem);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  scale: var(--together);
-  opacity: var(--together);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .circle,
+  .skills {
+    transition: none;
+  }
 }

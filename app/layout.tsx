@@ -3,7 +3,6 @@ import { Archivo, Fraunces, Montserrat } from 'next/font/google';
 import './globals.css';
 import { site } from '@/content/site';
 import MotionProvider from '@/components/motion/MotionProvider';
-import Cursor from '@/components/motion/Cursor/Cursor';
 import PageTransition from '@/components/motion/PageTransition/PageTransition';
 import SectionTheme from '@/components/motion/SectionTheme';
 import Navigation from '@/components/ui/Navigation/Navigation';
@@ -67,7 +66,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <ChatGuide />
         <SectionTheme />
         <PageTransition />
-        <Cursor />
       </body>
     </html>
   );

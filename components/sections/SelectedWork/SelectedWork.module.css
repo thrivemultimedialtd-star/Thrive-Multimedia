@@ -34,9 +34,9 @@
   font-size: var(--fs-heading-sm);
   line-height: 1;
   transition:
-    background-color 0.5s var(--ease-out),
-    color 0.5s var(--ease-out),
-    border-color 0.5s var(--ease-out);
+    background-color 0.25s ease-out,
+    color 0.25s ease-out,
+    border-color 0.25s ease-out;
 }
 .moreLink:hover,
 .moreLink:focus-visible {
@@ -45,7 +45,7 @@
   border-color: var(--charcoal);
 }
 .arrow {
-  transition: transform 0.5s var(--ease-out);
+  transition: transform 0.25s ease-out;
 }
 .moreLink:hover .arrow {
   transform: translateX(6px);

@@ -54,7 +54,7 @@
   background-size: 0% 1px;
   background-position: 0 100%;
   background-repeat: no-repeat;
-  transition: background-size 0.5s var(--ease-out);
+  transition: background-size 0.25s ease-out;
 }
 .col a:hover,
 .col a:focus-visible {

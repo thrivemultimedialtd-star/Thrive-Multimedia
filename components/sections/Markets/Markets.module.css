@@ -4,35 +4,29 @@
   color: var(--paper);
 }
 
-/* ── Goals band ── */
-.bandWrap {
-  position: relative;
-  margin-block: clamp(3rem, 7vw, 7rem);
-}
+/* ── Goals: a static list; hover turns a goal green ── */
 .band {
   display: flex;
-  gap: clamp(2rem, 5vw, 6rem);
-  width: max-content;
-  will-change: transform;
-  padding-inline: var(--margin);
+  flex-wrap: wrap;
+  gap: 1.75rem clamp(1.5rem, 4vw, 4rem);
+  margin-block: clamp(3rem, 7vw, 6rem);
 }
 .goal {
   position: relative;
   font-family: var(--font-display);
   font-weight: 900;
   font-stretch: 112%;
-  font-size: clamp(3rem, 10vw, 11rem);
+  font-size: clamp(2.2rem, 6vw, 6.5rem);
   line-height: 0.95;
   letter-spacing: -0.035em;
   text-transform: uppercase;
-  white-space: nowrap;
   color: transparent;
   -webkit-text-stroke: 1px rgba(243, 241, 234, 0.5);
   transition:
-    color 0.5s var(--ease-out),
-    -webkit-text-stroke-color 0.5s linear;
+    color 0.2s ease-out,
+    -webkit-text-stroke-color 0.2s ease-out;
 }
-.goal[data-active] {
+.goal:hover {
   color: var(--green-bright);
   -webkit-text-stroke-color: var(--green-bright);
 }
@@ -46,36 +40,6 @@
   letter-spacing: 0.2em;
   -webkit-text-stroke: 0;
   color: rgba(243, 241, 234, 0.6);
-}
-
-.preview {
-  position: absolute;
-  right: var(--margin);
-  top: 50%;
-  width: clamp(140px, 14vw, 220px);
-  aspect-ratio: 1;
-  translate: 0 -50%;
-  border-radius: 50%;
-  overflow: hidden;
-  pointer-events: none;
-  opacity: 0;
-  scale: 0.6;
-  transition:
-    opacity 0.35s linear,
-    scale 0.7s var(--ease-out);
-}
-.preview[data-show] {
-  opacity: 1;
-  scale: 1;
-}
-.previewItem {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transition: opacity 0.4s linear;
-}
-.previewItem[data-active] {
-  opacity: 1;
 }
 
 /* ── Copy ── */
@@ -118,7 +82,18 @@
 .marqueeTrack {
   display: flex;
   width: max-content;
-  will-change: transform;
+  animation: marquee var(--marquee-duration, 40s) linear infinite;
+}
+.marqueeTrack[data-reverse] {
+  animation-direction: reverse;
+}
+.marquee:hover .marqueeTrack {
+  animation-play-state: paused;
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
 }
 .name {
   display: inline-flex;
@@ -135,7 +110,7 @@
   /* Logos are black on transparent; knock them out to paper on the charcoal section. */
   filter: invert(0.95);
   opacity: 0.88;
-  transition: opacity 0.3s linear;
+  transition: opacity 0.2s ease-out;
 }
 .marquee:hover .logo {
   opacity: 1;
@@ -155,21 +130,14 @@
     grid-column: 1 / -1;
     text-align: left;
   }
-  .preview {
-    display: none;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .band {
-    flex-direction: column;
-    width: auto;
-    gap: 0.5rem;
-  }
   .goal {
-    white-space: normal;
+    transition: none;
   }
   .marqueeTrack {
+    animation: none;
     flex-wrap: wrap;
     width: auto;
     padding-inline: var(--margin);

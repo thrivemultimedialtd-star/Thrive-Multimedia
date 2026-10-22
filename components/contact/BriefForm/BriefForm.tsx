@@ -4,9 +4,6 @@ import { useEffect, useRef, useState, useTransition, type ReactNode } from 'reac
 import { contact } from '@/content/site';
 import { briefOptions, emptyBrief, formatBrief, validateBrief, type Brief, type BriefErrors } from '@/lib/brief';
 import { sendBrief } from '@/app/actions/sendBrief';
-import { ease, env, tween, type CircleGrid } from '@/lib/motion';
-import TransitionGrid from '@/components/motion/TransitionGrid/TransitionGrid';
-import Magnetic from '@/components/motion/Magnetic';
 import styles from './BriefForm.module.css';
 
 const WHATSAPP = '2347038860337'; // +234 703 886 0337, from the brochure
@@ -27,7 +24,6 @@ export default function BriefForm() {
   const startedAt = useRef(0);
   const honeypot = useRef<HTMLInputElement>(null);
   const headings = useRef<Array<HTMLHeadingElement | null>>([]);
-  const thanksGrid = useRef<CircleGrid | null>(null);
   const shownStep = useRef(1);
 
   useEffect(() => {
@@ -79,17 +75,6 @@ export default function BriefForm() {
     });
   };
 
-  // Open the thank-you panel through the site's circle grid.
-  useEffect(() => {
-    if (!sent) return;
-    const g = thanksGrid.current;
-    if (!g || env.reducedMotion) {
-      g?.setProgress(1);
-      return;
-    }
-    return tween({ duration: 1200, ease: ease.linear, onUpdate: (v) => g.setProgress(v) });
-  }, [sent]);
-
   const text = formatBrief(brief);
   const whatsappHref = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(text)}`;
   const mailHref = `mailto:${contact.email}?subject=${encodeURIComponent(`Project brief: ${brief.name || 'new enquiry'}`)}&body=${encodeURIComponent(text)}`;
@@ -105,17 +90,6 @@ export default function BriefForm() {
             <a href={contact.phones[0].href}>{contact.phones[0].display}</a>.
           </p>
         </div>
-        <TransitionGrid
-          cols={10}
-          rows={6}
-          mode="iris"
-          color="var(--green-deep)"
-          spread={0.65}
-          initial={0}
-          onReady={(g) => {
-            thanksGrid.current = g;
-          }}
-        />
       </div>
     );
   }
@@ -298,11 +272,9 @@ export default function BriefForm() {
           </button>
         ) : (
           <>
-            <Magnetic>
-              <button type="submit" className={styles.next} disabled={pending} data-cursor="open" data-cursor-label="Send">
-                {pending ? 'Sending…' : 'Send brief'} <span aria-hidden="true">→</span>
-              </button>
-            </Magnetic>
+            <button type="submit" className={styles.next} disabled={pending}>
+              {pending ? 'Sending…' : 'Send brief'} <span aria-hidden="true">→</span>
+            </button>
             <a
               href={whatsappHref}
               target="_blank"

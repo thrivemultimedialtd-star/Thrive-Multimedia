@@ -91,7 +91,6 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             sizes="100vw"
             priority
             ratio="16 / 9"
-            parallax={0.12}
           />
         </IrisReveal>
       </div>

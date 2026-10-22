@@ -2,36 +2,9 @@
   position: relative;
   overflow: hidden;
   height: 100%;
-  isolation: isolate;
+  transition: opacity 0.4s ease-out;
 }
 
-.content {
-  height: 100%;
-  transition:
-    transform 1.6s cubic-bezier(0.16, 1, 0.3, 1),
-    opacity 0.3s linear;
-}
-
-/* Until the grid exists (and the iris hasn't played), keep the image hidden so it never flashes. */
-:global(html[data-motion='full']) .iris:not([data-grid]):not([data-revealed]) .content {
+:global(html[data-js]) .iris:not([data-revealed]) {
   opacity: 0;
-}
-
-/* Settle: the image starts slightly large and comes to rest as the circles open. */
-:global(html[data-js]) .iris:not([data-revealed]) .content {
-  transform: scale(1.08);
-}
-.iris[data-revealed] .content {
-  transform: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :global(html[data-js]) .iris:not([data-revealed]) .content {
-    transform: none;
-    opacity: 0;
-  }
-  .iris[data-revealed] .content {
-    opacity: 1;
-    transition: opacity 0.5s linear;
-  }
 }

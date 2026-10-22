@@ -12,7 +12,6 @@
 }
 .diagram {
   grid-column: 8 / -1;
-  transition-duration: 1.6s;
 }
 
 .skillsTitle {

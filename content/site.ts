@@ -16,18 +16,6 @@ export const site = {
     'Thrive Multimedia is a full-service design agency in Abuja, working across print, web and multimedia to energise marketing, build better brands and deliver real-world results.',
 };
 
-// Home page sections for the Blackbook-style section index (ids match the section elements).
-export const homeSections = [
-  { id: 'top', label: 'Top' },
-  { id: 'intro', label: 'A fresh perspective' },
-  { id: 'process', label: 'Approach' },
-  { id: 'work', label: 'Selected work' },
-  { id: 'services', label: 'Services' },
-  { id: 'markets', label: 'Markets' },
-  { id: 'about', label: 'About' },
-  { id: 'contact', label: 'Contact' },
-];
-
 export const nav = [
   { label: 'Work', href: '/work' },
   { label: 'Services', href: '/services' },

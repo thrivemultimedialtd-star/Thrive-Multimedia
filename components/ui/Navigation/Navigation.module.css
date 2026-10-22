@@ -4,19 +4,12 @@
   z-index: 800;
   color: var(--fg);
   transition:
-    transform 0.6s var(--ease-out),
-    color 0.7s var(--ease-in-out);
+    transform 0.25s ease-out,
+    color 0.25s ease-out;
   /* backwards fill only: a lingering transform would trap the fixed mobile menu inside the header */
-  animation: navIn 0.9s var(--ease-out) 0.25s backwards;
+  animation: navIn 0.3s ease-out backwards;
 }
-.header[data-hidden]:not([data-open]):not(:focus-within) {
-  transform: translateY(-110%);
-}
-@media (prefers-reduced-motion: reduce) {
-  .header[data-hidden]:not([data-open]):not(:focus-within) {
-    transform: none;
-  }
-}
+
 
 @keyframes navIn {
   from {
@@ -43,8 +36,8 @@
   background: var(--bg);
   opacity: 0;
   transition:
-    opacity 0.4s linear,
-    background-color 0.7s var(--ease-in-out);
+    opacity 0.25s ease-out,
+    background-color 0.25s ease-out;
   z-index: -1;
 }
 .header[data-scrolled] .bar::before {
@@ -78,7 +71,7 @@
   background: currentColor;
   transform: scaleX(0);
   transform-origin: 100% 50%;
-  transition: transform 0.5s var(--ease-out);
+  transition: transform 0.25s ease-out;
 }
 .link:hover::after,
 .link[aria-current='page']::after {
@@ -98,7 +91,7 @@
   width: 26px;
   height: 1.5px;
   background: currentColor;
-  transition: transform 0.5s var(--ease-out);
+  transition: transform 0.25s ease-out;
 }
 .burger {
   position: relative;
@@ -142,7 +135,7 @@
   overflow: hidden;
 }
 .menu li a {
-  animation: menuIn 0.8s var(--ease-out) both;
+  animation: menuIn 0.25s ease-out both;
   animation-delay: calc(var(--i) * 60ms + 80ms);
 }
 @keyframes menuIn {

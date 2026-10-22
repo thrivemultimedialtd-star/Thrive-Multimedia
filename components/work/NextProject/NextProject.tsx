@@ -6,7 +6,7 @@ import styles from './NextProject.module.css';
 export default function NextProject({ project }: { project: Project }) {
   return (
     <section className={styles.track} data-section-theme="paper" aria-label="Next project">
-      <TransitionLink href={`/work/${project.slug}`} className={styles.link} data-cursor="next" data-cursor-label="Next">
+      <TransitionLink href={`/work/${project.slug}`} className={styles.link}>
         <span className="t-meta">Next project · {project.number}</span>
         <span className={styles.name}>{project.name}</span>
         <span className={`t-meta ${styles.hint}`}>

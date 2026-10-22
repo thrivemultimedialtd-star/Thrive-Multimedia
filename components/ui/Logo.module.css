@@ -1,6 +1,6 @@
 .logo {
   height: auto;
-  transition: filter 0.7s var(--ease-in-out);
+  transition: filter 0.25s ease-out;
 }
 
 :global([data-theme='green']) .logo,
