@@ -10,7 +10,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
 const corner = 'radial-gradient(ellipse 80% 80% at 100% 0%, #000 0%, transparent 100%)';
 
 /**
- * "Our approach": the four stages on warm sand. Desktop lists the steps beside one large card;
+ * "Our approach": the four stages on soft sage. Desktop lists the steps beside one large card;
  * hovering, clicking or arrowing to a step shows it (a quick crossfade, nothing moves on its own).
  * Phones get a compact grid of four cards with everything visible.
  */
@@ -33,7 +33,7 @@ export default function Process({ id = 'process' }: { id?: string }) {
   };
 
   return (
-    <section id={id} className={`wrap section ${styles.process}`} data-section-theme="sand" aria-labelledby={`${id}-title`}>
+    <section id={id} className={`wrap section ${styles.process}`} data-section-theme="sage" aria-labelledby={`${id}-title`}>
       <div className="section-head">
         <h2 id={`${id}-title`} className="t-meta">
           Our approach

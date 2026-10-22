@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 
 /**
- * Sections declare data-section-theme="paper|sand|ink|green|charcoal" and paint their own colours
+ * Sections declare data-section-theme="paper|sage|ink|green|charcoal" and paint their own colours
  * (globals.css). Whichever section is under the nav sets <body data-theme>, so the fixed nav,
  * logo and cursor always match what they sit on.
  */
