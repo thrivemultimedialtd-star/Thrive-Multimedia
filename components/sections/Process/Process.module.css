@@ -1,6 +1,29 @@
 .process {
   --card: #f6f8f1;
   --card-rule: rgba(35, 54, 26, 0.1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── Step icons: line drawings that draw themselves in ── */
+.icon {
+  display: block;
+  color: var(--thrive-green);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  overflow: visible;
+}
+.icon > * {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+@keyframes draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
 /* ── Desktop: step list beside one large card ── */
@@ -16,13 +39,34 @@
   align-self: center;
 }
 .list {
+  position: relative;
   display: grid;
   border-top: 1px solid var(--rule);
 }
+
+/* The rail: how far through the sequence the chosen step is. */
+.rail {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(-1 * clamp(0.9rem, 1.6vw, 1.4rem));
+  width: 2px;
+  background: var(--rule);
+}
+.rail::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--thrive-green);
+  transform-origin: 50% 0;
+  transform: scaleY(var(--progress, 0.25));
+  transition: transform 0.4s var(--ease-out-expo);
+}
+
 .tab {
   position: relative;
   display: grid;
-  grid-template-columns: 3rem 1fr;
+  grid-template-columns: 3rem auto 1fr;
   align-items: baseline;
   width: 100%;
   padding-block: clamp(1rem, 1.8vw, 1.6rem);
@@ -39,8 +83,8 @@
 .tab[data-active] {
   opacity: 1;
 }
-/* The active step is underlined in green (static). */
-.tab[data-active]::after {
+/* The active step's underline draws in from the left. */
+.tab::after {
   content: '';
   position: absolute;
   left: 0;
@@ -48,14 +92,65 @@
   bottom: -1px;
   height: 2px;
   background: var(--thrive-green);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform 0.35s var(--ease-out-expo);
+}
+.tab[data-active]::after {
+  transform: scaleX(1);
 }
 .tabNum {
   color: var(--thrive-green);
 }
 .tabWord {
   font-size: clamp(2.4rem, 4.6vw, 4.75rem);
+  transition: transform 0.2s ease-out;
+}
+.arrow {
+  justify-self: start;
+  margin-left: 0.6em;
+  font-size: clamp(1.2rem, 2vw, 1.8rem);
+  color: var(--thrive-green);
+  opacity: 0;
+  transform: translateX(-6px);
+  transition:
+    opacity 0.2s ease-out,
+    transform 0.2s ease-out;
+}
+.tab:hover .tabWord,
+.tab:focus-visible .tabWord {
+  transform: translateX(6px);
+}
+.tab:hover .arrow,
+.tab:focus-visible .arrow,
+.tab[data-active] .arrow {
+  opacity: 1;
+  transform: translateX(6px);
 }
 
+/* First time the list scrolls into view: rows cascade in, the rail grows to step 1. */
+:global(html[data-js]) .list:not([data-revealed]) .tab {
+  opacity: 0;
+  transform: translateY(14px);
+}
+:global(html[data-js]) .list:not([data-revealed]) .rail::after {
+  transform: scaleY(0);
+}
+.list[data-revealed] .tab {
+  transition:
+    opacity 0.5s ease-out,
+    transform 0.6s var(--ease-out-expo);
+  transition-delay: calc(var(--i) * 60ms);
+}
+.list[data-revealed] .tab:hover,
+.list[data-revealed] .tab:focus-visible {
+  transition-delay: 0ms;
+}
+.list[data-revealed] .rail::after {
+  transition-delay: 0.15s;
+}
+
+/* ── The card ── */
 .stage {
   grid-column: 7 / -1;
   position: relative;
@@ -79,21 +174,39 @@
 }
 .panel {
   grid-area: 1 / 1;
+  opacity: 0;
+  transition: opacity 0.15s ease-out;
+}
+.panel[data-active] {
+  opacity: 1;
+}
+.content {
+  position: relative;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   gap: 1rem;
   padding: clamp(1.75rem, 3.5vw, 3rem);
-  opacity: 0;
-  transition: opacity 0.2s ease-out;
 }
-.panel[data-active] {
-  opacity: 1;
+.panelIcon {
+  position: absolute;
+  top: clamp(1.75rem, 3.5vw, 3rem);
+  left: clamp(1.75rem, 3.5vw, 3rem);
+  width: clamp(3rem, 5vw, 4.5rem);
+  height: auto;
+  /* The icon is drawn at ~3× its 24px grid, so a thinner stroke keeps the line delicate. */
+  stroke-width: 0.9;
 }
-.numeral {
+.numeralMask {
   position: absolute;
   top: clamp(1rem, 2.5vw, 2rem);
   right: clamp(1.25rem, 3vw, 2.5rem);
+  overflow: hidden;
+  padding: 0.05em 0.05em 0;
+}
+.numeral {
+  display: block;
   font-family: var(--font-display);
   font-weight: var(--display-weight);
   font-stretch: var(--display-stretch);
@@ -113,6 +226,41 @@
 .body {
   max-width: 42ch;
   color: var(--fg-muted);
+}
+
+/* Each time a step becomes active (and once the card is in view): icon draws, numeral rises,
+   then the text follows. */
+.stage[data-revealed] .panel[data-active] .panelIcon > * {
+  animation: draw 0.7s var(--ease-out-expo) both;
+}
+.stage[data-revealed] .panel[data-active] .panelIcon > :nth-child(2) {
+  animation-delay: 0.08s;
+}
+.stage[data-revealed] .panel[data-active] .panelIcon > :nth-child(3) {
+  animation-delay: 0.16s;
+}
+.stage[data-revealed] .panel[data-active] .panelIcon > :nth-child(4) {
+  animation-delay: 0.24s;
+}
+.stage[data-revealed] .panel[data-active] .numeral {
+  animation: rise 0.5s var(--ease-out-expo) both;
+}
+.stage[data-revealed] .panel[data-active] .count,
+.stage[data-revealed] .panel[data-active] .line,
+.stage[data-revealed] .panel[data-active] .body {
+  animation: fadeUp 0.45s var(--ease-out-expo) both;
+  animation-delay: calc(0.12s + var(--i) * 50ms);
+}
+@keyframes rise {
+  from {
+    transform: translateY(100%);
+  }
+}
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
 }
 
 /* ── Phones: compact cards ── */
@@ -140,6 +288,14 @@
     border-radius: 16px;
     border: 1px solid var(--card-rule);
     background: var(--card);
+    transition:
+      opacity 0.5s ease-out,
+      transform 0.6s var(--ease-out-expo);
+  }
+  /* Tactile press. */
+  .card:active {
+    transform: scale(0.98);
+    transition-duration: 0.1s;
   }
   .cardTexture {
     position: absolute;
@@ -148,14 +304,31 @@
     opacity: 0.12;
     pointer-events: none;
   }
-  .cardNum,
+  .cardTop,
   .cardWord,
   .cardLine,
   .cardBody {
     position: relative;
   }
+  .cardTop {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
   .cardNum {
     color: var(--thrive-green);
+  }
+  .cardIcon {
+    width: 28px;
+    height: 28px;
+  }
+  /* Each card's icon draws as the card arrives. */
+  :global(html[data-js]) .card:not([data-revealed]) .cardIcon > * {
+    stroke-dashoffset: 1;
+  }
+  .card[data-revealed] .cardIcon > * {
+    animation: draw 0.8s var(--ease-out-expo) both;
+    animation-delay: calc(0.2s + var(--i) * 80ms);
   }
   .cardWord {
     font-size: clamp(1.35rem, 6vw, 1.9rem);
@@ -179,9 +352,36 @@
   }
 }
 
+/* Reduced motion: everything drawn and in place; state changes are instant. */
 @media (prefers-reduced-motion: reduce) {
   .tab,
-  .panel {
-    transition: none;
+  .tab::after,
+  .tabWord,
+  .arrow,
+  .rail::after,
+  .panel,
+  .card {
+    transition: none !important;
+  }
+  .tab:hover .tabWord,
+  .tab:focus-visible .tabWord {
+    transform: none;
+  }
+  :global(html[data-js]) .list:not([data-revealed]) .tab {
+    opacity: 0.4;
+    transform: none;
+  }
+  .icon > *,
+  .numeral,
+  .count,
+  .line,
+  .body {
+    animation: none !important;
+  }
+  :global(html[data-js]) .card:not([data-revealed]) .cardIcon > * {
+    stroke-dashoffset: 0;
+  }
+  .card:active {
+    transform: none;
   }
 }
