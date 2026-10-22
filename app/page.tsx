@@ -6,10 +6,11 @@ import ServiceList from '@/components/sections/ServiceList/ServiceList';
 import Markets from '@/components/sections/Markets/Markets';
 import AboutSection from '@/components/sections/About/AboutSection';
 import ContactSection from '@/components/sections/Contact/ContactSection';
+import SheetStack from '@/components/motion/SheetStack/SheetStack';
 
 export default function Home() {
   return (
-    <>
+    <SheetStack>
       <Hero />
       <Intro />
       <Process />
@@ -18,6 +19,6 @@ export default function Home() {
       <Markets />
       <AboutSection />
       <ContactSection />
-    </>
+    </SheetStack>
   );
 }

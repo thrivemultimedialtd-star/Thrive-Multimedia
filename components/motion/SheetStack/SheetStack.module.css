@@ -1,0 +1,34 @@
+/* Each direct child is a sheet: it sits above the one before it (z-index is set in SheetStack.tsx). */
+.stack > * {
+  position: relative;
+  --veil: 0;
+}
+
+/* The veil that darkens a sheet as the next one covers it. */
+.stack > *::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  background: #0b120a;
+  opacity: var(--veil);
+  pointer-events: none;
+}
+
+/* Every sheet after the first has a rounded top edge and casts a soft shadow onto the one below. */
+.stack > * + * {
+  border-radius: 24px 24px 0 0;
+  box-shadow: 0 -24px 60px -24px rgba(11, 18, 10, 0.35);
+}
+
+@media (max-width: 768px) {
+  .stack > * + * {
+    border-radius: 16px 16px 0 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stack > *::after {
+    display: none;
+  }
+}
