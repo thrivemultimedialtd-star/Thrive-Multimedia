@@ -79,7 +79,6 @@ export default function Process({ id = 'process' }: { id?: string }) {
         <h2 id={`${id}-title`} className="t-meta">
           Our approach
         </h2>
-        <span className="t-meta">{pad(stages.length)} steps</span>
       </div>
 
       <div
