@@ -206,9 +206,9 @@
   .title {
     display: flex;
   }
-  /* Fill the content width exactly: THRIVE is about 4.4× its font size wide. */
+  /* Fill the content width exactly: THRIVE is about 4.03× its font size wide. */
   .thrive {
-    font-size: calc((100vw - 2 * var(--margin)) / 4.45);
+    font-size: calc((100vw - 2 * var(--margin)) / 4.05);
   }
   .multimedia {
     font-size: 4.2vw;

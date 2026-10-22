@@ -95,9 +95,9 @@
 }
 .headTitle {
   font-family: var(--font-display);
-  font-weight: 800;
-  font-stretch: 62%;
-  font-size: 1.25rem;
+  font-weight: var(--heading-weight);
+  font-stretch: var(--display-stretch);
+  font-size: 1rem;
   letter-spacing: 0.02em;
   text-transform: uppercase;
   line-height: 1;

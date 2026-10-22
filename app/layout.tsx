@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Archivo, Fraunces, Montserrat } from 'next/font/google';
+import { Archivo, Montserrat } from 'next/font/google';
 import './globals.css';
 import { site } from '@/content/site';
 import MotionProvider from '@/components/motion/MotionProvider';
@@ -13,13 +13,6 @@ const archivo = Archivo({
   subsets: ['latin'],
   axes: ['wdth'],
   variable: '--font-archivo',
-  display: 'swap',
-});
-const fraunces = Fraunces({
-  subsets: ['latin'],
-  axes: ['opsz', 'SOFT'],
-  style: ['normal', 'italic'],
-  variable: '--font-fraunces',
   display: 'swap',
 });
 const montserrat = Montserrat({
@@ -46,7 +39,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html
       lang="en"
-      className={`${archivo.variable} ${fraunces.variable} ${montserrat.variable}`}
+      className={`${archivo.variable} ${montserrat.variable}`}
       suppressHydrationWarning
     >
       <head>

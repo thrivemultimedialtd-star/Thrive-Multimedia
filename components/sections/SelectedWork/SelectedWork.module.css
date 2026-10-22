@@ -30,7 +30,9 @@
   padding: 1.4rem 2.4rem;
   border: 1px solid var(--rule);
   border-radius: 999px;
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
+  font-weight: var(--heading-weight);
+  font-stretch: var(--display-stretch);
   font-size: var(--fs-heading-sm);
   line-height: 1;
   transition:

@@ -126,8 +126,10 @@
 }
 .menuLink {
   display: block;
-  font-family: var(--font-serif);
-  font-size: clamp(2.75rem, 13vw, 5rem);
+  font-family: var(--font-display);
+  font-weight: var(--heading-weight);
+  font-stretch: var(--display-stretch);
+  font-size: clamp(2.1rem, 10vw, 4rem);
   line-height: 1.08;
   letter-spacing: -0.02em;
 }

@@ -21,17 +21,20 @@
   --rule: var(--rule-dark);
   --accent: var(--thrive-green);
 
-  /* Type families are injected by next/font in layout.tsx */
+  /* Two families, taken from the logo (injected by next/font in layout.tsx):
+     THRIVE → heavy, wide Archivo; MULTIMEDIA → spaced Montserrat. */
   --font-display: var(--font-archivo), 'Arial Black', sans-serif;
-  --font-serif: var(--font-fraunces), Georgia, serif;
   --font-sans: var(--font-montserrat), 'Helvetica Neue', Arial, sans-serif;
+  --display-stretch: 100%;
+  --display-weight: 900;
+  --heading-weight: 800;
 
   /* Fluid type scale */
   --fs-display: clamp(4.25rem, 17.5vw, 19rem);
   --fs-display-sm: clamp(3rem, 10vw, 10rem);
-  --fs-heading: clamp(2.25rem, 5.4vw, 5.25rem);
-  --fs-heading-sm: clamp(1.6rem, 3vw, 2.75rem);
-  --fs-lead: clamp(1.2rem, 1.9vw, 1.75rem);
+  --fs-heading: clamp(1.9rem, 4.4vw, 4.25rem);
+  --fs-heading-sm: clamp(1.35rem, 2.4vw, 2.2rem);
+  --fs-lead: clamp(1.1rem, 1.6vw, 1.5rem);
   --fs-body: clamp(1rem, 1.05vw, 1.125rem);
   --fs-meta: 0.72rem;
   --fs-nav: 0.85rem;
@@ -167,42 +170,44 @@ img {
 .t-display {
   font-family: var(--font-display);
   font-size: var(--fs-display);
-  font-weight: 900;
-  font-stretch: 112%;
+  font-weight: var(--display-weight);
+  font-stretch: var(--display-stretch);
   line-height: 0.84;
   letter-spacing: -0.035em;
   text-transform: uppercase;
 }
+/* Same face as .t-display at a smaller size (name kept for existing call sites). */
 .t-condensed {
   font-family: var(--font-display);
-  font-weight: 800;
-  font-stretch: 62%;
-  font-size: clamp(4.5rem, 13vw, 12rem);
-  line-height: 0.86;
-  letter-spacing: -0.01em;
+  font-weight: var(--display-weight);
+  font-stretch: var(--display-stretch);
+  font-size: clamp(2.4rem, 4.6vw, 4.5rem);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
   text-transform: uppercase;
 }
 .t-heading {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: var(--fs-heading);
-  font-weight: 380;
-  line-height: 1.02;
+  font-weight: var(--heading-weight);
+  font-stretch: var(--display-stretch);
+  line-height: 1.05;
   letter-spacing: -0.02em;
-  font-variation-settings: 'opsz' 144, 'SOFT' 50;
 }
 .t-heading-sm {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: var(--fs-heading-sm);
-  font-weight: 400;
+  font-weight: var(--heading-weight);
+  font-stretch: var(--display-stretch);
   line-height: 1.1;
   letter-spacing: -0.015em;
 }
 .t-lead {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: var(--fs-lead);
-  font-weight: 350;
-  line-height: 1.35;
-  letter-spacing: -0.01em;
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: -0.005em;
 }
 .t-body {
   font-size: var(--fs-body);

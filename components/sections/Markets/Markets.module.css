@@ -14,9 +14,9 @@
 .goal {
   position: relative;
   font-family: var(--font-display);
-  font-weight: 900;
-  font-stretch: 112%;
-  font-size: clamp(2.2rem, 6vw, 6.5rem);
+  font-weight: var(--display-weight);
+  font-stretch: var(--display-stretch);
+  font-size: clamp(1.9rem, 5.2vw, 5.5rem);
   line-height: 0.95;
   letter-spacing: -0.035em;
   text-transform: uppercase;
@@ -98,7 +98,6 @@
 .name {
   display: inline-flex;
   align-items: center;
-  font-family: var(--font-serif);
   font-size: clamp(1.6rem, 3.6vw, 3.4rem);
   line-height: 1.2;
   letter-spacing: -0.015em;

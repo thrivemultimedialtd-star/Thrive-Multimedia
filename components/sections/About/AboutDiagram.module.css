@@ -58,8 +58,8 @@
 
 .label {
   font-family: var(--font-display);
-  font-weight: 800;
-  font-stretch: 110%;
+  font-weight: var(--heading-weight);
+  font-stretch: var(--display-stretch);
   font-size: clamp(0.9rem, 1.8vw, 1.4rem);
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -90,7 +90,8 @@
   display: grid;
   place-items: center;
   font-family: var(--font-display);
-  font-weight: 900;
+  font-weight: var(--display-weight);
+  font-stretch: var(--display-stretch);
   font-size: clamp(0.6rem, 1.2vw, 0.9rem);
   letter-spacing: 0.08em;
   text-transform: uppercase;

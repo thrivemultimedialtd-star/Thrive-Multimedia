@@ -42,8 +42,11 @@
   left: 6%;
   bottom: 12%;
   right: 6%;
-  font-family: var(--font-serif);
-  font-size: clamp(2rem, 6vw, 6.5rem);
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-stretch: var(--display-stretch);
+  text-transform: uppercase;
+  font-size: clamp(1.8rem, 5vw, 5.5rem);
   line-height: 0.95;
   letter-spacing: -0.03em;
   opacity: 0.22;

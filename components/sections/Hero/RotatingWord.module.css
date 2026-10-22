@@ -4,7 +4,7 @@
   vertical-align: bottom;
   height: 1.3em;
   overflow: hidden;
-  /* Room for the italic overhang and the underline. */
+  /* Room for the underline. */
   padding-inline: 0.06em;
   margin-inline: -0.06em;
   transition: width 0.3s ease-out;
@@ -15,7 +15,6 @@
   left: 0.06em;
   bottom: 0;
   white-space: nowrap;
-  font-style: italic;
   color: var(--thrive-green);
   line-height: 1.3;
   transition: opacity 0.3s ease-out;

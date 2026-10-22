@@ -15,9 +15,9 @@
 
 .name {
   font-family: var(--font-display);
-  font-weight: 900;
-  font-stretch: 112%;
-  font-size: clamp(2.8rem, 9vw, 10rem);
+  font-weight: var(--display-weight);
+  font-stretch: var(--display-stretch);
+  font-size: clamp(2.4rem, 8vw, 9rem);
   line-height: 0.9;
   letter-spacing: -0.035em;
   text-transform: uppercase;
