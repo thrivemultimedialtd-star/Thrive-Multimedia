@@ -5,10 +5,10 @@ import { env, observe } from '@/lib/motion';
 import styles from './RotatingWord.module.css';
 
 /**
- * A word that cycles through a list with a short crossfade; the space eases to fit
- * the current word. Starts when `active` is set.
+ * A word that rolls through a list inside a mask: the current word slides up and out,
+ * the next rises in, and the mask's width eases to fit it. Starts when `active` is set.
  */
-export default function RotatingWord({ words, active, interval = 3000 }: { words: string[]; active: boolean; interval?: number }) {
+export default function RotatingWord({ words, active, interval = 2600 }: { words: string[]; active: boolean; interval?: number }) {
   const [index, setIndex] = useState(0);
   const root = useRef<HTMLSpanElement>(null);
   const items = useRef<Array<HTMLSpanElement | null>>([]);
