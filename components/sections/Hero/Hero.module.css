@@ -6,7 +6,8 @@
   /* meta · space · type · buttons · space: the wordmark-and-buttons group sits centred */
   grid-template-rows: auto 1fr auto auto 1fr;
   padding: calc(var(--nav-h) + 1.25rem) var(--margin) 0;
-  overflow: hidden;
+  /* clip, not hidden: hidden would make this a scroll container and freeze the parallax inside. */
+  overflow: clip;
   isolation: isolate;
   /* The lead (Huriya Air) frame; the other two lock onto it. */
   --tee-w: clamp(200px, 19vw, 360px);
@@ -185,6 +186,31 @@
   width: calc(var(--tee-w) * 0.36);
   aspect-ratio: 3 / 4;
   z-index: 3;
+}
+
+/* Depth: as the hero scrolls away the three photos rise at different speeds. */
+@keyframes heroDepth {
+  to {
+    translate: 0 var(--depth);
+  }
+}
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .frame {
+      animation: heroDepth linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 100vh;
+    }
+    .f0 {
+      --depth: -3vh;
+    }
+    .f1 {
+      --depth: -7vh;
+    }
+    .f2 {
+      --depth: -11vh;
+    }
+  }
 }
 
 /* ── Mobile: an ordered column; nothing floats over the text ── */

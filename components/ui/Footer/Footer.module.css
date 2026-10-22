@@ -1,6 +1,7 @@
 .footer {
   position: relative;
-  overflow: hidden;
+  /* clip, not hidden: hidden would make this a scroll container and freeze the parallax inside. */
+  overflow: clip;
   color: var(--paper);
   /* The brochure cover gradient, green into grey. */
   background: linear-gradient(170deg, var(--green-deep) 0%, #2f4724 45%, #545a50 100%);
@@ -8,7 +9,9 @@
 
 .texture {
   position: absolute;
-  inset: 0;
+  inset: -10% 0;
+  --px-from: 8%;
+  --px-to: -8%;
   /* The back-cover pattern: dark lines fading out toward the grey, as printed. */
   color: #0b120a;
   opacity: 0.42;

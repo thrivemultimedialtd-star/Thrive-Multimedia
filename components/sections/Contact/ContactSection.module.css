@@ -2,7 +2,8 @@
   position: relative;
   min-height: 100svh;
   color: var(--paper);
-  overflow: hidden;
+  /* clip, not hidden: hidden would make this a scroll container and freeze the parallax inside. */
+  overflow: clip;
   isolation: isolate;
   padding-block: clamp(7rem, 16vw, 16rem) clamp(5rem, 9vw, 8rem);
 }
@@ -16,6 +17,8 @@
 }
 
 .title {
+  --px-from: 5vh;
+  --px-to: -5vh;
   font-family: var(--font-display);
   font-weight: var(--display-weight);
   font-stretch: var(--display-stretch);

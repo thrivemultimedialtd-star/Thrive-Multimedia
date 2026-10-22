@@ -1,6 +1,7 @@
 .intro {
   position: relative;
-  overflow: hidden;
+  /* clip, not hidden: hidden would make this a scroll container and freeze the parallax inside. */
+  overflow: clip;
   isolation: isolate;
   /* Compact top: it follows the hero directly. */
   padding-block: clamp(2.5rem, 5vw, 4.5rem) clamp(5rem, 9vw, 8rem);
@@ -16,7 +17,10 @@
 }
 .texture {
   position: absolute;
-  inset: 0;
+  /* Extra height so the slower-moving pattern never shows an edge. */
+  inset: -8vh 0;
+  --px-from: 6vh;
+  --px-to: -6vh;
   color: var(--green-bright);
   opacity: 0.1;
 }
@@ -26,6 +30,8 @@
   right: -9vw;
   width: 42vw;
   aspect-ratio: 1;
+  --px-from: 12vh;
+  --px-to: -12vh;
   background: var(--paper);
   opacity: 0.07;
   -webkit-mask: url(/brand/thrive-mark.png) center / contain no-repeat;

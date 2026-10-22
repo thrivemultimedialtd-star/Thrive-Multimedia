@@ -21,7 +21,7 @@ export default function ContactSection({ headingLevel = 'h2' }: { headingLevel?:
           id="contact-title"
           text={closing.title}
           split="lines"
-          className={styles.title}
+          className={`${styles.title} parallax`}
         />
 
         <div className={styles.grid}>

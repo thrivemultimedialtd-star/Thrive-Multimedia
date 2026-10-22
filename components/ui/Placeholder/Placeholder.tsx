@@ -52,7 +52,8 @@ export default function Placeholder({
       role={image ? undefined : 'img'}
       aria-label={image ? undefined : `Placeholder image: ${label}`}
     >
-      <div className={styles.inner}>
+      {/* The inner layer drifts inside the frame as it scrolls past (contained images stay put). */}
+      <div className={`${styles.inner} ${image?.fit === 'contain' ? '' : 'parallax'}`}>
         {image ? (
           <Image
             src={image.src}

@@ -292,6 +292,40 @@ img {
   transform: none;
 }
 
+/* ───────────────────────── Parallax ─────────────────────────
+   Subtle depth: a layer drifts from --px-from to --px-to while its element crosses the
+   viewport. Native scroll-driven animation (no JS); it animates `translate`, so it composes
+   with any transform the element already uses. Browsers without support, and anyone who
+   prefers reduced motion, get the static page. */
+@keyframes parallax-y {
+  from {
+    translate: 0 var(--px-from, 6%);
+  }
+  to {
+    translate: 0 var(--px-to, -6%);
+  }
+}
+@keyframes parallax-x {
+  from {
+    translate: var(--px-from, -3%) 0;
+  }
+  to {
+    translate: var(--px-to, 3%) 0;
+  }
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .parallax,
+    .parallax-x {
+      animation: parallax-y linear both;
+      animation-timeline: view();
+    }
+    .parallax-x {
+      animation-name: parallax-x;
+    }
+  }
+}
+
 /* ───────────────────────── Reduced motion ───────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   *,

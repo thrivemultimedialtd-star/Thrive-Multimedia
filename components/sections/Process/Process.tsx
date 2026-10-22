@@ -91,7 +91,7 @@ export default function Process({ id = 'process' }: { id?: string }) {
         </div>
 
         <Reveal delay={100} className={styles.stage}>
-          <Texture className={styles.texture} size="900px auto" fade={corner} />
+          <Texture className={`${styles.texture} parallax`} size="900px auto" fade={corner} />
           <div className={styles.panels}>
             {stages.map((st, i) => {
               const on = i === active;

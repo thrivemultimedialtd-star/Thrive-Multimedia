@@ -70,8 +70,8 @@ export default function Intro() {
   return (
     <section ref={root} id="intro" className={styles.intro} data-section-theme="ink" aria-labelledby="intro-title">
       <div className={styles.backdrop} aria-hidden="true">
-        <Texture className={styles.texture} size="1000px auto" fade="radial-gradient(ellipse 85% 90% at 100% 0%, #000 0%, transparent 100%)" />
-        <span className={styles.mark} />
+        <Texture className={`${styles.texture} parallax`} size="1000px auto" fade="radial-gradient(ellipse 85% 90% at 100% 0%, #000 0%, transparent 100%)" />
+        <span className={`${styles.mark} parallax`} />
       </div>
 
       <div className={`wrap ${styles.inner}`}>

@@ -7,7 +7,7 @@ import styles from './Footer.module.css';
 export default function Footer() {
   return (
     <footer className={styles.footer} data-section-theme="green">
-      <Texture className={styles.texture} fade="linear-gradient(to bottom, #000 0%, #000 40%, transparent 90%)" />
+      <Texture className={`${styles.texture} parallax`} fade="linear-gradient(to bottom, #000 0%, #000 40%, transparent 90%)" />
       <div className={`wrap ${styles.inner}`}>
         <div className={styles.brand}>
           <Logo className={styles.logo} />

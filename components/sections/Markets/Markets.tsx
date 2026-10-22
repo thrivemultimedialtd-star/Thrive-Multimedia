@@ -18,7 +18,7 @@ export default function Markets() {
 
       <ul className={`wrap ${styles.band}`}>
         {markets.goals.map((g) => (
-          <li key={g} className={styles.goal}>
+          <li key={g} className={`${styles.goal} parallax-x`}>
             {g}
           </li>
         ))}

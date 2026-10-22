@@ -1,6 +1,7 @@
 .markets {
   position: relative;
-  overflow: hidden;
+  /* clip, not hidden: hidden would make this a scroll container and freeze the parallax inside. */
+  overflow: clip;
   color: var(--paper);
 }
 
@@ -25,6 +26,15 @@
   transition:
     color 0.2s ease-out,
     -webkit-text-stroke-color 0.2s ease-out;
+}
+.goal {
+  --px-from: -2.5%;
+  --px-to: 2.5%;
+}
+/* Alternate rows drift the other way, a gentle shear as you pass. */
+.goal:nth-child(even) {
+  --px-from: 2.5%;
+  --px-to: -2.5%;
 }
 .goal:hover {
   color: var(--green-bright);
