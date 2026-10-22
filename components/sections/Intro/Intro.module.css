@@ -1,36 +1,141 @@
 .intro {
-  /* Sized to its content (not a full screen) so it follows the hero without a gap. */
-  display: grid;
-  place-items: center;
-  padding: clamp(1.5rem, 3vw, 3rem) var(--margin) clamp(5rem, 9vw, 8rem);
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  /* Compact top: it follows the hero directly. */
+  padding-block: clamp(2.5rem, 5vw, 4.5rem) clamp(5rem, 9vw, 8rem);
   color: var(--paper);
 }
 
-.inner {
-  display: grid;
-  justify-items: center;
-  gap: clamp(1.5rem, 3vw, 2.5rem);
-  text-align: center;
+/* ── Background: the brochure pattern and the Thrive mark ── */
+.backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+.texture {
+  position: absolute;
+  inset: 0;
+  color: var(--green-bright);
+  opacity: 0.07;
+}
+.mark {
+  position: absolute;
+  top: -6vw;
+  right: -9vw;
+  width: 42vw;
+  aspect-ratio: 1;
+  background: var(--paper);
+  opacity: 0.05;
+  -webkit-mask: url(/brand/thrive-mark.png) center / contain no-repeat;
+  mask: url(/brand/thrive-mark.png) center / contain no-repeat;
+  /* Turns a little as the statement brightens (--p is set by Intro.tsx). */
+  transform: rotate(calc(var(--p, 0) * 10deg));
 }
 
+.inner {
+  position: relative;
+}
+.head {
+  border-top-color: var(--rule-light);
+}
 .eyebrow {
   color: var(--green-bright);
 }
 
-/* Sasha's lede: a quiet, centred statement that ends on a colon. */
+/* ── The statement ── */
 .lede {
   font-family: var(--font-display);
   font-weight: var(--heading-weight);
   font-stretch: var(--display-stretch);
-  font-size: clamp(1.7rem, 3.8vw, 3.8rem);
-  line-height: 1.08;
+  font-size: clamp(2rem, 4.9vw, 5.8rem);
+  line-height: 1.05;
   letter-spacing: -0.025em;
 }
+/* The brochure's four lines, one per row on wide screens. */
+.line {
+  display: block;
+  white-space: nowrap;
+}
+/* Words brighten one after another as --p goes 0 → 1 (only once JS is running). */
+:global(html[data-js]) .word {
+  opacity: clamp(0.18, calc(var(--p, 0) * var(--n) - var(--i) + 1), 1);
+}
+.accent {
+  color: var(--green-bright);
+}
 
+/* ── Paragraph and the media it names ── */
+.foot {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gutter);
+  row-gap: 2.5rem;
+  margin-top: clamp(3.5rem, 7vw, 6rem);
+  padding-top: clamp(1.5rem, 2.5vw, 2rem);
+  border-top: 1px solid var(--rule-light);
+}
 .body {
+  grid-column: 1 / span 6;
   max-width: 52ch;
-  margin-top: clamp(1rem, 3vw, 2.5rem);
-  font-size: clamp(0.95rem, 1.05vw, 1.05rem);
+  font-size: clamp(0.98rem, 1.1vw, 1.08rem);
   line-height: 1.7;
-  color: rgba(243, 241, 234, 0.55);
+  color: rgba(243, 241, 234, 0.65);
+}
+.media {
+  grid-column: 8 / -1;
+  list-style: none;
+}
+.medium {
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  align-items: baseline;
+  padding-block: 0.95rem;
+  border-bottom: 1px solid var(--rule-light);
+  transition: color 0.2s ease-out;
+}
+.medium:first-child {
+  padding-top: 0;
+}
+.medium:hover {
+  color: var(--green-bright);
+}
+.num {
+  color: var(--green-bright);
+}
+.name {
+  font-family: var(--font-display);
+  font-weight: var(--heading-weight);
+  font-stretch: var(--display-stretch);
+  font-size: clamp(1.1rem, 1.6vw, 1.45rem);
+  letter-spacing: -0.01em;
+}
+
+@media (max-width: 1000px) {
+  .lede {
+    font-size: clamp(2rem, 7.4vw, 3.4rem);
+  }
+  .line {
+    display: inline;
+    white-space: normal;
+  }
+  .body,
+  .media {
+    grid-column: 1 / -1;
+  }
+  .mark {
+    width: 70vw;
+    top: -10vw;
+    right: -22vw;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mark {
+    transform: none;
+  }
+  .medium {
+    transition: none;
+  }
 }

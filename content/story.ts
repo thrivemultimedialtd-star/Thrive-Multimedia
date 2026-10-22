@@ -14,9 +14,13 @@ export const hero = {
 export const intro = {
   // p.2 "A fresh perspective"
   eyebrow: 'A fresh perspective',
-  // Sasha-style lede that leads straight into the approach stages. Brochure p.2.
+  // The statement that leads straight into the approach stages. Brochure p.2.
   lede: ['We use creative imagination', 'across print, web and multimedia', 'to energise marketing and build', 'better brands. Real-world results take:'],
   body: 'Thrive Multimedia is a full-service design agency for businesses in any market, across all media. We work closely with clients to set new directions for their print and digital marketing and to unify their branding everywhere it appears: e-commerce websites, company brochures and stationery, magazine advertising campaigns in Nigeria and abroad, and video presentations.',
+  // Shown in green in the statement.
+  accent: 'print, web and multimedia',
+  // p.2, the media named in the body copy above.
+  media: ['E-commerce websites', 'Company brochures', 'Stationery', 'Magazine advertising', 'Video presentations'],
 };
 
 // Pinned sequence. Each stage maps to a brochure idea.
