@@ -8,11 +8,11 @@
 .band {
   display: flex;
   flex-wrap: wrap;
-  gap: 1.75rem clamp(1.5rem, 4vw, 4rem);
+  /* Rows sit close now there are no numbers above the goals. */
+  gap: 0.5rem clamp(1.5rem, 4vw, 4rem);
   margin-block: clamp(3rem, 7vw, 6rem);
 }
 .goal {
-  position: relative;
   font-family: var(--font-display);
   font-weight: var(--display-weight);
   font-stretch: var(--display-stretch);
@@ -29,17 +29,6 @@
 .goal:hover {
   color: var(--green-bright);
   -webkit-text-stroke-color: var(--green-bright);
-}
-.goalIndex {
-  position: absolute;
-  top: -1.4rem;
-  left: 0.2rem;
-  font-family: var(--font-sans);
-  font-size: var(--fs-meta);
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  -webkit-text-stroke: 0;
-  color: rgba(243, 241, 234, 0.6);
 }
 
 /* ── Copy ── */

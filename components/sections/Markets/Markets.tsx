@@ -17,9 +17,8 @@ export default function Markets() {
       </div>
 
       <ul className={`wrap ${styles.band}`}>
-        {markets.goals.map((g, i) => (
+        {markets.goals.map((g) => (
           <li key={g} className={styles.goal}>
-            <span className={styles.goalIndex}>{String(i + 1).padStart(2, '0')}</span>
             {g}
           </li>
         ))}
