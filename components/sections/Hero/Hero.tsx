@@ -11,7 +11,6 @@ import TransitionLink from '@/components/motion/TransitionLink';
 import Placeholder from '@/components/ui/Placeholder/Placeholder';
 import Reveal from '@/components/motion/Reveal/Reveal';
 import RotatingWord from './RotatingWord';
-import CircleBurst from './CircleBurst';
 import styles from './Hero.module.css';
 
 // Brochure work: Huriya Air leads, Market Monie overlaps it, The Place tucks underneath (desktop only).
@@ -32,9 +31,8 @@ export default function Hero() {
   const title = useRef<HTMLHeadingElement>(null);
   const collageRef = useRef<HTMLDivElement>(null);
   const layers = useRef<Array<HTMLDivElement | null>>([]);
-  // Set once the entrance has finished: the playful layer (rotating word, living letters, burst tip) starts then.
+  // Set once the entrance has finished: the playful layer (rotating word, living letters) starts then.
   const [alive, setAlive] = useState(false);
-  const [burstUsed, setBurstUsed] = useState(false);
 
   // "MULTIMEDIA" is justified to the exact width of "THRIVE", like the logo lockup.
   useLayoutEffect(() => {
@@ -116,7 +114,7 @@ export default function Hero() {
 
   // Living THRIVE letters. A gentle wave always travels across the word (green on its crest) and
   // MULTIMEDIA's spacing breathes. On top: letters lift, stretch and turn green near the pointer;
-  // on touch, a tap sends a ripple and scrolling sways them slightly.
+  // on touch, scrolling sways them slightly.
   useEffect(() => {
     const h = title.current;
     if (!alive || !h || env.reducedMotion) return;
@@ -132,12 +130,7 @@ export default function Hero() {
     measure();
     window.addEventListener('resize', measure);
 
-    let rippleAt = -1;
     let clock = 0;
-    const onTap = () => {
-      rippleAt = clock;
-    };
-    thrive.addEventListener('pointerdown', onTap);
 
     const C = [35, 35, 35];
     const G = [106, 154, 54];
@@ -165,10 +158,6 @@ export default function Hero() {
           target = clamp(1 - d / 260) ** 2;
           lean = clamp(dx / 260, -1, 1);
         }
-        if (rippleAt >= 0) {
-          const t = clock - rippleAt - i * 0.06;
-          if (t > 0 && t < 0.5) target = Math.max(target, Math.sin((t / 0.5) * Math.PI));
-        }
         const s = st[i];
         s.f = damp(s.f, target, target > s.f ? 14 : 6, dt);
         s.k = damp(s.k, lean * s.f * -6 + sway, 8, dt);
@@ -180,12 +169,10 @@ export default function Hero() {
         m.style.transform = `translateY(${(-(s.f * 0.14 + waveLift * 0.085) * size).toFixed(2)}px) scaleY(${(1 + s.f * 0.12).toFixed(4)}) skewX(${s.k.toFixed(2)}deg)`;
         m.style.color = tint > 0.002 ? `rgb(${mix(C[0], G[0])},${mix(C[1], G[1])},${mix(C[2], G[2])})` : '';
       });
-      if (rippleAt >= 0 && clock - rippleAt > 0.5 + masks.length * 0.06) rippleAt = -1;
     });
     return () => {
       stop();
       window.removeEventListener('resize', measure);
-      thrive.removeEventListener('pointerdown', onTap);
       delete h.dataset.alive;
       h.style.removeProperty('--mm-breath');
       masks.forEach((m) => {
@@ -250,8 +237,6 @@ export default function Hero() {
         </Reveal>
       </div>
 
-      <CircleBurst area={root} className={styles.burst} onBurst={() => setBurstUsed(true)} />
-
       <div className={styles.foot}>
         <div className={styles.actions}>
           <Magnetic className={styles.ctaWrap}>
@@ -272,10 +257,6 @@ export default function Hero() {
           <TransitionLink href="/contact" className={styles.secondary}>
             {hero.secondary}
           </TransitionLink>
-          <span className={`t-meta ${styles.tip}`} data-show={(alive && !burstUsed) || undefined} aria-hidden="true">
-            ✦ <span className={styles.tipDesk}>Click</span>
-            <span className={styles.tipTouch}>Tap</span> anywhere
-          </span>
         </div>
       </div>
     </section>
