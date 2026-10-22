@@ -237,6 +237,13 @@ img {
   padding-block: var(--section);
   position: relative;
 }
+/* Back-to-back sections of the same colour share one standard gap instead of doubling it. */
+.section[data-section-theme='paper'] + .section[data-section-theme='paper'],
+.section[data-section-theme='ink'] + .section[data-section-theme='ink'],
+.section[data-section-theme='charcoal'] + .section[data-section-theme='charcoal'],
+.section[data-section-theme='green'] + .section[data-section-theme='green'] {
+  padding-top: 0;
+}
 .section-head {
   display: flex;
   justify-content: space-between;

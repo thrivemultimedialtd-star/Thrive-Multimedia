@@ -20,7 +20,7 @@
 .more {
   display: flex;
   justify-content: center;
-  margin-top: clamp(5rem, 10vw, 10rem);
+  margin-top: clamp(3rem, 6vw, 5.5rem);
 }
 
 .moreLink {
