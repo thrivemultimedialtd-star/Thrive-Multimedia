@@ -7,47 +7,208 @@
   color: rgba(243, 241, 234, 0.7);
 }
 
-.grid {
+.stepper {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: clamp(1.5rem, 3vw, 2.5rem);
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gutter);
+  align-items: stretch;
 }
 
-.card {
-  display: grid;
-  align-content: start;
-  gap: 0.9rem;
-  padding-top: 1.25rem;
-  border-top: 1px solid rgba(127, 181, 63, 0.6);
+/* ── Step list (desktop) ── */
+.listWrap {
+  grid-column: 1 / span 5;
+  align-self: center;
 }
-
-.num {
+.list {
+  display: grid;
+  border-top: 1px solid var(--rule-light);
+}
+.tab {
+  position: relative;
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  align-items: baseline;
+  width: 100%;
+  padding-block: clamp(1rem, 1.8vw, 1.6rem);
+  text-align: left;
+  color: var(--paper);
+  border-bottom: 1px solid var(--rule-light);
+  opacity: 0.35;
+  transition: opacity 0.25s ease-out;
+}
+.tab:hover {
+  opacity: 0.7;
+}
+.tab[data-active] {
+  opacity: 1;
+}
+.tabNum {
   color: var(--green-bright);
 }
-
-.word {
-  font-size: clamp(2.6rem, 4.6vw, 4.5rem);
+.tabWord {
+  font-size: clamp(2.4rem, 4.6vw, 4.75rem);
 }
 
-.line {
-  font-size: clamp(1.05rem, 1.3vw, 1.25rem);
-  line-height: 1.35;
+/* Timing bar: a thin track under each row; the active one fills green. */
+.track {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
 }
-
-.body {
-  font-size: 0.95rem;
-  line-height: 1.6;
-  color: rgba(243, 241, 234, 0.62);
+.fill {
+  position: absolute;
+  inset: 0;
+  background: var(--green-bright);
+  transform-origin: 0 50%;
 }
-
-@media (max-width: 1000px) {
-  .grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    row-gap: 3rem;
+.stepper[data-playing] .fill {
+  animation: fill 5s linear both;
+  animation-play-state: paused;
+}
+.stepper[data-playing] .fill[data-running] {
+  animation-play-state: running;
+}
+@keyframes fill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
   }
 }
-@media (max-width: 560px) {
-  .grid {
-    grid-template-columns: 1fr;
+
+/* ── Stage: the active step, large ── */
+.stage {
+  grid-column: 7 / -1;
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  border: 1px solid rgba(243, 241, 234, 0.12);
+  background: rgba(243, 241, 234, 0.035);
+  min-height: clamp(26rem, 38vw, 34rem);
+}
+.texture {
+  position: absolute;
+  inset: 0;
+  color: var(--green-bright);
+  opacity: 0.16;
+  pointer-events: none;
+}
+.panels {
+  position: relative;
+  display: grid;
+  height: 100%;
+}
+.panel {
+  grid-area: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding: clamp(1.75rem, 3.5vw, 3rem);
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0.3s ease-out,
+    transform 0.3s ease-out;
+}
+.panel[data-active] {
+  opacity: 1;
+  transform: none;
+}
+.numeral {
+  position: absolute;
+  top: clamp(1rem, 2.5vw, 2rem);
+  right: clamp(1.25rem, 3vw, 2.5rem);
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-stretch: var(--display-stretch);
+  font-size: clamp(6rem, 13vw, 12rem);
+  line-height: 0.8;
+  letter-spacing: -0.04em;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(127, 181, 63, 0.55);
+}
+.count {
+  color: var(--green-bright);
+}
+/* The tab already names the step on desktop. */
+.panelWord {
+  display: none;
+}
+.line {
+  max-width: 18ch;
+}
+.body {
+  max-width: 42ch;
+  color: rgba(243, 241, 234, 0.65);
+}
+
+/* ── Phones and tablets: a vertical timeline, every step visible ── */
+@media (max-width: 900px) {
+  .stepper {
+    display: block;
+  }
+  .listWrap {
+    display: none;
+  }
+  .stage {
+    min-height: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    overflow: visible;
+  }
+  .texture {
+    display: none;
+  }
+  .panels {
+    gap: 2.75rem;
+    padding-left: 2rem;
+    /* The timeline's spine. */
+    background: linear-gradient(rgba(243, 241, 234, 0.18), rgba(243, 241, 234, 0.18)) 5px 0.4rem / 1px calc(100% - 0.8rem) no-repeat;
+  }
+  .panel {
+    grid-area: auto;
+    position: relative;
+    justify-content: flex-start;
+    gap: 0.75rem;
+    padding: 0;
+    opacity: 1;
+    transform: none;
+  }
+  /* A green dot on the spine for each step. */
+  .panel::before {
+    content: '';
+    position: absolute;
+    left: calc(-2rem + 1px);
+    top: 0.3rem;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--green-bright);
+    box-shadow: 0 0 0 4px var(--bg);
+  }
+  .numeral {
+    display: none;
+  }
+  .panelWord {
+    display: block;
+    font-size: clamp(2.4rem, 11vw, 3.5rem);
+  }
+  .line {
+    max-width: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tab,
+  .panel {
+    transition: none;
+  }
+  .stepper[data-playing] .fill {
+    animation: none;
   }
 }
