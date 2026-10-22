@@ -18,7 +18,7 @@
   position: absolute;
   inset: 0;
   color: var(--green-bright);
-  opacity: 0.07;
+  opacity: 0.1;
 }
 .mark {
   position: absolute;
@@ -27,7 +27,7 @@
   width: 42vw;
   aspect-ratio: 1;
   background: var(--paper);
-  opacity: 0.05;
+  opacity: 0.07;
   -webkit-mask: url(/brand/thrive-mark.png) center / contain no-repeat;
   mask: url(/brand/thrive-mark.png) center / contain no-repeat;
   /* Turns a little as the statement brightens (--p is set by Intro.tsx). */
@@ -60,7 +60,7 @@
 }
 /* Words brighten one after another as --p goes 0 → 1 (only once JS is running). */
 :global(html[data-js]) .word {
-  opacity: clamp(0.18, calc(var(--p, 0) * var(--n) - var(--i) + 1), 1);
+  opacity: clamp(0.3, calc(var(--p, 0) * var(--n) - var(--i) + 1), 1);
 }
 .accent {
   color: var(--green-bright);
@@ -81,7 +81,7 @@
   max-width: 52ch;
   font-size: clamp(0.98rem, 1.1vw, 1.08rem);
   line-height: 1.7;
-  color: rgba(243, 241, 234, 0.65);
+  color: rgba(243, 241, 234, 0.78);
 }
 .media {
   grid-column: 8 / -1;

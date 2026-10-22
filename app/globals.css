@@ -67,10 +67,10 @@
   --rule: var(--rule-light);
   --accent: var(--green-bright);
 }
-/* Near-black green: the dark the page transition fades into. Used by the approach sequence. */
+/* Deep Thrive green: the dark behind A fresh perspective and Our approach. */
 [data-theme='ink'],
 [data-section-theme='ink'] {
-  --bg: #0b120a;
+  --bg: #1a2c16;
   --fg: var(--paper);
   --fg-muted: rgba(243, 241, 234, 0.62);
   --rule: var(--rule-light);
