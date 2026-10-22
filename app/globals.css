@@ -9,6 +9,7 @@
   --logo-grey: #4d4d4d;
   --paper: #f3f1ea;
   --paper-2: #e9e6dc;
+  --sand: #e6dfcd;
   --mist: #8a8f86;
   --clay: #c9b79c;
   --rule-dark: rgba(35, 35, 35, 0.16);
@@ -75,6 +76,15 @@
   --fg-muted: rgba(243, 241, 234, 0.62);
   --rule: var(--rule-light);
   --accent: var(--green-bright);
+}
+/* Warm sand, from the brochure's clay and paper. Used by Our approach. */
+[data-theme='sand'],
+[data-section-theme='sand'] {
+  --bg: var(--sand);
+  --fg: var(--charcoal);
+  --fg-muted: rgba(35, 35, 35, 0.66);
+  --rule: var(--rule-dark);
+  --accent: var(--thrive-green);
 }
 [data-theme='paper'],
 [data-section-theme='paper'] {
@@ -241,7 +251,8 @@ img {
 .section[data-section-theme='paper'] + .section[data-section-theme='paper'],
 .section[data-section-theme='ink'] + .section[data-section-theme='ink'],
 .section[data-section-theme='charcoal'] + .section[data-section-theme='charcoal'],
-.section[data-section-theme='green'] + .section[data-section-theme='green'] {
+.section[data-section-theme='green'] + .section[data-section-theme='green'],
+.section[data-section-theme='sand'] + .section[data-section-theme='sand'] {
   padding-top: 0;
 }
 .section-head {
