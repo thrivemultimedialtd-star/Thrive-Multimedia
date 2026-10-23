@@ -159,11 +159,45 @@
   border-radius: 24px;
   border: 1px solid var(--card-rule);
   background: var(--card);
-  min-height: clamp(26rem, 38vw, 34rem);
+  min-height: clamp(36rem, 48vw, 44rem);
 }
+
+/* The step photos fill the top half of the card. */
+.photos {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 56%;
+  overflow: clip;
+}
+.photo {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
+}
+.photo[data-active] {
+  opacity: 1;
+}
+.photoFrame {
+  transform: scale(1.05);
+  transition: transform 0.8s var(--ease-out-expo);
+}
+.photo[data-active] .photoFrame {
+  transform: none;
+}
+/* Keeps the numeral and the caption readable over any photo. */
+.scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(60% 55% at 100% 0%, rgba(11, 18, 10, 0.45), transparent 70%),
+    linear-gradient(to bottom, rgba(11, 18, 10, 0.35) 0%, transparent 38%, transparent 62%, rgba(11, 18, 10, 0.5) 100%);
+  pointer-events: none;
+}
+
 .texture {
   position: absolute;
-  inset: -6% 0;
+  inset: 56% 0 -6% 0;
   --px-from: 4%;
   --px-to: -4%;
   color: var(--thrive-green);
@@ -192,14 +226,27 @@
   gap: 1rem;
   padding: clamp(1.75rem, 3.5vw, 3rem);
 }
+.countRow {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
 .panelIcon {
+  width: 30px;
+  height: 30px;
+}
+/* The step's photo credit, as a chip on the photo's bottom edge. */
+.caption {
   position: absolute;
-  top: clamp(1.75rem, 3.5vw, 3rem);
   left: clamp(1.75rem, 3.5vw, 3rem);
-  width: clamp(3rem, 5vw, 4.5rem);
-  height: auto;
-  /* The icon is drawn at ~3× its 24px grid, so a thinner stroke keeps the line delicate. */
-  stroke-width: 0.9;
+  top: calc(56% - 2.9rem);
+  padding: 0.5rem 0.85rem;
+  border-radius: 999px;
+  background: rgba(11, 18, 10, 0.62);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  color: var(--paper);
+  font-size: 0.62rem;
 }
 .numeralMask {
   position: absolute;
@@ -213,11 +260,12 @@
   font-family: var(--font-display);
   font-weight: var(--display-weight);
   font-stretch: var(--display-stretch);
-  font-size: clamp(6rem, 13vw, 12rem);
+  font-size: clamp(4.5rem, 9vw, 8rem);
   line-height: 0.8;
   letter-spacing: -0.04em;
   color: transparent;
-  -webkit-text-stroke: 1.5px rgba(106, 154, 54, 0.6);
+  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.95);
+  filter: drop-shadow(0 2px 14px rgba(11, 18, 10, 0.45));
 }
 .count {
   color: var(--thrive-green);
@@ -248,7 +296,8 @@
 .stage[data-revealed] .panel[data-active] .numeral {
   animation: rise 0.5s var(--ease-out-expo) both;
 }
-.stage[data-revealed] .panel[data-active] .count,
+.stage[data-revealed] .panel[data-active] .caption,
+.stage[data-revealed] .panel[data-active] .countRow,
 .stage[data-revealed] .panel[data-active] .line,
 .stage[data-revealed] .panel[data-active] .body {
   animation: fadeUp 0.45s var(--ease-out-expo) both;
@@ -283,7 +332,8 @@
   }
   .card {
     position: relative;
-    overflow: hidden;
+    /* clip, not hidden, so the photo's parallax keeps working. */
+    overflow: clip;
     display: flex;
     flex-direction: column;
     gap: 0.45rem;
@@ -299,6 +349,20 @@
   .card:active {
     transform: scale(0.98);
     transition-duration: 0.1s;
+  }
+  .cardPhoto {
+    position: relative;
+    margin: -16px -16px 0.35rem;
+  }
+  .cardPhotoFrame {
+    height: auto;
+    aspect-ratio: 16 / 10;
+  }
+  .cardCaption {
+    padding: 0.55rem 16px 0;
+    font-size: 0.56rem;
+    letter-spacing: 0.14em;
+    color: var(--fg-muted);
   }
   .cardTexture {
     position: absolute;
@@ -374,8 +438,17 @@
     opacity: 0.4;
     transform: none;
   }
+  .photo,
+  .photoFrame {
+    transition: none !important;
+  }
+  .photoFrame {
+    transform: none;
+  }
   .icon > *,
   .numeral,
+  .caption,
+  .countRow,
   .count,
   .line,
   .body {

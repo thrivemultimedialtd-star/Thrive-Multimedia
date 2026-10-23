@@ -5,6 +5,8 @@ import { process as stages } from '@/content/story';
 import { useReveal } from '@/components/motion/useReveal';
 import Reveal from '@/components/motion/Reveal/Reveal';
 import Texture from '@/components/ui/Texture';
+import Placeholder from '@/components/ui/Placeholder/Placeholder';
+import { images } from '@/content/brochure';
 import StepIcon from './StepIcon';
 import styles from './Process.module.css';
 
@@ -91,6 +93,22 @@ export default function Process({ id = 'process' }: { id?: string }) {
         </div>
 
         <Reveal delay={100} className={styles.stage}>
+          {/* One photo per step, stacked; the active one fades in and settles. */}
+          <div className={styles.photos} aria-hidden="true">
+            {stages.map((st, i) => (
+              <div key={st.word} className={styles.photo} data-active={i === active || undefined}>
+                <Placeholder
+                  label={st.caption}
+                  image={images[st.image]}
+                  sizes="(max-width: 900px) 100vw, 45vw"
+                  priority={i === 0}
+                  bare
+                  className={styles.photoFrame}
+                />
+              </div>
+            ))}
+            <span className={styles.scrim} />
+          </div>
           <Texture className={`${styles.texture} parallax`} size="900px auto" fade={corner} />
           <div className={styles.panels}>
             {stages.map((st, i) => {
@@ -108,13 +126,16 @@ export default function Process({ id = 'process' }: { id?: string }) {
                 >
                   {/* Re-mounted whenever this step becomes active, so its entrance replays. */}
                   <div key={on ? 'on' : 'off'} className={styles.content}>
-                    <StepIcon index={i} className={styles.panelIcon} />
                     <span className={styles.numeralMask} aria-hidden="true">
                       <span className={styles.numeral}>{pad(i + 1)}</span>
                     </span>
-                    <p className={`t-meta ${styles.count}`} style={{ '--i': 0 } as CSSProperties}>
-                      Step {i + 1} of {stages.length}
-                    </p>
+                    <p className={`t-meta ${styles.caption}`}>{st.caption}</p>
+                    <div className={styles.countRow} style={{ '--i': 0 } as CSSProperties}>
+                      <StepIcon index={i} className={styles.panelIcon} />
+                      <p className={`t-meta ${styles.count}`}>
+                        Step {i + 1} of {stages.length}
+                      </p>
+                    </div>
                     <p className={`t-heading-sm ${styles.line}`} style={{ '--i': 1 } as CSSProperties}>
                       {st.line}
                     </p>
@@ -134,6 +155,10 @@ export default function Process({ id = 'process' }: { id?: string }) {
         {stages.map((st, i) => (
           <Reveal as="li" key={st.word} delay={i * 80} className={styles.card} style={{ '--i': i } as CSSProperties}>
             <Texture className={styles.cardTexture} size="520px auto" fade={corner} />
+            <figure className={styles.cardPhoto}>
+              <Placeholder label={st.caption} image={images[st.image]} sizes="50vw" bare className={styles.cardPhotoFrame} />
+              <figcaption className={`t-meta ${styles.cardCaption}`}>{st.caption}</figcaption>
+            </figure>
             <div className={styles.cardTop}>
               <span className={`t-meta ${styles.cardNum}`}>{pad(i + 1)}</span>
               <StepIcon index={i} className={styles.cardIcon} />
