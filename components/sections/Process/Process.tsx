@@ -2,35 +2,40 @@
 
 import { useRef, useState, type CSSProperties, type KeyboardEvent } from 'react';
 import { process as stages } from '@/content/story';
-import { useReveal } from '@/components/motion/useReveal';
 import Reveal from '@/components/motion/Reveal/Reveal';
 import Texture from '@/components/ui/Texture';
-import Placeholder from '@/components/ui/Placeholder/Placeholder';
-import { images } from '@/content/brochure';
 import StepIcon from './StepIcon';
 import styles from './Process.module.css';
 
 const pad = (n: number) => String(n).padStart(2, '0');
-const corner = 'radial-gradient(ellipse 80% 80% at 100% 0%, #000 0%, transparent 100%)';
+
+// One bold Thrive colour per step; neighbours never share a tone.
+const tones = [
+  { bg: '#7fb53f', fg: '#0b120a', accent: '#0b120a', body: 0.9 }, // Listen: bright green
+  { bg: '#24391a', fg: '#f3f1ea', accent: '#7fb53f', body: 0.82 }, // Define: deep green
+  { bg: '#232323', fg: '#f3f1ea', accent: '#7fb53f', body: 0.82 }, // Create: charcoal
+  { bg: '#6a9a36', fg: '#0b120a', accent: '#0b120a', body: 0.9 }, // Deliver: Thrive green
+];
+const toneStyle = (i: number) => {
+  const t = tones[i];
+  return { '--tone-bg': t.bg, '--tone-fg': t.fg, '--tone-accent': t.accent, '--tone-body': t.body } as CSSProperties;
+};
 
 /**
- * "Our approach": the four stages on soft sage. Desktop lists the steps beside one large card:
- * a green rail shows how far through the sequence you are, and choosing a step (hover, click or
- * arrow keys) replays that card's entrance: its icon draws, the numeral rises, the text follows.
- * Phones get a grid of four cards that cascade in, each icon drawing as it arrives.
- * Nothing moves on its own; every motion answers a scroll into view or a choice.
+ * "Our approach": four steps as four bold colour panels.
+ * Desktop: an expanding row. The chosen panel (hover, click or arrow keys) widens and tells its
+ * step; the others fold to a vertical word. Phones: the panels stack full width, everything
+ * visible, each rising in as it arrives. Nothing moves on its own.
  */
 export default function Process({ id = 'process' }: { id?: string }) {
   const tabs = useRef<Array<HTMLButtonElement | null>>([]);
-  const list = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
-  useReveal(list, { trigger: 'view' });
 
   const onKey = (e: KeyboardEvent) => {
     const n = stages.length;
     const next =
-      e.key === 'ArrowDown' || e.key === 'ArrowRight' ? (active + 1) % n
-      : e.key === 'ArrowUp' || e.key === 'ArrowLeft' ? (active - 1 + n) % n
+      e.key === 'ArrowRight' || e.key === 'ArrowDown' ? (active + 1) % n
+      : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? (active - 1 + n) % n
       : e.key === 'Home' ? 0
       : e.key === 'End' ? n - 1
       : null;
@@ -41,31 +46,22 @@ export default function Process({ id = 'process' }: { id?: string }) {
   };
 
   return (
-    <section id={id} className={`wrap section ${styles.process}`} data-section-theme="sage" aria-labelledby={`${id}-title`}>
+    <section id={id} className={`wrap section ${styles.process}`} data-section-theme="paper" aria-labelledby={`${id}-title`}>
       <div className="section-head">
         <h2 id={`${id}-title`} className="t-meta">
           Our approach
         </h2>
       </div>
 
-      {/* Desktop: step list + one large card (hidden on phones, so read only once). */}
-      <div className={styles.stepper}>
-        <div className={styles.listWrap}>
-          <div
-            ref={list}
-            role="tablist"
-            aria-orientation="vertical"
-            aria-label="Our approach"
-            className={styles.list}
-            style={{ '--progress': (active + 1) / stages.length } as CSSProperties}
-            onKeyDown={onKey}
-          >
-            <span className={styles.rail} aria-hidden="true" />
-            {stages.map((st, i) => {
-              const on = i === active;
-              return (
+      {/* Desktop: expanding panels (hidden on phones, so read only once). */}
+      <Reveal className={styles.rowWrap}>
+        <div role="tablist" aria-label="Our approach" className={styles.row} onKeyDown={onKey}>
+          {stages.map((st, i) => {
+            const on = i === active;
+            return (
+              <div key={st.word} className={styles.panel} style={toneStyle(i)} data-active={on || undefined}>
+                <Texture className={styles.texture} size="700px auto" />
                 <button
-                  key={st.word}
                   ref={(n) => {
                     tabs.current[i] = n;
                   }}
@@ -75,97 +71,62 @@ export default function Process({ id = 'process' }: { id?: string }) {
                   aria-selected={on}
                   aria-controls={`${id}-panel-${i}`}
                   tabIndex={on ? 0 : -1}
-                  className={styles.tab}
-                  style={{ '--i': i } as CSSProperties}
-                  data-active={on || undefined}
+                  className={styles.hit}
                   onClick={() => setActive(i)}
-                  onMouseEnter={() => setActive(i)}
+                  onFocus={() => setActive(i)}
+                  onPointerMove={(e) => e.pointerType === 'mouse' && !on && setActive(i)}
                 >
-                  <span className={`t-meta ${styles.tabNum}`}>{pad(i + 1)}</span>
-                  <span className={`t-condensed ${styles.tabWord}`}>{st.word}</span>
-                  <span className={styles.arrow} aria-hidden="true">
-                    →
+                  <span className="visually-hidden">
+                    Step {i + 1}: {st.word}
                   </span>
                 </button>
-              );
-            })}
-          </div>
-        </div>
 
-        <Reveal delay={100} className={styles.stage}>
-          {/* One photo per step, stacked; the active one fades in and settles. */}
-          <div className={styles.photos} aria-hidden="true">
-            {stages.map((st, i) => (
-              <div key={st.word} className={styles.photo} data-active={i === active || undefined}>
-                <Placeholder
-                  label={st.caption}
-                  image={images[st.image]}
-                  sizes="(max-width: 900px) 100vw, 45vw"
-                  priority={i === 0}
-                  bare
-                  className={styles.photoFrame}
-                />
-              </div>
-            ))}
-            <span className={styles.scrim} />
-          </div>
-          <Texture className={`${styles.texture} parallax`} size="900px auto" fade={corner} />
-          <div className={styles.panels}>
-            {stages.map((st, i) => {
-              const on = i === active;
-              return (
+                <div className={styles.top} aria-hidden="true">
+                  <span className={styles.numeral}>{pad(i + 1)}</span>
+                  <StepIcon key={on ? 'on' : 'off'} index={i} />
+                </div>
+
+                {/* Folded: the word runs up the panel. */}
+                <span className={`t-condensed ${styles.wordV}`} aria-hidden="true">
+                  {st.word}
+                </span>
+
+                {/* Open: the step told in full. Re-mounted when opened so its entrance replays. */}
                 <div
-                  key={st.word}
+                  key={on ? 'on' : 'off'}
                   id={`${id}-panel-${i}`}
                   role="tabpanel"
                   aria-labelledby={`${id}-tab-${i}`}
                   aria-hidden={!on || undefined}
-                  inert={!on || undefined}
-                  className={styles.panel}
-                  data-active={on || undefined}
+                  className={styles.body}
                 >
-                  {/* Re-mounted whenever this step becomes active, so its entrance replays. */}
-                  <div key={on ? 'on' : 'off'} className={styles.content}>
-                    <span className={styles.numeralMask} aria-hidden="true">
-                      <span className={styles.numeral}>{pad(i + 1)}</span>
-                    </span>
-                    <p className={`t-meta ${styles.caption}`}>{st.caption}</p>
-                    <div className={styles.countRow} style={{ '--i': 0 } as CSSProperties}>
-                      <StepIcon index={i} className={styles.panelIcon} />
-                      <p className={`t-meta ${styles.count}`}>
-                        Step {i + 1} of {stages.length}
-                      </p>
-                    </div>
-                    <p className={`t-heading-sm ${styles.line}`} style={{ '--i': 1 } as CSSProperties}>
-                      {st.line}
-                    </p>
-                    <p className={`t-body ${styles.body}`} style={{ '--i': 2 } as CSSProperties}>
-                      {st.body}
-                    </p>
-                  </div>
+                  <h3 className={`t-condensed ${styles.word}`}>{st.word}</h3>
+                  <p className={styles.line}>{st.line}</p>
+                  <p className={styles.text}>{st.body}</p>
                 </div>
-              );
-            })}
-          </div>
-        </Reveal>
-      </div>
+              </div>
+            );
+          })}
+        </div>
+      </Reveal>
 
-      {/* Phones: four compact cards, everything visible. */}
-      <ol className={styles.cards}>
+      {/* Phones: the four panels stacked, everything visible. */}
+      <ol className={styles.stack}>
         {stages.map((st, i) => (
-          <Reveal as="li" key={st.word} delay={i * 80} className={styles.card} style={{ '--i': i } as CSSProperties}>
-            <Texture className={styles.cardTexture} size="520px auto" fade={corner} />
-            <figure className={styles.cardPhoto}>
-              <Placeholder label={st.caption} image={images[st.image]} sizes="50vw" bare className={styles.cardPhotoFrame} />
-              <figcaption className={`t-meta ${styles.cardCaption}`}>{st.caption}</figcaption>
-            </figure>
+          <Reveal as="li" key={st.word} delay={i * 60} distance={24} className={styles.card} style={toneStyle(i)}>
+            <Texture className={styles.texture} size="520px auto" />
+            <span className={styles.cardNumeral} aria-hidden="true">
+              {pad(i + 1)}
+            </span>
             <div className={styles.cardTop}>
-              <span className={`t-meta ${styles.cardNum}`}>{pad(i + 1)}</span>
               <StepIcon index={i} className={styles.cardIcon} />
+              <span className={`t-meta ${styles.cardCount}`}>
+                {pad(i + 1)} / {pad(stages.length)}
+              </span>
             </div>
             <h3 className={`t-condensed ${styles.cardWord}`}>{st.word}</h3>
             <p className={styles.cardLine}>{st.line}</p>
-            <p className={styles.cardBody}>{st.body}</p>
+            <p className={styles.cardText}>{st.body}</p>
           </Reveal>
         ))}
       </ol>

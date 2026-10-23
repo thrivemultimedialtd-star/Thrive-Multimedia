@@ -1,9 +1,5 @@
 // Website copy rewritten from brochure ideas. Source pages noted per block.
 
-import type { images } from './brochure';
-
-type BrochureImageKey = keyof typeof images;
-
 export const hero = {
   line: 'We turn ideas into brands people remember, across print, web and multimedia.', // p.2
   // The line is shown as lead + rotating word + tail. Each word is a brochure service.
@@ -27,34 +23,25 @@ export const intro = {
   media: ['E-commerce websites', 'Company brochures', 'Stationery', 'Magazine advertising', 'Video presentations'],
 };
 
-// Our approach. Each stage maps to a brochure idea. Its photo is real Thrive work from the
-// brochure (keys into `images` in content/brochure.ts), captioned only by brand and medium.
-export const process: { word: string; image: BrochureImageKey; caption: string; line: string; body: string }[] = [
+// Our approach. Each stage maps to a brochure idea.
+export const process = [
   {
     word: 'Listen',
-    image: 'market-monie',
-    caption: 'Market Monie · Presentation',
     line: 'We start with you and your market.',
     body: 'Time spent understanding the business and the sector it competes in means the work lands with the audience it is meant for.', // p.12
   },
   {
     word: 'Define',
-    image: 'huriya-air',
-    caption: 'Huriya Air · Branding',
     line: 'Then we find what the brand stands for.',
     body: 'Core values first. A brand that expresses them clearly will serve the business goals behind it.', // p.8
   },
   {
     word: 'Create',
-    image: 'philip-bechi',
-    caption: 'Philip Bechi · Book cover',
     line: 'Every concept is made fresh.',
     body: 'Off-the-shelf is off the table. Copywriting, design, illustration, video and code all happen in-house, so ideas move freely between them.', // pp.2, 4
   },
   {
     word: 'Deliver',
-    image: 'farm-alert-van',
-    caption: 'Farm Alert Logistics · Vehicle livery',
     line: 'One message, every medium.',
     body: 'We roll the work out across print, web and multimedia so it speaks consistently, and judge it by the results it brings back.', // pp.2, 10
   },
