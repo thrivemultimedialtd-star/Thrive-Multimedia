@@ -52,8 +52,21 @@ export default function SheetStack({ children }: { children: ReactNode }) {
       const refresh = () => ScrollTrigger.refresh();
       whenFontsReady().then(refresh);
       window.addEventListener('load', refresh);
+
+      // A pin fixes its section's height inline, so a section that grows (e.g. the Services
+      // accordion opening a row) would spill under the next sheet and its hand-off would come
+      // too early. Watch each sheet's contents and re-measure once a change settles.
+      let timer = 0;
+      const ro = new ResizeObserver(() => {
+        clearTimeout(timer);
+        timer = window.setTimeout(refresh, 150);
+      });
+      sheets.forEach((s) => [...s.children].forEach((c) => ro.observe(c)));
+
       return () => {
         window.removeEventListener('load', refresh);
+        ro.disconnect();
+        clearTimeout(timer);
         mm.revert();
       };
     },

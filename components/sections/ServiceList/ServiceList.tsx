@@ -42,7 +42,9 @@ export default function ServiceList({ headingLevel = 'h2' }: { headingLevel?: 'h
                 className={styles.row}
                 data-open={open || undefined}
                 data-dim={active !== null && !open ? '' : undefined}
-                onMouseEnter={() => !env.touch && setActive(i)}
+                // pointermove (not mouseenter) so rows only open when the mouse actually moves,
+                // never because the list scrolled under a resting cursor.
+                onPointerMove={(e) => e.pointerType === 'mouse' && !open && setActive(i)}
               >
                 <H className={styles.rowHead}>
                   <button
