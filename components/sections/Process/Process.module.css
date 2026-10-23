@@ -1,5 +1,5 @@
 .process {
-  --card: #f6f8f1;
+  --card: #fbfdf7;
   --card-rule: rgba(35, 54, 26, 0.1);
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
