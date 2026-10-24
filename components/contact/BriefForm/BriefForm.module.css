@@ -10,7 +10,10 @@
   --f-accent-hover: #172511;
   --f-focus: rgba(106, 154, 54, 0.35);
   --f-error: #a8401a;
-  display: grid;
+  /* Fills its card; the actions sit at the bottom on every step. */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   gap: 1.75rem;
   color: var(--f-fg);
 }
@@ -217,6 +220,49 @@
   opacity: 0;
 }
 
+/* ── Journey: all four steps, pinned above the actions on desktop ── */
+.journey {
+  margin-top: auto;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.6rem 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--f-line);
+  list-style: none;
+  font-size: 0.95rem;
+}
+.journey li {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  color: var(--f-muted);
+}
+.journey li[data-state='current'] {
+  color: var(--f-fg);
+  font-weight: 600;
+}
+.journeyMark {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1.5px solid var(--f-line);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.journey li[data-state='current'] .journeyMark {
+  border-color: var(--f-accent);
+  background: var(--f-accent);
+  color: var(--f-accent-fg);
+}
+.journey li[data-state='done'] .journeyMark {
+  border-color: var(--thrive-green);
+  color: var(--f-accent);
+}
+
 /* ── Actions ── */
 .actions {
   display: flex;
@@ -290,6 +336,7 @@
 
 /* ── Sent ── */
 .thanks {
+  flex: 1;
   position: relative;
   min-height: 18rem;
   animation: fadeIn 0.3s ease-out both;
@@ -316,6 +363,14 @@
 .thanksBody a {
   color: var(--f-fg);
   border-bottom: 1px solid currentColor;
+}
+
+/* Phones: the card has its natural height, so the overview is left out and the actions
+   follow the step directly. */
+@media (max-width: 900px) {
+  .journey {
+    display: none;
+  }
 }
 
 @media (max-width: 768px) {

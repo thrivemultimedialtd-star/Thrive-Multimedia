@@ -22,26 +22,29 @@ export default function ContactSection({ headingLevel = 'h2' }: { headingLevel?:
         </Reveal>
 
         <div className={styles.layout}>
-          <TextReveal as={headingLevel} id="contact-title" text={closing.title} split="lines" className={styles.title} />
+          {/* Left column: heading, one-tap actions, studio (pinned to the bottom on desktop). */}
+          <div className={styles.side}>
+            <TextReveal as={headingLevel} id="contact-title" text={closing.title} split="lines" className={styles.title} />
 
-          <div className={styles.quick}>
-            <QuickActions />
+            <div className={styles.quick}>
+              <QuickActions />
+            </div>
+
+            <Reveal delay={150} distance={12} className={styles.studio}>
+              <h3 className="t-meta">Studio</h3>
+              <address className={styles.address}>
+                {contact.address.map((l) => (
+                  <span key={l}>{l}</span>
+                ))}
+              </address>
+              <a href={mapsHref} target="_blank" rel="noopener noreferrer" className={styles.maps}>
+                Open in Maps <span aria-hidden="true">↗</span>
+              </a>
+            </Reveal>
           </div>
 
           <Reveal delay={100} distance={20} className={styles.formCard}>
             <BriefForm />
-          </Reveal>
-
-          <Reveal delay={150} distance={12} className={styles.studio}>
-            <h3 className="t-meta">Studio</h3>
-            <address className={styles.address}>
-              {contact.address.map((l) => (
-                <span key={l}>{l}</span>
-              ))}
-            </address>
-            <a href={mapsHref} target="_blank" rel="noopener noreferrer" className={styles.maps}>
-              Open in Maps <span aria-hidden="true">↗</span>
-            </a>
           </Reveal>
         </div>
       </div>

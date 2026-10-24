@@ -253,6 +253,7 @@ export default function BriefForm() {
         </section>
       ))}
 
+
       {failure && (
         <p className={styles.failure} role="alert">
           {failure}{' '}
@@ -293,6 +294,15 @@ export default function BriefForm() {
           </>
         )}
       </div>
+      {/* The whole journey at a glance (desktop), anchored to the card's bottom edge. */}
+      <ol className={styles.journey} aria-hidden="true">
+        {steps.map((title, i) => (
+          <li key={title} data-state={i + 1 < step ? 'done' : i + 1 === step ? 'current' : 'next'}>
+            <span className={styles.journeyMark}>{i + 1 < step ? '✓' : String(i + 1).padStart(2, '0')}</span>
+            {title}
+          </li>
+        ))}
+      </ol>
     </form>
   );
 }

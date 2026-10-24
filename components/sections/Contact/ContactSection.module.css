@@ -15,23 +15,23 @@
   border-top-color: var(--rule-light);
 }
 
-/* Desktop: heading, actions and studio on the left; the brief card on the right. */
+/* Desktop: two columns that start and end on the same lines. Left: heading, actions and
+   studio; right: the brief card, at a fixed height so changing steps never resizes it. */
 .layout {
   display: grid;
   grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-  grid-template-areas:
-    'title form'
-    'quick form'
-    'studio form';
-  grid-template-rows: auto auto 1fr;
   column-gap: clamp(2rem, 5vw, 5rem);
-  row-gap: clamp(1.75rem, 3vw, 2.5rem);
-  align-items: start;
+  align-items: stretch;
   margin-top: clamp(1.5rem, 3vw, 2.5rem);
+}
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.75rem, 3vw, 2.5rem);
+  min-width: 0;
 }
 
 .title {
-  grid-area: title;
   font-family: var(--font-display);
   font-weight: var(--display-weight);
   font-stretch: var(--display-stretch);
@@ -43,7 +43,7 @@
 
 /* ── Quick actions ── */
 .quick {
-  grid-area: quick;
+  min-width: 0;
 }
 .actions {
   display: grid;
@@ -145,7 +145,8 @@
 
 /* ── The brief: a light card on the green ── */
 .formCard {
-  grid-area: form;
+  display: flex;
+  flex-direction: column;
   border-radius: 24px;
   background: var(--paper);
   color: var(--charcoal);
@@ -155,7 +156,8 @@
 
 /* ── Studio ── */
 .studio {
-  grid-area: studio;
+  /* Sits on the card's bottom line. */
+  margin-top: auto;
   display: grid;
   gap: 0.6rem;
   justify-items: start;
@@ -188,12 +190,25 @@
 @media (max-width: 900px) {
   .layout {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-areas:
-      'title'
-      'quick'
-      'form'
-      'studio';
-    grid-template-rows: none;
+    row-gap: clamp(1.75rem, 5vw, 2.5rem);
+  }
+  /* One column: heading, actions, the brief, then the studio. */
+  .side {
+    display: contents;
+  }
+  .title {
+    order: 1;
+  }
+  .quick {
+    order: 2;
+  }
+  .formCard {
+    order: 3;
+    min-height: 0;
+  }
+  .studio {
+    order: 4;
+    margin-top: 0;
   }
   .title {
     font-size: clamp(2.3rem, 11vw, 3.6rem);
