@@ -2,11 +2,20 @@ import { projects } from '@/content/projects';
 import TextReveal from '@/components/motion/TextReveal/TextReveal';
 import Reveal from '@/components/motion/Reveal/Reveal';
 import TransitionLink from '@/components/motion/TransitionLink';
-import ProjectGrid from '@/components/work/ProjectGrid/ProjectGrid';
+import FeaturedCard from './FeaturedCard';
 import styles from './SelectedWork.module.css';
 
 // Reveal just before the section scrolls in, so it never arrives empty.
 const EARLY = '0px 0px 10% 0px';
+
+// Balanced pairs, mirrored, then one wide closer. Each slot has a fixed ratio.
+const slots = [
+  { slot: 'a', sizes: '(max-width: 900px) 100vw, 58vw' },
+  { slot: 'b', sizes: '(max-width: 900px) 100vw, 42vw' },
+  { slot: 'c', sizes: '(max-width: 900px) 100vw, 42vw' },
+  { slot: 'd', sizes: '(max-width: 900px) 100vw, 58vw' },
+  { slot: 'e', sizes: '100vw' },
+];
 
 export default function SelectedWork({ count = 5 }: { count?: number }) {
   return (
@@ -27,11 +36,16 @@ export default function SelectedWork({ count = 5 }: { count?: number }) {
         </Reveal>
       </div>
 
-      <ProjectGrid projects={projects.slice(0, count)} />
+      <div className={styles.grid}>
+        {projects.slice(0, count).map((p, i) => {
+          const s = slots[i % slots.length];
+          return <FeaturedCard key={p.slug} project={p} slot={styles[s.slot]} sizes={s.sizes} />;
+        })}
+      </div>
 
       <div className={styles.more}>
         <TransitionLink href="/work" className={styles.moreLink}>
-          <span>All work</span>
+          <span>View all work</span>
           <span className={styles.arrow} aria-hidden="true">
             →
           </span>

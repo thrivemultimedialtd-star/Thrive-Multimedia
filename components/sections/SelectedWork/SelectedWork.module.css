@@ -17,6 +17,184 @@
   grid-column: 9 / -1;
 }
 
+/* ── The gallery: balanced pairs, mirrored, then one wide closer ── */
+.grid {
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: clamp(1.5rem, 2.8vw, 2.75rem);
+  row-gap: clamp(3rem, 5.5vw, 5rem);
+  align-items: start;
+}
+.a {
+  grid-column: 1 / span 7;
+  --ratio: 4 / 3;
+}
+.b {
+  grid-column: 8 / span 5;
+  --ratio: 1 / 1;
+}
+.c {
+  grid-column: 1 / span 5;
+  --ratio: 1 / 1;
+}
+.d {
+  grid-column: 6 / span 7;
+  --ratio: 4 / 3;
+}
+.e {
+  grid-column: 1 / -1;
+  --ratio: 21 / 9;
+}
+
+.card {
+  min-width: 0;
+}
+.link {
+  display: grid;
+  gap: 1.1rem;
+  border-radius: 18px;
+}
+.link:focus-visible {
+  outline: 3px solid var(--thrive-green);
+  outline-offset: 6px;
+}
+
+/* The image: a soft-cornered frame at the slot's ratio. */
+.media {
+  position: relative;
+  aspect-ratio: var(--ratio, 4 / 3);
+  border-radius: 18px;
+  overflow: clip;
+  background: var(--paper-2);
+}
+.mediaInner {
+  position: absolute;
+  inset: 0;
+  /* Hover zoom uses `scale`, so it composes with the entrance `transform`. */
+  transition: scale 0.6s var(--ease-out-expo);
+}
+.photo {
+  height: 100%;
+}
+@media (hover: hover) {
+  .link:hover .mediaInner {
+    scale: 1.04;
+  }
+}
+
+/* A small round "view" button that slides in on hover (always shown on touch screens). */
+.go {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--paper);
+  color: var(--charcoal);
+  font-size: 1.15rem;
+  box-shadow: 0 10px 24px -12px rgba(11, 18, 10, 0.5);
+  transition:
+    opacity 0.35s ease-out,
+    transform 0.45s var(--ease-out-expo);
+}
+@media (hover: hover) {
+  .go {
+    opacity: 0;
+    transform: translate(-8px, 8px) scale(0.85);
+  }
+  .link:hover .go,
+  .link:focus-visible .go {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* The caption: number and name, the discipline as a pill, then the brochure's line. */
+.caption {
+  display: grid;
+  gap: 0.45rem;
+}
+.captionTop {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.name {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  min-width: 0;
+  font-family: var(--font-display);
+  font-weight: var(--heading-weight);
+  font-stretch: var(--display-stretch);
+  font-size: var(--fs-heading-sm);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+}
+.num {
+  color: var(--fg-muted);
+  flex: none;
+}
+.nameText {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 2px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.4s var(--ease-out-expo);
+}
+.link:hover .nameText,
+.link:focus-visible .nameText {
+  background-size: 100% 2px;
+}
+.pill {
+  flex: none;
+  padding: 0.4rem 0.75rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  color: var(--thrive-green);
+  font-size: 0.66rem;
+  white-space: nowrap;
+}
+.brief {
+  max-width: 52ch;
+  font-size: 0.98rem;
+  line-height: 1.55;
+  color: var(--fg-muted);
+}
+
+/* Entrance: the image unveils upward like a curtain while the photo settles from a gentle zoom;
+   the caption follows. Plays as each card scrolls in. */
+:global(html[data-js]) .media {
+  clip-path: inset(100% 0 0 0 round 18px);
+  transition: clip-path 1.1s var(--ease-out-expo);
+}
+:global(html[data-js]) .mediaInner {
+  transform: scale(1.12);
+  transition:
+    transform 1.3s var(--ease-out-expo),
+    scale 0.6s var(--ease-out-expo);
+}
+:global(html[data-js]) .caption {
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 0.6s ease-out 0.35s,
+    transform 0.8s var(--ease-out-expo) 0.35s;
+}
+:global(html[data-js]) .card[data-revealed] .media {
+  clip-path: inset(0 round 18px);
+}
+:global(html[data-js]) .card[data-revealed] .mediaInner,
+:global(html[data-js]) .card[data-revealed] .caption {
+  opacity: 1;
+  transform: none;
+}
+
 .more {
   display: flex;
   justify-content: center;
@@ -27,13 +205,12 @@
   display: inline-flex;
   align-items: center;
   gap: 1rem;
-  padding: 1.4rem 2.4rem;
-  border: 1px solid var(--rule);
+  min-height: 56px;
+  padding: 1rem 2rem;
+  border: 1.5px solid var(--charcoal);
   border-radius: 999px;
-  font-family: var(--font-display);
-  font-weight: var(--heading-weight);
-  font-stretch: var(--display-stretch);
-  font-size: var(--fs-heading-sm);
+  font-weight: 600;
+  font-size: 1.05rem;
   line-height: 1;
   transition:
     background-color 0.25s ease-out,
@@ -57,5 +234,52 @@
   .intro h2,
   .lede {
     grid-column: 1 / -1;
+  }
+}
+
+/* Phones and tablets: one clean column, every image at 4:3. */
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 2.75rem;
+  }
+  .a,
+  .b,
+  .c,
+  .d,
+  .e {
+    grid-column: 1 / -1;
+    --ratio: 4 / 3;
+  }
+  .go {
+    width: 44px;
+    height: 44px;
+  }
+  .captionTop {
+    flex-wrap: wrap;
+    row-gap: 0.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mediaInner,
+  .go,
+  .nameText,
+  .moreLink,
+  .arrow {
+    transition: none !important;
+  }
+  :global(html[data-js]) .media {
+    clip-path: inset(0 round 18px);
+    transition: none;
+  }
+  :global(html[data-js]) .mediaInner,
+  :global(html[data-js]) .caption {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .link:hover .mediaInner {
+    scale: none;
   }
 }
