@@ -2,7 +2,7 @@
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   column-gap: var(--gutter);
-  row-gap: 4rem;
+  row-gap: var(--space-l);
   align-items: center;
 }
 .text {

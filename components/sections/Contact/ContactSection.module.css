@@ -4,7 +4,7 @@
   /* clip, not hidden: hidden would make this a scroll container and freeze the parallax inside. */
   overflow: clip;
   isolation: isolate;
-  padding-block: clamp(5rem, 10vw, 9rem) clamp(5rem, 9vw, 8rem);
+  padding-block: var(--section);
 }
 
 .inner {

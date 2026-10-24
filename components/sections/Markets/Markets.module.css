@@ -73,7 +73,7 @@
   grid-template-columns: repeat(12, minmax(0, 1fr));
   grid-template-rows: repeat(2, clamp(12rem, 16vw, 16rem));
   gap: 12px;
-  margin-top: clamp(2.5rem, 5vw, 4.5rem);
+  margin-top: var(--space-l);
   list-style: none;
 }
 /* The tile: grid slot, deal-in flight and scroll drift. The burst lives here too, so it can fly
@@ -260,7 +260,7 @@
   column-gap: var(--gutter);
   row-gap: 1.75rem;
   align-items: end;
-  margin-top: clamp(3.5rem, 7vw, 6rem);
+  margin-top: var(--space-l);
 }
 .closer {
   grid-column: 1 / span 7;
@@ -335,7 +335,7 @@
 
 /* ── Logos: one marquee, one wall ── */
 .walls {
-  margin-top: clamp(4.5rem, 9vw, 8rem);
+  margin-top: var(--space-xl);
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 3rem;

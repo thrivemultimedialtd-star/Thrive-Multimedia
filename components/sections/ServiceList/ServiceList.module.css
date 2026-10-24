@@ -2,7 +2,7 @@
   position: relative;
 }
 .title {
-  margin-bottom: clamp(3rem, 7vw, 6rem);
+  margin-bottom: var(--space-l);
 }
 
 .list {

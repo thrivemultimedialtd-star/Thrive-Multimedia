@@ -19,7 +19,7 @@ const slots = [
 
 export default function SelectedWork({ count = 5 }: { count?: number }) {
   return (
-    <section id="work" className={`wrap section ${styles.work}`} data-section-theme="paper" aria-labelledby="work-title">
+    <section id="work" className="wrap section" data-section-theme="paper" aria-labelledby="work-title">
       <Reveal variant="rule" rootMargin={EARLY} className="section-head">
         <span className="t-meta">Selected work</span>
         <span className="t-meta">

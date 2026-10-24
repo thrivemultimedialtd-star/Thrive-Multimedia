@@ -1,5 +1,5 @@
 .title {
-  margin-bottom: clamp(3rem, 7vw, 6rem);
+  margin-bottom: var(--space-l);
 }
 
 /* Asymmetric rhythm: pieces keep their own proportions and step across the grid. */

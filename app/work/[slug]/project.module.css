@@ -84,7 +84,7 @@
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   column-gap: var(--gutter);
-  margin-top: clamp(5rem, 10vw, 10rem);
+  margin-top: var(--space-xl);
   align-items: start;
 }
 .g1 {

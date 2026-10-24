@@ -42,7 +42,11 @@
   /* Layout */
   --gutter: clamp(16px, 2.2vw, 36px);
   --margin: clamp(16px, 3.4vw, 56px);
-  --section: clamp(6rem, 14vw, 14rem);
+  /* Spacing scale: one rhythm for every section and the gaps inside them. */
+  --section: clamp(4rem, 8vw, 7.5rem);
+  --space-head: clamp(2rem, 4vw, 3.5rem);
+  --space-l: clamp(2.5rem, 5vw, 4.5rem);
+  --space-xl: clamp(3rem, 6vw, 5.5rem);
   --nav-h: 72px;
 
   /* Motion */
@@ -251,7 +255,7 @@ img {
   gap: 1rem;
   padding-top: 0.9rem;
   border-top: 1px solid var(--rule);
-  margin-bottom: clamp(3rem, 7vw, 6rem);
+  margin-bottom: var(--space-head);
 }
 
 .visually-hidden {
