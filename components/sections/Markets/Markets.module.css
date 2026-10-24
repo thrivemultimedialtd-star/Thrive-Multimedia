@@ -4,9 +4,10 @@
   overflow: clip;
   color: var(--paper);
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* ── Heading ── */
+/* ── Heading: the words drop in, then the green full stop bounces home ── */
 .title {
   font-family: var(--font-display);
   font-weight: var(--display-weight);
@@ -16,18 +17,54 @@
   letter-spacing: -0.035em;
   max-width: 14ch;
 }
+.drop {
+  display: inline-block;
+}
+:global(html[data-js]) .drop {
+  opacity: 0;
+  transform: translateY(-0.7em) rotate(-6deg);
+  transition:
+    opacity 0.4s ease-out,
+    transform 0.8s var(--spring);
+  transition-delay: calc(var(--w, 0) * 90ms);
+}
+:global(html[data-js]) [data-revealed] .drop {
+  opacity: 1;
+  transform: none;
+}
 .dot {
   display: inline-block;
   color: var(--green-bright);
-  transform-origin: 50% 85%;
+  transform-origin: 50% 100%;
 }
-/* The green full stop pops in just after the heading arrives. */
 :global(html[data-js]) .dot {
-  transform: scale(0);
-  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.35s;
+  opacity: 0;
 }
 :global(html[data-js]) [data-revealed] .dot {
-  transform: none;
+  animation: dotDrop 0.95s ease-out both 0.45s;
+}
+@keyframes dotDrop {
+  0% {
+    opacity: 0;
+    transform: translateY(-1.4em);
+  }
+  35% {
+    opacity: 1;
+    transform: translateY(0) scale(1.25, 0.7);
+  }
+  55% {
+    transform: translateY(-0.35em) scale(0.92, 1.1);
+  }
+  75% {
+    transform: translateY(0) scale(1.08, 0.9);
+  }
+  88% {
+    transform: translateY(-0.08em);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 /* ── Goals: a bento of bold colour tiles ── */
@@ -39,52 +76,46 @@
   margin-top: clamp(2.5rem, 5vw, 4.5rem);
   list-style: none;
 }
+/* The tile: grid slot, deal-in flight and scroll drift. The burst lives here too, so it can fly
+   past the card's edges. */
 .tile {
   position: relative;
-  overflow: clip;
   display: flex;
-  align-items: flex-end;
-  padding: clamp(1.25rem, 2.2vw, 2rem);
-  border-radius: 24px;
-  background: var(--tile);
-  color: #0b120a;
-  transition:
-    opacity 0.45s ease-out,
-    transform 0.6s var(--ease-out-expo),
-    rotate 0.3s ease-out,
-    translate 0.3s ease-out,
-    filter 0.15s ease-out;
 }
-/* Each goal lands as it scrolls in: its colour wipes up from the bottom edge, then the words
-   rise into place. A short cascade when several arrive together. */
+/* Tiles deal in like cards: up from below, tilted, then a springy landing. */
 :global(html[data-js]) .tile {
-  clip-path: inset(100% 0 0 0 round 24px);
   transition:
     opacity 0.45s ease-out,
-    clip-path 0.75s var(--ease-out-expo),
-    rotate 0.3s ease-out,
-    translate 0.3s ease-out,
-    filter 0.15s ease-out;
-  transition-delay: calc(var(--i, 0) * 90ms), calc(var(--i, 0) * 90ms), 0s, 0s, 0s;
+    transform 0.95s var(--spring);
+  transition-delay: calc(var(--i, 0) * 110ms);
 }
-:global(html[data-js]) .tile[data-revealed] {
-  clip-path: inset(0 round 24px);
-}
-:global(html[data-js]) .tile .goal {
+:global(html[data-js]) .tile:not([data-revealed]) {
   opacity: 0;
-  transform: translateY(18px);
-  transition:
-    opacity 0.5s ease-out,
-    transform 0.7s var(--ease-out-expo);
-  transition-delay: calc(var(--i, 0) * 90ms + 0.18s);
+  transform: translateY(120px) rotate(var(--deal, 9deg)) scale(0.82);
 }
-:global(html[data-js]) .tile[data-revealed] .goal {
-  opacity: 1;
-  transform: none;
+.tile:nth-child(even) {
+  --deal: -9deg;
 }
-/* A tap visibly answers: the tile presses in and brightens. */
-.tile:active {
-  filter: brightness(1.08);
+/* Different drift speeds while the bento scrolls past (the global parallax utility). */
+.tile:nth-child(1) {
+  --px-from: 2%;
+  --px-to: -2%;
+}
+.tile:nth-child(2) {
+  --px-from: 9%;
+  --px-to: -9%;
+}
+.tile:nth-child(3) {
+  --px-from: 15%;
+  --px-to: -15%;
+}
+.tile:nth-child(4) {
+  --px-from: 5%;
+  --px-to: -5%;
+}
+.tile:nth-child(5) {
+  --px-from: 12%;
+  --px-to: -12%;
 }
 /* Launch a new brand: the lead tile. */
 .tile:nth-child(1) {
@@ -102,6 +133,51 @@
 }
 .tile:nth-child(5) {
   grid-column: 11 / span 2;
+}
+
+/* The card: colour, content, the pointer tilt and the jelly bounce. */
+.card {
+  position: relative;
+  flex: 1;
+  overflow: clip;
+  display: flex;
+  align-items: flex-end;
+  padding: clamp(1.25rem, 2.2vw, 2rem);
+  border-radius: 24px;
+  background: var(--tile);
+  color: #0b120a;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transition:
+    transform 0.35s ease-out,
+    box-shadow 0.35s ease-out;
+}
+@media (hover: hover) {
+  .card:hover {
+    box-shadow: 0 30px 60px -28px rgba(0, 0, 0, 0.6);
+  }
+}
+.card[data-jelly] {
+  animation: jelly 0.5s ease-out;
+}
+@keyframes jelly {
+  0% {
+    scale: 1;
+  }
+  25% {
+    scale: 0.93 1.04;
+  }
+  50% {
+    scale: 1.04 0.95;
+  }
+  75% {
+    scale: 0.98 1.02;
+  }
+  100% {
+    scale: 1;
+  }
 }
 .tileTexture {
   position: absolute;
@@ -125,11 +201,55 @@
   font-size: clamp(3rem, 6.4vw, 7rem);
   max-width: 9ch;
 }
-/* Feedback: a tile lifts and tilts slightly under the pointer. */
-@media (hover: hover) {
-  .tile:hover {
-    translate: 0 -6px;
-    rotate: -1deg;
+/* Each word bounces up out of its own mask, one after another, as the tile lands. */
+.word {
+  display: inline-block;
+  overflow: clip;
+  vertical-align: top;
+  padding-bottom: 0.06em;
+  margin-bottom: -0.06em;
+}
+.wordIn {
+  display: inline-block;
+}
+:global(html[data-js]) .wordIn {
+  transform: translateY(110%) rotate(8deg);
+  transition: transform 0.75s var(--spring);
+  transition-delay: calc(var(--i, 0) * 110ms + 0.35s + var(--w, 0) * 80ms);
+}
+:global(html[data-js]) .tile[data-revealed] .wordIn {
+  transform: none;
+}
+
+/* The tap burst: little Thrive stars and dots that spray out and fade. */
+.spark {
+  position: absolute;
+  z-index: 5;
+  width: var(--sz, 12px);
+  height: var(--sz, 12px);
+  margin: calc(var(--sz, 12px) / -2) 0 0 calc(var(--sz, 12px) / -2);
+  background: var(--c, #7fb53f);
+  clip-path: polygon(50% 0, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0 50%, 39% 39%);
+  pointer-events: none;
+  animation: spark 0.75s cubic-bezier(0.2, 0.7, 0.3, 1) forwards;
+}
+.sparkDot {
+  clip-path: none;
+  border-radius: 50%;
+  width: calc(var(--sz, 12px) * 0.6);
+  height: calc(var(--sz, 12px) * 0.6);
+}
+@keyframes spark {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0) scale(0.4);
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(1);
   }
 }
 
@@ -151,20 +271,59 @@
   line-height: 0.98;
   letter-spacing: -0.03em;
 }
+/* "Same enthusiasm.": a wave runs through the letters once, then a squiggle draws underneath. */
 .accent {
+  position: relative;
+  display: inline-block;
   color: var(--green-bright);
-  /* Underlined once the statement is in view, drawing left to right. */
-  background-image: linear-gradient(currentColor, currentColor);
-  background-repeat: no-repeat;
-  background-position: 0 92%;
-  background-size: 100% 0.07em;
+  padding-bottom: 0.18em;
 }
-:global(html[data-js]) .accent {
-  background-size: 0% 0.07em;
-  transition: background-size 0.8s var(--ease-out-expo) 0.4s;
+.waveWord {
+  display: inline-block;
+  white-space: nowrap;
 }
-:global(html[data-js]) .closer[data-revealed] .accent {
-  background-size: 100% 0.07em;
+.letter {
+  display: inline-block;
+}
+:global(html[data-js]) .closer[data-revealed] .letter {
+  animation: wave 0.7s var(--spring) both;
+  animation-delay: calc(0.25s + var(--c, 0) * 40ms);
+}
+@keyframes wave {
+  0% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-0.28em) rotate(-6deg);
+  }
+  100% {
+    transform: none;
+  }
+}
+.squiggle {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.05em;
+  width: 100%;
+  height: 0.28em;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  /* No non-scaling-stroke: it would measure the dash in pixels and stop the draw short. */
+  stroke-width: 2.6;
+  stroke-linecap: round;
+}
+.squiggle path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+:global(html[data-js]) .squiggle path {
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 1s var(--ease-out-expo) 0.9s;
+}
+:global(html[data-js]) .closer[data-revealed] .squiggle path {
+  stroke-dashoffset: 0;
 }
 .body {
   grid-column: 8 / -1;
@@ -174,7 +333,7 @@
   max-width: 46ch;
 }
 
-/* ── Logos: one marquee, one still wall ── */
+/* ── Logos: one marquee, one wall ── */
 .walls {
   margin-top: clamp(4.5rem, 9vw, 8rem);
   display: grid;
@@ -259,6 +418,7 @@
   padding: 1rem;
   border-right: 1px solid var(--rule-light);
   border-bottom: 1px solid var(--rule-light);
+  perspective: 500px;
 }
 .wallLogo {
   /* Fill the cell's width at the logo's set height, scaled to fit, so a wide logo never
@@ -267,21 +427,22 @@
   object-fit: contain;
   filter: invert(0.95);
   opacity: 0.75;
+  transform-origin: 50% 0;
   transition: opacity 0.2s ease-out;
 }
 .cell:hover .wallLogo {
   opacity: 1;
 }
-/* The logos rise into the grid in a quick cascade as it scrolls in. */
+/* The wall flips in like a split-flap board, cell after cell. */
 :global(html[data-js]) .wall:not([data-revealed]) .wallLogo {
   opacity: 0;
-  transform: translateY(8px);
+  transform: rotateX(-95deg);
 }
 :global(html[data-js]) .wall .wallLogo {
   transition:
-    opacity 0.5s ease-out,
-    transform 0.6s var(--ease-out-expo);
-  transition-delay: min(calc(var(--i, 0) * 30ms), 420ms);
+    opacity 0.35s ease-out,
+    transform 0.8s var(--spring);
+  transition-delay: min(calc(var(--i, 0) * 55ms), 700ms);
 }
 :global(html[data-js]) .wall[data-revealed] .cell:hover .wallLogo {
   transition-delay: 0s;
@@ -297,21 +458,19 @@
   .tile:nth-child(n) {
     grid-column: auto;
     grid-row: auto;
-    padding: 18px;
   }
   .tile:nth-child(1) {
     grid-column: 1 / -1;
     min-height: 13rem;
+  }
+  .card {
+    padding: 18px;
   }
   .goal {
     font-size: clamp(1.15rem, 5.2vw, 1.6rem);
   }
   .tile:nth-child(1) .goal {
     font-size: clamp(2.6rem, 13vw, 4.2rem);
-  }
-  .tile:active {
-    transform: scale(0.98);
-    transition-duration: 0.12s;
   }
   .closer,
   .body {
@@ -326,41 +485,48 @@
   }
 }
 
+/* Reduced motion: everything in its final state; no burst, bounce or tilt. */
 @media (prefers-reduced-motion: reduce) {
   .tile,
-  .tile .goal,
-  .dot,
-  .accent,
+  .wordIn,
+  .drop,
+  .card,
+  .squiggle path,
   .wallLogo {
     transition: none !important;
   }
-  :global(html[data-js]) .tile,
-  :global(html[data-js]) .tile[data-revealed] {
-    clip-path: inset(0 round 24px);
+  .dot,
+  .letter,
+  .card[data-jelly],
+  .spark {
+    animation: none !important;
   }
-  :global(html[data-js]) .tile .goal,
-  :global(html[data-js]) .wall .wallLogo,
-  :global(html[data-js]) .dot {
-    transform: none !important;
+  .spark {
+    display: none;
   }
-  :global(html[data-js]) .tile .goal {
+  :global(html[data-js]) .tile:not([data-revealed]),
+  :global(html[data-js]) .wall:not([data-revealed]) .wallLogo {
+    transform: none;
+  }
+  :global(html[data-js]) .tile:not([data-revealed]) {
     opacity: 1;
   }
   :global(html[data-js]) .wall:not([data-revealed]) .wallLogo {
     opacity: 0.75;
   }
-  :global(html[data-js]) .accent {
-    background-size: 100% 0.07em;
-  }
-  .tile:active {
-    filter: none;
-  }
-  .tile:hover {
-    translate: none;
-    rotate: none;
-  }
-  .tile:active {
+  :global(html[data-js]) .wordIn,
+  :global(html[data-js]) .drop {
+    opacity: 1;
     transform: none;
+  }
+  :global(html[data-js]) .dot {
+    opacity: 1;
+  }
+  :global(html[data-js]) .squiggle path {
+    stroke-dashoffset: 0;
+  }
+  .card {
+    transform: none !important;
   }
   /* The marquee holds still as a tidy wall. */
   .marqueeTrack {

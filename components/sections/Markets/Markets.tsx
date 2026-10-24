@@ -2,17 +2,15 @@ import type { CSSProperties } from 'react';
 import { markets } from '@/content/story';
 import { clients, identities } from '@/content/clients';
 import Reveal from '@/components/motion/Reveal/Reveal';
-import Texture from '@/components/ui/Texture';
 import Marquee from './Marquee';
 import LogoWall from './LogoWall';
+import Bento from './Bento';
 import styles from './Markets.module.css';
-
-// One solid brand colour per goal; ink text reads on every one (5.7:1 or better).
-const tiles = ['#7fb53f', '#f3f1ea', '#c9b79c', '#6a9a36', '#8a8f86'];
 
 /**
  * Markets: the goals Thrive helps with, as a bento of bold colour tiles, then the closing
- * statement, the clients marquee and a still wall of the identities Thrive has shaped.
+ * statement, the clients marquee and a wall of the identities Thrive has shaped. The heading's
+ * words drop in and its full stop bounces; "Same enthusiasm." waves and gets a drawn squiggle.
  */
 export default function Markets() {
   // "Any industry. Same enthusiasm." → the second sentence carries the green accent.
@@ -28,32 +26,49 @@ export default function Markets() {
         </Reveal>
         <Reveal>
           <h2 id="markets-title" className={styles.title}>
-            {markets.title}
+            {markets.title.split(' ').map((w, wi, arr) => (
+              <span key={wi}>
+                <span className={styles.drop} style={{ '--w': wi } as CSSProperties}>
+                  {w}
+                </span>
+                {wi < arr.length - 1 ? ' ' : null}
+              </span>
+            ))}
             <span className={styles.dot} aria-hidden="true">
               .
             </span>
           </h2>
         </Reveal>
 
-        <ul className={styles.bento}>
-          {markets.goals.map((g, i) => (
-            <Reveal
-              as="li"
-              key={g}
-              variant="fade"
-              className={styles.tile}
-              style={{ '--tile': tiles[i], '--i': i } as CSSProperties}
-            >
-              <Texture className={styles.tileTexture} size="520px auto" />
-              <span className={styles.goal}>{g}</span>
-            </Reveal>
-          ))}
-        </ul>
+        <Bento goals={markets.goals} />
 
         <div className={styles.copy}>
           <Reveal as="p" className={styles.closer}>
             {lead}.{' '}
-            <span className={styles.accent}>{tail}</span>
+            <span className={styles.accent}>
+              <span className="visually-hidden">{tail}</span>
+              {/* A one-time wave through the letters, then a hand-drawn squiggle underneath. */}
+              <span aria-hidden="true">
+                {tail.split(' ').map((word, wi, arr) => {
+                  const offset = arr.slice(0, wi).join(' ').length + (wi ? 1 : 0);
+                  return (
+                    <span key={wi}>
+                      <span className={styles.waveWord}>
+                        {[...word].map((ch, ci) => (
+                          <span key={ci} className={styles.letter} style={{ '--c': offset + ci } as CSSProperties}>
+                            {ch}
+                          </span>
+                        ))}
+                      </span>
+                      {wi < arr.length - 1 ? ' ' : null}
+                    </span>
+                  );
+                })}
+              </span>
+              <svg className={styles.squiggle} viewBox="0 0 300 20" preserveAspectRatio="none" aria-hidden="true">
+                <path d="M2 12 C 22 2, 42 2, 62 11 S 102 20, 122 11 S 162 2, 182 11 S 222 20, 242 11 S 282 2, 298 9" pathLength={1} />
+              </svg>
+            </span>
           </Reveal>
           <Reveal delay={100} className={styles.body}>
             <p>{markets.body}</p>
