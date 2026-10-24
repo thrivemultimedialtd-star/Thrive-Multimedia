@@ -2,11 +2,16 @@ import { contact } from '@/content/site';
 import { closing } from '@/content/story';
 import TextReveal from '@/components/motion/TextReveal/TextReveal';
 import Reveal from '@/components/motion/Reveal/Reveal';
-import CopyEmail from '@/components/motion/CopyEmail';
 import BriefForm from '@/components/contact/BriefForm/BriefForm';
+import QuickActions from './QuickActions';
 import styles from './ContactSection.module.css';
 
-/** The closing section: the heading, the project brief form and the studio's contact details. */
+const mapsHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contact.address.join(' ').replace(/,\s*$/, ''))}`;
+
+/**
+ * The closing section. The heading and three one-tap ways to reach the studio (WhatsApp, call,
+ * email) come first; the project brief sits beside them on a light card; the studio address last.
+ */
 export default function ContactSection({ headingLevel = 'h2' }: { headingLevel?: 'h1' | 'h2' }) {
   return (
     <section id="contact" className={styles.contact} data-section-theme="green" aria-labelledby="contact-title">
@@ -16,46 +21,28 @@ export default function ContactSection({ headingLevel = 'h2' }: { headingLevel?:
           <span className="t-meta">Abuja · Nigeria</span>
         </Reveal>
 
-        <TextReveal
-          as={headingLevel}
-          id="contact-title"
-          text={closing.title}
-          split="lines"
-          className={`${styles.title} parallax`}
-        />
+        <div className={styles.layout}>
+          <TextReveal as={headingLevel} id="contact-title" text={closing.title} split="lines" className={styles.title} />
 
-        <div className={styles.grid}>
-          <Reveal delay={100} distance={16} className={styles.formCol}>
+          <div className={styles.quick}>
+            <QuickActions />
+          </div>
+
+          <Reveal delay={100} distance={20} className={styles.formCard}>
             <BriefForm />
           </Reveal>
 
-          <div className={styles.details}>
-            <Reveal delay={150} distance={12} className={styles.block}>
-              <h3 className="t-meta">Email</h3>
-              <a href={`mailto:${contact.email}`} className={styles.big}>
-                {contact.email}
-              </a>
-              <CopyEmail email={contact.email} className={styles.copy} />
-            </Reveal>
-
-            <Reveal delay={200} distance={12} className={styles.block}>
-              <h3 className="t-meta">Phone</h3>
-              {contact.phones.map((p) => (
-                <a key={p.href} href={p.href} className={`${styles.big} ${styles.nowrap}`}>
-                  {p.display}
-                </a>
+          <Reveal delay={150} distance={12} className={styles.studio}>
+            <h3 className="t-meta">Studio</h3>
+            <address className={styles.address}>
+              {contact.address.map((l) => (
+                <span key={l}>{l}</span>
               ))}
-            </Reveal>
-
-            <Reveal delay={200} distance={12} className={styles.block}>
-              <h3 className="t-meta">Studio</h3>
-              <address className={styles.address}>
-                {contact.address.map((l) => (
-                  <span key={l}>{l}</span>
-                ))}
-              </address>
-            </Reveal>
-          </div>
+            </address>
+            <a href={mapsHref} target="_blank" rel="noopener noreferrer" className={styles.maps}>
+              Open in Maps <span aria-hidden="true">↗</span>
+            </a>
+          </Reveal>
         </div>
       </div>
     </section>

@@ -5,6 +5,8 @@ export const contact = {
     { display: '+234 817 677 8762', href: 'tel:+2348176778762' },
   ],
   email: 'thrivemultimedialtd@gmail.com',
+  // WhatsApp on the first number, as in the brochure (international format, no +).
+  whatsapp: '2347038860337',
   address: ['3rd Floor, Novare Central,', 'Wuse Zone 5,', 'Abuja.'],
 };
 

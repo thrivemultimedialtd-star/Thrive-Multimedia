@@ -6,7 +6,7 @@ import { briefOptions, emptyBrief, formatBrief, validateBrief, type Brief, type 
 import { sendBrief } from '@/app/actions/sendBrief';
 import styles from './BriefForm.module.css';
 
-const WHATSAPP = '2347038860337'; // +234 703 886 0337, from the brochure
+const WHATSAPP = contact.whatsapp;
 const steps = ['What do you need?', 'What’s the goal?', 'Tell us about it', 'How do we reach you?'];
 
 /**
