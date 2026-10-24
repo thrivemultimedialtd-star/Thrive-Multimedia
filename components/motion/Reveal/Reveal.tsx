@@ -14,6 +14,8 @@ interface Props {
   className?: string;
   style?: CSSProperties;
   rootMargin?: string;
+  /** Play the entrance every time the element scrolls into view, not just the first time. */
+  replay?: boolean;
 }
 
 /** Generic in-view reveal for supporting content. Quieter than TextReveal by design. */
@@ -27,9 +29,10 @@ export default function Reveal({
   className,
   style,
   rootMargin,
+  replay,
 }: Props) {
   const ref = useRef<HTMLElement>(null);
-  useReveal(ref, { trigger, delay: Math.min(delay, 200), rootMargin });
+  useReveal(ref, { trigger, delay: Math.min(delay, 200), rootMargin, replay });
   const Tag = as as 'div';
   return (
     <Tag

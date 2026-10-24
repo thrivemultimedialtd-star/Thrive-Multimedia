@@ -24,7 +24,7 @@ export default function Markets() {
           <span className="t-meta">{markets.eyebrow}</span>
           <span className="t-meta">Giving you the creative edge</span>
         </Reveal>
-        <Reveal>
+        <Reveal replay>
           <h2 id="markets-title" className={styles.title}>
             {markets.title.split(' ').map((w, wi, arr) => (
               <span key={wi}>
@@ -43,7 +43,7 @@ export default function Markets() {
         <Bento goals={markets.goals} />
 
         <div className={styles.copy}>
-          <Reveal as="p" className={styles.closer}>
+          <Reveal as="p" replay className={styles.closer}>
             {lead}.{' '}
             <span className={styles.accent}>
               <span className="visually-hidden">{tail}</span>

@@ -9,7 +9,7 @@ export default function LogoWall({ label, items }: { label: string; items: Logo[
     <div className={styles.wallBlock}>
       <h3 className={`t-meta ${styles.marqueeLabel}`}>{label}</h3>
       {/* The logos rise into the grid in a quick cascade as it scrolls in. */}
-      <Reveal as="ul" variant="fade" className={styles.wall}>
+      <Reveal as="ul" variant="fade" replay className={styles.wall}>
         {items.map((n, i) => (
           <li key={n.name} className={styles.cell} style={{ '--i': i } as CSSProperties}>
             {/* eslint-disable-next-line @next/next/no-img-element */}

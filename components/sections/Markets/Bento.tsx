@@ -67,6 +67,7 @@ export default function Bento({ goals }: { goals: string[] }) {
           as="li"
           key={g}
           variant="fade"
+          replay
           className={`${styles.tile} parallax`}
           style={{ '--tile': tiles[i], '--i': i } as CSSProperties}
         >
