@@ -4,7 +4,6 @@ import { useRef, useState, type CSSProperties, type KeyboardEvent } from 'react'
 import { process as stages } from '@/content/story';
 import Reveal from '@/components/motion/Reveal/Reveal';
 import Texture from '@/components/ui/Texture';
-import StepIcon from './StepIcon';
 import styles from './Process.module.css';
 
 const pad = (n: number) => String(n).padStart(2, '0');
@@ -83,7 +82,6 @@ export default function Process({ id = 'process' }: { id?: string }) {
 
                 <div className={styles.top} aria-hidden="true">
                   <span className={styles.numeral}>{pad(i + 1)}</span>
-                  <StepIcon key={on ? 'on' : 'off'} index={i} />
                 </div>
 
                 {/* Folded: the word runs up the panel. */}
@@ -119,7 +117,6 @@ export default function Process({ id = 'process' }: { id?: string }) {
               {pad(i + 1)}
             </span>
             <div className={styles.cardTop}>
-              <StepIcon index={i} className={styles.cardIcon} />
               <span className={`t-meta ${styles.cardCount}`}>
                 {pad(i + 1)} / {pad(stages.length)}
               </span>
