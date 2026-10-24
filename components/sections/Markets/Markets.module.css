@@ -3,68 +3,129 @@
   /* clip, not hidden: hidden would make this a scroll container and freeze the parallax inside. */
   overflow: clip;
   color: var(--paper);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* ── Goals: a static list; hover turns a goal green ── */
-.band {
-  display: flex;
-  flex-wrap: wrap;
-  /* Rows sit close now there are no numbers above the goals. */
-  gap: 0.5rem clamp(1.5rem, 4vw, 4rem);
-  margin-block: clamp(3rem, 7vw, 6rem);
-}
-.goal {
+/* ── Heading ── */
+.title {
   font-family: var(--font-display);
   font-weight: var(--display-weight);
   font-stretch: var(--display-stretch);
-  font-size: clamp(1.9rem, 5.2vw, 5.5rem);
-  line-height: 0.95;
+  font-size: clamp(2.6rem, 7vw, 6.5rem);
+  line-height: 0.92;
   letter-spacing: -0.035em;
-  text-transform: uppercase;
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(243, 241, 234, 0.5);
-  transition:
-    color 0.2s ease-out,
-    -webkit-text-stroke-color 0.2s ease-out;
+  max-width: 14ch;
 }
-.goal {
-  --px-from: -2.5%;
-  --px-to: 2.5%;
-}
-/* Alternate rows drift the other way, a gentle shear as you pass. */
-.goal:nth-child(even) {
-  --px-from: 2.5%;
-  --px-to: -2.5%;
-}
-.goal:hover {
+.dot {
   color: var(--green-bright);
-  -webkit-text-stroke-color: var(--green-bright);
 }
 
-/* ── Copy ── */
+/* ── Goals: a bento of bold colour tiles ── */
+.bento {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: repeat(2, clamp(12rem, 16vw, 16rem));
+  gap: 12px;
+  margin-top: clamp(2.5rem, 5vw, 4.5rem);
+  list-style: none;
+}
+.tile {
+  position: relative;
+  overflow: clip;
+  display: flex;
+  align-items: flex-end;
+  padding: clamp(1.25rem, 2.2vw, 2rem);
+  border-radius: 24px;
+  background: var(--tile);
+  color: #0b120a;
+  transition:
+    opacity 0.5s ease-out,
+    transform 0.6s var(--ease-out-expo),
+    rotate 0.3s ease-out,
+    translate 0.3s ease-out;
+}
+/* Launch a new brand: the lead tile. */
+.tile:nth-child(1) {
+  grid-column: 1 / span 7;
+  grid-row: 1 / span 2;
+}
+.tile:nth-child(2) {
+  grid-column: 8 / span 3;
+}
+.tile:nth-child(3) {
+  grid-column: 11 / span 2;
+}
+.tile:nth-child(4) {
+  grid-column: 8 / span 3;
+}
+.tile:nth-child(5) {
+  grid-column: 11 / span 2;
+}
+.tileTexture {
+  position: absolute;
+  inset: 0;
+  color: #0b120a;
+  opacity: 0.07;
+  pointer-events: none;
+}
+.goal {
+  position: relative;
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-stretch: var(--display-stretch);
+  font-size: clamp(1.1rem, 1.6vw, 1.9rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  hyphens: none;
+}
+.tile:nth-child(1) .goal {
+  font-size: clamp(3rem, 6.4vw, 7rem);
+  max-width: 9ch;
+}
+/* Feedback: a tile lifts and tilts slightly under the pointer. */
+@media (hover: hover) {
+  .tile:hover {
+    translate: 0 -6px;
+    rotate: -1deg;
+  }
+}
+
+/* ── Closing statement and body ── */
 .copy {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   column-gap: var(--gutter);
-  row-gap: 2rem;
+  row-gap: 1.75rem;
   align-items: end;
-}
-.body {
-  grid-column: 1 / span 5;
-}
-.body :global(.t-body) {
-  color: rgba(243, 241, 234, 0.7);
+  margin-top: clamp(3.5rem, 7vw, 6rem);
 }
 .closer {
+  grid-column: 1 / span 7;
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-stretch: var(--display-stretch);
+  font-size: clamp(2.2rem, 4.6vw, 4.6rem);
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+}
+.accent {
+  color: var(--green-bright);
+}
+.body {
   grid-column: 8 / -1;
-  text-align: right;
+  font-size: clamp(1rem, 1.1vw, 1.08rem);
+  line-height: 1.7;
+  color: rgba(243, 241, 234, 0.78);
+  max-width: 46ch;
 }
 
-/* ── Marquees ── */
+/* ── Logos: one marquee, one still wall ── */
 .walls {
-  margin-top: clamp(5rem, 10vw, 9rem);
+  margin-top: clamp(4.5rem, 9vw, 8rem);
   display: grid;
-  gap: 2.5rem;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 3rem;
 }
 .marquee {
   border-top: 1px solid var(--rule-light);
@@ -122,28 +183,103 @@
   background: var(--green-bright);
 }
 
-@media (max-width: 768px) {
-  .body,
-  .closer {
+.wallBlock {
+  border-top: 1px solid var(--rule-light);
+  padding-top: 1rem;
+}
+.wall {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  margin-inline: var(--margin);
+  border-left: 1px solid var(--rule-light);
+  border-top: 1px solid var(--rule-light);
+  list-style: none;
+}
+.cell {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  min-height: clamp(6.5rem, 9vw, 8.5rem);
+  padding: 1rem;
+  border-right: 1px solid var(--rule-light);
+  border-bottom: 1px solid var(--rule-light);
+}
+.wallLogo {
+  /* Fill the cell's width at the logo's set height, scaled to fit, so a wide logo never
+     stretches its column. */
+  width: 100%;
+  object-fit: contain;
+  filter: invert(0.95);
+  opacity: 0.75;
+  transition: opacity 0.2s ease-out;
+}
+.cell:hover .wallLogo {
+  opacity: 1;
+}
+
+/* ── Phones and tablets ── */
+@media (max-width: 900px) {
+  .bento {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: none;
+    grid-auto-rows: minmax(9.5rem, auto);
+  }
+  .tile:nth-child(n) {
+    grid-column: auto;
+    grid-row: auto;
+    padding: 18px;
+  }
+  .tile:nth-child(1) {
     grid-column: 1 / -1;
-    text-align: left;
+    min-height: 13rem;
+  }
+  .goal {
+    font-size: clamp(1.15rem, 5.2vw, 1.6rem);
+  }
+  .tile:nth-child(1) .goal {
+    font-size: clamp(2.6rem, 13vw, 4.2rem);
+  }
+  .tile:active {
+    transform: scale(0.98);
+    transition-duration: 0.12s;
+  }
+  .closer,
+  .body {
+    grid-column: 1 / -1;
+  }
+  .wall {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .cell {
+    min-height: 6rem;
+    padding: 0.75rem;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .goal {
+  .tile {
     transition: none;
   }
+  .tile:hover {
+    translate: none;
+    rotate: none;
+  }
+  .tile:active {
+    transform: none;
+  }
+  /* The marquee holds still as a tidy wall. */
   .marqueeTrack {
     animation: none;
-    flex-wrap: wrap;
     width: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+    gap: 1.5rem 1rem;
     padding-inline: var(--margin);
+    align-items: center;
+    justify-items: center;
   }
-  .dup {
+  .dup,
+  .sep {
     display: none;
-  }
-  .marqueeTrack {
-    row-gap: 1.5rem;
   }
 }
