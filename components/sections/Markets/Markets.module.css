@@ -17,7 +17,17 @@
   max-width: 14ch;
 }
 .dot {
+  display: inline-block;
   color: var(--green-bright);
+  transform-origin: 50% 85%;
+}
+/* The green full stop pops in just after the heading arrives. */
+:global(html[data-js]) .dot {
+  transform: scale(0);
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.35s;
+}
+:global(html[data-js]) [data-revealed] .dot {
+  transform: none;
 }
 
 /* ── Goals: a bento of bold colour tiles ── */
@@ -39,10 +49,42 @@
   background: var(--tile);
   color: #0b120a;
   transition:
-    opacity 0.5s ease-out,
+    opacity 0.45s ease-out,
     transform 0.6s var(--ease-out-expo),
     rotate 0.3s ease-out,
-    translate 0.3s ease-out;
+    translate 0.3s ease-out,
+    filter 0.15s ease-out;
+}
+/* Each goal lands as it scrolls in: its colour wipes up from the bottom edge, then the words
+   rise into place. A short cascade when several arrive together. */
+:global(html[data-js]) .tile {
+  clip-path: inset(100% 0 0 0 round 24px);
+  transition:
+    opacity 0.45s ease-out,
+    clip-path 0.75s var(--ease-out-expo),
+    rotate 0.3s ease-out,
+    translate 0.3s ease-out,
+    filter 0.15s ease-out;
+  transition-delay: calc(var(--i, 0) * 90ms), calc(var(--i, 0) * 90ms), 0s, 0s, 0s;
+}
+:global(html[data-js]) .tile[data-revealed] {
+  clip-path: inset(0 round 24px);
+}
+:global(html[data-js]) .tile .goal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.5s ease-out,
+    transform 0.7s var(--ease-out-expo);
+  transition-delay: calc(var(--i, 0) * 90ms + 0.18s);
+}
+:global(html[data-js]) .tile[data-revealed] .goal {
+  opacity: 1;
+  transform: none;
+}
+/* A tap visibly answers: the tile presses in and brightens. */
+.tile:active {
+  filter: brightness(1.08);
 }
 /* Launch a new brand: the lead tile. */
 .tile:nth-child(1) {
@@ -111,6 +153,18 @@
 }
 .accent {
   color: var(--green-bright);
+  /* Underlined once the statement is in view, drawing left to right. */
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 92%;
+  background-size: 100% 0.07em;
+}
+:global(html[data-js]) .accent {
+  background-size: 0% 0.07em;
+  transition: background-size 0.8s var(--ease-out-expo) 0.4s;
+}
+:global(html[data-js]) .closer[data-revealed] .accent {
+  background-size: 100% 0.07em;
 }
 .body {
   grid-column: 8 / -1;
@@ -147,7 +201,9 @@
 .marqueeTrack[data-reverse] {
   animation-direction: reverse;
 }
-.marquee:hover .marqueeTrack {
+.marquee:hover .marqueeTrack,
+.marquee:active .marqueeTrack,
+.marquee[data-offscreen] .marqueeTrack {
   animation-play-state: paused;
 }
 @keyframes marquee {
@@ -216,6 +272,20 @@
 .cell:hover .wallLogo {
   opacity: 1;
 }
+/* The logos rise into the grid in a quick cascade as it scrolls in. */
+:global(html[data-js]) .wall:not([data-revealed]) .wallLogo {
+  opacity: 0;
+  transform: translateY(8px);
+}
+:global(html[data-js]) .wall .wallLogo {
+  transition:
+    opacity 0.5s ease-out,
+    transform 0.6s var(--ease-out-expo);
+  transition-delay: min(calc(var(--i, 0) * 30ms), 420ms);
+}
+:global(html[data-js]) .wall[data-revealed] .cell:hover .wallLogo {
+  transition-delay: 0s;
+}
 
 /* ── Phones and tablets ── */
 @media (max-width: 900px) {
@@ -257,8 +327,33 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .tile {
-    transition: none;
+  .tile,
+  .tile .goal,
+  .dot,
+  .accent,
+  .wallLogo {
+    transition: none !important;
+  }
+  :global(html[data-js]) .tile,
+  :global(html[data-js]) .tile[data-revealed] {
+    clip-path: inset(0 round 24px);
+  }
+  :global(html[data-js]) .tile .goal,
+  :global(html[data-js]) .wall .wallLogo,
+  :global(html[data-js]) .dot {
+    transform: none !important;
+  }
+  :global(html[data-js]) .tile .goal {
+    opacity: 1;
+  }
+  :global(html[data-js]) .wall:not([data-revealed]) .wallLogo {
+    opacity: 0.75;
+  }
+  :global(html[data-js]) .accent {
+    background-size: 100% 0.07em;
+  }
+  .tile:active {
+    filter: none;
   }
   .tile:hover {
     translate: none;

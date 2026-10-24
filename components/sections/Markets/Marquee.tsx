@@ -1,10 +1,25 @@
+'use client';
+
+import { useEffect, useRef } from 'react';
 import { logoHeight, type Logo } from '@/content/brochure';
+import { observe } from '@/lib/motion';
 import styles from './Markets.module.css';
 
-/** A row of client logos that drifts slowly (pure CSS) and pauses on hover. */
+/**
+ * A row of client logos that drifts slowly (pure CSS). It pauses on hover, while pressed on a
+ * touch screen so a logo can be read, and whenever it is off screen to save battery.
+ */
 export default function Marquee({ label, items, direction = -1 }: { label: string; items: Logo[]; direction?: 1 | -1 }) {
+  const root = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = root.current;
+    if (!el) return;
+    return observe(el, (e) => el.toggleAttribute('data-offscreen', !e.isIntersecting), '0px');
+  }, []);
+
   return (
-    <div className={styles.marquee}>
+    <div ref={root} className={styles.marquee}>
       <h3 className={`t-meta ${styles.marqueeLabel}`}>{label}</h3>
       {/* Readable list for assistive tech; the moving copy is decorative. */}
       <ul className="visually-hidden">

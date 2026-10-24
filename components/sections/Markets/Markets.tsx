@@ -40,10 +40,9 @@ export default function Markets() {
             <Reveal
               as="li"
               key={g}
-              delay={i * 60}
-              distance={24}
+              variant="fade"
               className={styles.tile}
-              style={{ '--tile': tiles[i] } as CSSProperties}
+              style={{ '--tile': tiles[i], '--i': i } as CSSProperties}
             >
               <Texture className={styles.tileTexture} size="520px auto" />
               <span className={styles.goal}>{g}</span>
