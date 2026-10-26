@@ -21,6 +21,8 @@ export async function sendBrief(brief: Brief, meta: { startedAt: number; website
 
   const ip = (await headers()).get('x-forwarded-for')?.split(',')[0]?.trim() || 'local';
   const now = Date.now();
+  // Forget visitors whose window has passed, so the map can't grow without bound.
+  for (const [k, times] of hits) if (now - times[times.length - 1] >= WINDOW_MS) hits.delete(k);
   const recent = (hits.get(ip) ?? []).filter((t) => now - t < WINDOW_MS);
   if (recent.length >= LIMIT) return { ok: false, error: 'Too many briefs in a short time. Please try again in a few minutes.' };
   hits.set(ip, [...recent, now]);
@@ -44,8 +46,17 @@ export async function sendBrief(brief: Brief, meta: { startedAt: number; website
   const key = process.env.RESEND_API_KEY;
   if (!key) {
     // Local development without a key: log the brief so the flow can still be tested.
-    console.info(`[brief] RESEND_API_KEY not set; brief not emailed.\n${text}`);
-    return { ok: true };
+    if (process.env.NODE_ENV !== 'production') {
+      console.info(`[brief] RESEND_API_KEY not set; brief not emailed.\n${text}`);
+      return { ok: true };
+    }
+    // In production a missing key must never look like success: the visitor gets the
+    // WhatsApp and email fallbacks instead, and the lost brief is in the logs.
+    console.error(`[brief] RESEND_API_KEY not set in production; brief not emailed.\n${text}`);
+    return { ok: false, error: 'The brief could not be sent just now.' };
+  }
+  if (!process.env.BRIEF_FROM) {
+    console.warn('[brief] BRIEF_FROM not set; Resend’s test sender only delivers to the Resend account owner.');
   }
 
   try {

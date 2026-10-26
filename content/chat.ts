@@ -18,7 +18,7 @@ export interface ChatNode {
   options: ChatOption[];
 }
 
-export const WHATSAPP_URL = `https://wa.me/2347038860337?text=${encodeURIComponent('Hi Thrive, I’d like to talk about a project.')}`;
+export const WHATSAPP_URL = `https://wa.me/${contact.whatsapp}?text=${encodeURIComponent('Hi Thrive, I’d like to talk about a project.')}`;
 
 const home: ChatOption = { label: '↺ Back to start', to: 'start' };
 const list = (items: string[]) => items.map((i) => `• ${i}`).join('\n');
@@ -87,7 +87,7 @@ const nodes: Record<string, ChatNode> = {
       `Studio: ${contact.address.join(' ')}`,
     ],
     options: [
-      { label: 'WhatsApp +234 703 886 0337', action: 'whatsapp', href: WHATSAPP_URL },
+      { label: `WhatsApp ${contact.phones[0].display}`, action: 'whatsapp', href: WHATSAPP_URL },
       { label: `Call ${contact.phones[0].display}`, action: 'external', href: contact.phones[0].href },
       { label: 'Send an email', action: 'external', href: `mailto:${contact.email}` },
       { label: 'Fill in the brief', action: 'brief' },

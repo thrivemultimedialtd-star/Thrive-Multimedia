@@ -12,9 +12,9 @@ import ProjectCard from '@/components/work/ProjectCard/ProjectCard';
 import NextProject from '@/components/work/NextProject/NextProject';
 import styles from './project.module.css';
 
-// Navigations here are allowed to block: the circle transition covers the screen until the
-// route is ready, so we never want the iris to open onto an empty Suspense fallback.
-export const instant = false;
+// Project pages are pure content, so the whole route is static. This also means an unknown slug
+// waits for its own render and gets a real 404 status, rather than a streamed 200 shell.
+export const ensureStatic = 'navigation';
 
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));

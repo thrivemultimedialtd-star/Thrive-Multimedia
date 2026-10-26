@@ -118,16 +118,13 @@
   line-height: 1.3;
   overflow-wrap: break-word;
 }
-.actionSub {
-  font-size: 0.9rem;
-  color: rgba(243, 241, 234, 0.72);
-}
 .actionArrow {
   font-size: 1.25rem;
   color: var(--green-bright);
   transition: transform 0.25s ease-out;
 }
-.copy {
+.copy,
+.alt {
   margin: 0 1.1rem 0.9rem calc(1.1rem + 46px + 1rem);
   min-height: 36px;
   padding: 0.4rem 0.9rem;
@@ -139,7 +136,12 @@
   text-transform: uppercase;
   transition: background-color 0.2s ease-out;
 }
-.copy:hover {
+.alt {
+  display: inline-flex;
+  align-items: center;
+}
+.copy:hover,
+.alt:hover {
   background: rgba(243, 241, 234, 0.1);
 }
 

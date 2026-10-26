@@ -15,11 +15,10 @@ const icon = {
   mail: <path d="M3.5 6h17v12h-17z M3.5 6.5l8.5 6.5 8.5-6.5" />,
 };
 
-function Action({ href, label, value, sub, glyph, external, children, delay }: {
+function Action({ href, label, value, glyph, external, children, delay }: {
   href: string;
   label: string;
   value: ReactNode;
-  sub?: string;
   glyph: ReactNode;
   external?: boolean;
   children?: ReactNode;
@@ -36,7 +35,6 @@ function Action({ href, label, value, sub, glyph, external, children, delay }: {
         <span className={styles.actionText}>
           <span className={styles.actionLabel}>{label}</span>
           <span className={styles.actionValue}>{value}</span>
-          {sub && <span className={styles.actionSub}>{sub}</span>}
         </span>
         <span className={styles.actionArrow} aria-hidden="true">
           →
@@ -55,7 +53,14 @@ export default function QuickActions() {
   return (
     <ul className={styles.actions} aria-label="Contact the studio">
       <Action href={`https://wa.me/${contact.whatsapp}`} label="WhatsApp" value={first.display} glyph={icon.chat} external delay={0} />
-      <Action href={first.href} label="Call" value={first.display} sub={second ? `or ${second.display}` : undefined} glyph={icon.phone} delay={60} />
+      <Action href={first.href} label="Call" value={first.display} glyph={icon.phone} delay={60}>
+        {/* Its own link: inside the first number's link it would dial the first number. */}
+        {second && (
+          <a href={second.href} className={styles.alt}>
+            or {second.display}
+          </a>
+        )}
+      </Action>
       <Action href={`mailto:${contact.email}`} label="Email" value={<>{user}@<wbr />{domain}</>} glyph={icon.mail} delay={120}>
         <CopyEmail email={contact.email} className={styles.copy} />
       </Action>

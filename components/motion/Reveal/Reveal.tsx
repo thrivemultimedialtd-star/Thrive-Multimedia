@@ -37,7 +37,7 @@ export default function Reveal({
   return (
     <Tag
       ref={ref as React.RefObject<HTMLDivElement>}
-      className={`${styles.reveal} ${styles[variant]} ${className ?? ''}`}
+      className={[styles.reveal, styles[variant], className].filter(Boolean).join(' ')}
       style={{ '--distance': `${distance}px`, ...style } as CSSProperties}
     >
       {children}
