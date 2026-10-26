@@ -1,28 +1,38 @@
 'use client';
 
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import type { CSSProperties, PointerEvent } from 'react';
 import { hero } from '@/content/story';
 import { projects } from '@/content/projects';
+import { site } from '@/content/site';
+import { clients } from '@/content/clients';
+import { logoHeight } from '@/content/brochure';
 import { clamp, damp, env, page, pointer, scroll, subscribe, whenFontsReady } from '@/lib/motion';
 import { useReveal } from '@/components/motion/useReveal';
 import IrisReveal from '@/components/motion/IrisReveal/IrisReveal';
 import TransitionLink from '@/components/motion/TransitionLink';
 import Placeholder from '@/components/ui/Placeholder/Placeholder';
+import Texture from '@/components/ui/Texture';
 import HeroText from './HeroText';
 import RotatingWord from './RotatingWord';
 import styles from './Hero.module.css';
 
-// Brochure work: Huriya Air leads, Market Monie overlaps it, The Place tucks underneath (desktop only).
-const collage = [
-  { p: projects[0], sizes: '(max-width: 768px) 64vw, 24vw', priority: true },
-  { p: projects[2], sizes: '(max-width: 768px) 42vw, 16vw', priority: false },
-  { p: projects[1], sizes: '12vw', priority: false },
+// The work, fanned like a stack of prints: The Place at the back left, Market Monie at the back
+// right, Huriya Air in front. Brochure images only.
+const stack = [
+  { p: projects[1], slot: 'c0', sizes: '(max-width: 768px) 34vw, 16vw', chip: false },
+  { p: projects[2], slot: 'c1', sizes: '(max-width: 768px) 52vw, 24vw', chip: true },
+  { p: projects[0], slot: 'c2', sizes: '(max-width: 768px) 46vw, 22vw', chip: true },
 ];
+// A quiet line of real clients from the brochure ("Who we've worked for"): Hair Label, EEMS,
+// Holyhill, NOA, UNITAR and Farm Alert.
+const proofLogos = [0, 1, 2, 3, 6, 8].map((i) => clients[i]).filter(Boolean);
 
 /**
- * The hero. Photos and buttons fade in quietly; the type keeps its original, expressive motion:
- * THRIVE → MULTIMEDIA rise letter by letter, then the line. Once in, THRIVE carries a gentle wave
- * (and reacts to the pointer), MULTIMEDIA's spacing breathes, and the service word rolls.
+ * The hero, mobile first: an eyebrow, the THRIVE / MULTIMEDIA lockup, the line, two clear actions,
+ * a fanned stack of real work and a quiet strip of clients. The type keeps its expressive motion
+ * (letters rise, then THRIVE carries a gentle wave and MULTIMEDIA breathes); the work cards deal in
+ * after it, and on desktop the stack tilts toward the pointer.
  */
 export default function Hero() {
   const root = useRef<HTMLElement>(null);
@@ -161,25 +171,26 @@ export default function Hero() {
     };
   }, [alive]);
 
+  // Desktop: the stack leans gently toward the pointer.
+  const tilt = (e: PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType !== 'mouse' || env.reducedMotion) return;
+    const r = e.currentTarget.getBoundingClientRect();
+    e.currentTarget.style.setProperty('--ty', `${(((e.clientX - r.left) / r.width - 0.5) * 8).toFixed(2)}deg`);
+    e.currentTarget.style.setProperty('--tx', `${(-((e.clientY - r.top) / r.height - 0.5) * 8).toFixed(2)}deg`);
+  };
+  const untilt = (e: PointerEvent<HTMLDivElement>) => {
+    e.currentTarget.style.removeProperty('--tx');
+    e.currentTarget.style.removeProperty('--ty');
+  };
+
   return (
     <section ref={root} id="top" className={styles.hero} data-section-theme="paper" aria-labelledby="hero-title">
 
-      <div className={styles.metaTop}>
-        <span className="t-meta">{hero.meta[0]}</span>
-        <span className={`t-meta ${styles.metaAlt}`}>{hero.meta[1]}</span>
-      </div>
-
-      <div className={styles.collage} aria-hidden="true">
-        {collage.map(({ p, sizes, priority }, i) => (
-          <div key={p.slug} className={`${styles.frame} ${styles[`f${i}`]}`}>
-            <IrisReveal trigger="load">
-              <Placeholder tone={p.visual.tone} label={p.visual.label} image={p.image} sizes={sizes} priority={priority} compact />
-            </IrisReveal>
-          </div>
-        ))}
-      </div>
-
-      <div ref={type} className={styles.type}>
+      <div ref={type} className={styles.copy}>
+        <p className={`t-meta ${styles.eyebrow}`}>
+          <span className={styles.eyeDot} aria-hidden="true" />
+          {hero.meta[1]} · {site.location.split(',')[0]}
+        </p>
         <h1 ref={title} id="hero-title" className={styles.title}>
           <HeroText
             as="span"
@@ -208,27 +219,55 @@ export default function Hero() {
             {hero.lineLead} <RotatingWord words={hero.rotate} active={alive} /> {hero.lineTail}
           </span>
         </p>
-      </div>
-
-      <div className={styles.foot}>
         <div className={styles.actions}>
-          <span className={styles.ctaWrap}>
-            <a
-              href="#work"
-              className={styles.cta}
-              onClick={(e) => {
-                e.preventDefault();
-                page.switchSection('work');
-              }}
-            >
-              {hero.cta}
-              <span aria-hidden="true">→</span>
-            </a>
-          </span>
+          <a
+            href="#work"
+            className={styles.cta}
+            onClick={(e) => {
+              e.preventDefault();
+              page.switchSection('work');
+            }}
+          >
+            {hero.cta}
+            <span aria-hidden="true">→</span>
+          </a>
           <TransitionLink href="/contact" className={styles.secondary}>
             {hero.secondary}
           </TransitionLink>
         </div>
+      </div>
+
+      {/* The work: a fanned stack of prints over a soft green glow and the brochure pattern. */}
+      <div className={styles.stage} aria-hidden="true">
+        <span className={styles.glow} />
+        <Texture className={styles.stageTexture} size="700px auto" fade="radial-gradient(closest-side, #000 0%, transparent 100%)" />
+        <div className={styles.stack} onPointerMove={tilt} onPointerLeave={untilt}>
+          {stack.map(({ p, slot, sizes, chip }, i) => (
+            <div key={p.slug} className={`${styles.card} ${styles[slot]}`} style={{ '--k': i } as CSSProperties}>
+              <IrisReveal trigger="load">
+                <Placeholder tone={p.visual.tone} label={p.visual.label} image={p.image} sizes={sizes} priority={i === 2} compact />
+              </IrisReveal>
+              {chip && (
+                <span className={styles.chip}>
+                  {p.name} · {p.discipline}
+                </span>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Proof: real clients from the brochure. */}
+      <div className={styles.proof}>
+        <p className={`t-meta ${styles.proofLabel}`}>Who we’ve worked for</p>
+        <ul className={styles.logos}>
+          {proofLogos.map((n, i) => (
+            <li key={n.name} style={{ '--k': i } as CSSProperties}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={n.src} alt={n.name} width={n.width} height={n.height} style={{ height: `${logoHeight(n, 1.9)}rem` }} />
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );
