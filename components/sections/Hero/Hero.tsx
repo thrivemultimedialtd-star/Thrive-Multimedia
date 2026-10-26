@@ -17,12 +17,13 @@ import HeroText from './HeroText';
 import RotatingWord from './RotatingWord';
 import styles from './Hero.module.css';
 
-// The work, fanned like a stack of prints: The Place at the back left, Market Monie at the back
-// right, Huriya Air in front. Brochure images only.
+// The work as three prints floating apart at different depths: Market Monie top right (back),
+// The Place lower left, Huriya Air in front. `d` is each print's depth for the pointer parallax.
+// Brochure images only.
 const stack = [
-  { p: projects[1], slot: 'c0', sizes: '(max-width: 768px) 34vw, 16vw', chip: false },
-  { p: projects[2], slot: 'c1', sizes: '(max-width: 768px) 52vw, 24vw', chip: true },
-  { p: projects[0], slot: 'c2', sizes: '(max-width: 768px) 46vw, 22vw', chip: true },
+  { p: projects[1], slot: 'c0', sizes: '(max-width: 768px) 34vw, 15vw', chip: false, d: 0.6 },
+  { p: projects[2], slot: 'c1', sizes: '(max-width: 768px) 52vw, 24vw', chip: true, d: 0.35 },
+  { p: projects[0], slot: 'c2', sizes: '(max-width: 768px) 44vw, 20vw', chip: true, d: 1 },
 ];
 // A quiet line of real clients from the brochure ("Who we've worked for"): Hair Label, EEMS,
 // Holyhill, NOA, UNITAR and Farm Alert.
@@ -171,17 +172,31 @@ export default function Hero() {
     };
   }, [alive]);
 
-  // Desktop: the stack leans gently toward the pointer.
+  // Desktop: the prints lean toward the pointer, and shift by their depth (nearer ones move more).
   const tilt = (e: PointerEvent<HTMLDivElement>) => {
     if (e.pointerType !== 'mouse' || env.reducedMotion) return;
     const r = e.currentTarget.getBoundingClientRect();
-    e.currentTarget.style.setProperty('--ty', `${(((e.clientX - r.left) / r.width - 0.5) * 8).toFixed(2)}deg`);
-    e.currentTarget.style.setProperty('--tx', `${(-((e.clientY - r.top) / r.height - 0.5) * 8).toFixed(2)}deg`);
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top) / r.height - 0.5;
+    const st = e.currentTarget.style;
+    st.setProperty('--ty', `${(x * 6).toFixed(2)}deg`);
+    st.setProperty('--tx', `${(-y * 6).toFixed(2)}deg`);
+    st.setProperty('--px', `${(x * 28).toFixed(1)}px`);
+    st.setProperty('--py', `${(y * 22).toFixed(1)}px`);
   };
   const untilt = (e: PointerEvent<HTMLDivElement>) => {
-    e.currentTarget.style.removeProperty('--tx');
-    e.currentTarget.style.removeProperty('--ty');
+    for (const k of ['--tx', '--ty', '--px', '--py']) e.currentTarget.style.removeProperty(k);
   };
+
+  // The prints float only while the hero is on screen.
+  const stage = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = stage.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => el.toggleAttribute('data-offscreen', !e.isIntersecting));
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   return (
     <section ref={root} id="top" className={styles.hero} data-section-theme="paper" aria-labelledby="hero-title">
@@ -238,20 +253,23 @@ export default function Hero() {
       </div>
 
       {/* The work: a fanned stack of prints over a soft green glow and the brochure pattern. */}
-      <div className={styles.stage} aria-hidden="true">
+      <div ref={stage} className={styles.stage} aria-hidden="true">
         <span className={styles.glow} />
         <Texture className={styles.stageTexture} size="700px auto" fade="radial-gradient(closest-side, #000 0%, transparent 100%)" />
         <div className={styles.stack} onPointerMove={tilt} onPointerLeave={untilt}>
-          {stack.map(({ p, slot, sizes, chip }, i) => (
-            <div key={p.slug} className={`${styles.card} ${styles[slot]}`} style={{ '--k': i } as CSSProperties}>
-              <IrisReveal trigger="load">
-                <Placeholder tone={p.visual.tone} label={p.visual.label} image={p.image} sizes={sizes} priority={i === 2} compact />
-              </IrisReveal>
-              {chip && (
-                <span className={styles.chip}>
-                  {p.name} · {p.discipline}
-                </span>
-              )}
+          {stack.map(({ p, slot, sizes, chip, d }, i) => (
+            <div key={p.slug} className={`${styles.card} ${styles[slot]}`} style={{ '--k': i, '--d': d } as CSSProperties}>
+              {/* The print itself: floats on its own rhythm and shifts with the pointer. */}
+              <div className={styles.print}>
+                <IrisReveal trigger="load">
+                  <Placeholder tone={p.visual.tone} label={p.visual.label} image={p.image} sizes={sizes} priority={i === 2} compact />
+                </IrisReveal>
+                {chip && (
+                  <span className={styles.chip}>
+                    {p.name} · {p.discipline}
+                  </span>
+                )}
+              </div>
             </div>
           ))}
         </div>
