@@ -31,7 +31,7 @@ export default function PageTransition() {
     (href: string) => {
       const target = new URL(href, window.location.href);
       if (target.pathname === window.location.pathname) {
-        if (target.hash) document.querySelector(target.hash)?.scrollIntoView({ behavior: 'smooth' });
+        if (target.hash) document.querySelector(target.hash)?.scrollIntoView({ behavior: env.reducedMotion ? 'auto' : 'smooth' });
         else window.scrollTo({ top: 0, behavior: env.reducedMotion ? 'auto' : 'smooth' });
         return;
       }

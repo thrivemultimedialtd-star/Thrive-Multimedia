@@ -13,7 +13,7 @@ import styles from './ServiceList.module.css';
  * Editorial service index. Hover, focus or tap a row to open its detail
  * (an accordion on touch).
  */
-export default function ServiceList({ headingLevel = 'h2' }: { headingLevel?: 'h2' | 'h3' }) {
+export default function ServiceList({ headingLevel = 'h3' }: { headingLevel?: 'h2' | 'h3' }) {
   const [active, setActive] = useState<number | null>(null);
   const H = headingLevel;
 

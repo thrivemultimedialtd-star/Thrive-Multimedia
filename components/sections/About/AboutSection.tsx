@@ -8,7 +8,7 @@ import styles from './AboutSection.module.css';
 /** The quiet "exhale" after the busier sections: slower reveals, nothing pinned. */
 export default function AboutSection({ teaser = true, headingLevel = 'h2' }: { teaser?: boolean; headingLevel?: 'h1' | 'h2' }) {
   return (
-    <section id="about" className={`wrap section ${styles.about}`} data-section-theme="paper" aria-labelledby="about-title">
+    <section id="about" className="wrap section" data-section-theme="paper" aria-labelledby="about-title">
       <Reveal variant="rule" className="section-head">
         <span className="t-meta">{about.eyebrow}</span>
         <span className="t-meta">Studio · Abuja</span>

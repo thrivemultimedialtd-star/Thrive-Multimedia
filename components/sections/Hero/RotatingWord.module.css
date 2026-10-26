@@ -15,7 +15,7 @@
   left: 0.06em;
   bottom: 0;
   white-space: nowrap;
-  color: var(--thrive-green);
+  color: var(--green-text);
   line-height: 1.3;
   transition:
     transform 0.8s var(--ease-out),

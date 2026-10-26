@@ -2,6 +2,8 @@
 // While a transition (the home page section switch) covers the screen, entrance animations
 // wait so they play in view rather than behind it.
 
+import { env } from './env';
+
 type Navigate = (href: string, opts?: { origin?: { x: number; y: number }; fromCovered?: boolean }) => void;
 
 let covered = false;
@@ -42,7 +44,7 @@ export const page = {
   /** Switch to a section on the current page (Blackbook-style). Falls back to a plain jump. */
   switchSection(id: string) {
     if (sectionSwitcher) sectionSwitcher(id);
-    else document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    else document.getElementById(id)?.scrollIntoView({ behavior: env.reducedMotion ? 'auto' : 'smooth' });
   },
   /** Navigate through the circle transition. Falls back to a normal navigation. */
   navigate(href: string, opts?: Parameters<Navigate>[1]) {

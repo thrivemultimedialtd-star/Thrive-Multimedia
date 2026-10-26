@@ -247,6 +247,11 @@
   outline: none;
   border-color: var(--green-bright);
 }
+/* A full ring for keyboard focus: the border colour alone is too faint to find. */
+.ask input:focus-visible {
+  outline: 2px solid var(--green-bright);
+  outline-offset: 2px;
+}
 .send {
   width: 44px;
   height: 44px;

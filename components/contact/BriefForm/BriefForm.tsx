@@ -25,6 +25,8 @@ export default function BriefForm() {
   const honeypot = useRef<HTMLInputElement>(null);
   const headings = useRef<Array<HTMLHeadingElement | null>>([]);
   const shownStep = useRef(1);
+  const form = useRef<HTMLFormElement>(null);
+  const focusError = useRef(false);
 
   useEffect(() => {
     startedAt.current = Date.now();
@@ -37,6 +39,16 @@ export default function BriefForm() {
     headings.current[step - 1]?.focus({ preventScroll: true });
   }, [step]);
 
+  // After a failed Continue or Send, take the visitor to the first answer that needs a look.
+  // Runs after the step effect, so it wins when a failed Send jumps back to an earlier step.
+  useEffect(() => {
+    if (!focusError.current) return;
+    focusError.current = false;
+    form.current
+      ?.querySelector<HTMLElement>('section:not([hidden]) :is([aria-invalid="true"], fieldset[aria-describedby] input)')
+      ?.focus();
+  }, [errors, step]);
+
   const set = <K extends keyof Brief>(k: K, v: Brief[K]) => {
     setBrief((b) => ({ ...b, [k]: v }));
     setErrors((e) => ({ ...e, [k]: undefined }));
@@ -48,6 +60,7 @@ export default function BriefForm() {
     if (to > step) {
       const e = validateBrief(brief, step);
       if (Object.keys(e).length) {
+        focusError.current = true;
         setErrors(e);
         return;
       }
@@ -59,6 +72,7 @@ export default function BriefForm() {
   const submit = () => {
     const e = validateBrief(brief);
     if (Object.keys(e).length) {
+      focusError.current = true;
       setErrors(e);
       const first = [1, 2, 3, 4].find((n) => Object.keys(validateBrief(brief, n)).length);
       if (first && first !== step) go(first);
@@ -149,7 +163,7 @@ export default function BriefForm() {
       </fieldset>
     ),
     2: (
-      <fieldset className={styles.fieldset}>
+      <fieldset className={styles.fieldset} aria-describedby={errors.goal ? 'brief-goal-error' : undefined}>
         <legend className="visually-hidden">Goal</legend>
         <div className={styles.chips}>
           {briefOptions.goals.map((g) =>
@@ -210,6 +224,7 @@ export default function BriefForm() {
 
   return (
     <form
+      ref={form}
       className={styles.form}
       noValidate
       onSubmit={(e) => {

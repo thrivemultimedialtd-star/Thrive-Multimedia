@@ -4,6 +4,8 @@
   --thrive-green: #6a9a36;
   --green-bright: #7fb53f;
   --green-deep: #24391a;
+  /* Thrive green deepened for small text on paper: 4.9:1, where the brand green is 3:1. */
+  --green-text: #4a7428;
   --green-ink: #172511;
   --charcoal: #232323;
   --logo-grey: #4d4d4d;
@@ -17,7 +19,7 @@
   /* Live theme: SectionTheme moves these as you scroll */
   --bg: var(--paper);
   --fg: var(--charcoal);
-  --fg-muted: rgba(35, 35, 35, 0.62);
+  --fg-muted: rgba(35, 35, 35, 0.68);
   --rule: var(--rule-dark);
   --accent: var(--thrive-green);
 
@@ -84,7 +86,7 @@
 [data-section-theme='paper'] {
   --bg: var(--paper);
   --fg: var(--charcoal);
-  --fg-muted: rgba(35, 35, 35, 0.62);
+  --fg-muted: rgba(35, 35, 35, 0.68);
   --rule: var(--rule-dark);
   --accent: var(--thrive-green);
 }

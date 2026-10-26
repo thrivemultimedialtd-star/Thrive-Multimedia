@@ -95,7 +95,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         </IrisReveal>
       </div>
 
-      <section className={`wrap section ${styles.body}`} data-section-theme="paper" aria-labelledby="overview-title">
+      <section className="wrap section" data-section-theme="paper" aria-labelledby="overview-title">
         <div className={styles.overview}>
           <h2 id="overview-title" className="t-meta">
             Overview
@@ -135,7 +135,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       </section>
 
       {related.length > 0 && (
-        <section className={`wrap section ${styles.related}`} data-section-theme="paper" aria-labelledby="related-title">
+        <section className="wrap section" data-section-theme="paper" aria-labelledby="related-title">
           <Reveal variant="rule" className="section-head">
             <h2 id="related-title" className="t-meta">
               Related work
