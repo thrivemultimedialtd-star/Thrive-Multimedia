@@ -8,8 +8,6 @@ import { site } from '@/content/site';
 import { clients } from '@/content/clients';
 import { logoHeight } from '@/content/brochure';
 import { clamp, damp, env, page, pointer, scroll, subscribe, whenFontsReady } from '@/lib/motion';
-import { useReveal } from '@/components/motion/useReveal';
-import IrisReveal from '@/components/motion/IrisReveal/IrisReveal';
 import TransitionLink from '@/components/motion/TransitionLink';
 import Placeholder from '@/components/ui/Placeholder/Placeholder';
 import Texture from '@/components/ui/Texture';
@@ -19,7 +17,8 @@ import styles from './Hero.module.css';
 
 // The work as three prints floating apart at different depths: Market Monie top right (back),
 // The Place lower left, Huriya Air in front. `d` is each print's depth for the pointer parallax.
-// Brochure images only.
+// Brochure images only. All three are above the fold, so all three load eagerly (Market Monie,
+// the largest, is the LCP image on phones).
 const stack = [
   { p: projects[1], slot: 'c0', sizes: '(max-width: 768px) 34vw, 15vw', chip: false, d: 0.6 },
   { p: projects[2], slot: 'c1', sizes: '(max-width: 768px) 52vw, 24vw', chip: true, d: 0.35 },
@@ -36,13 +35,10 @@ const proofLogos = [0, 1, 2, 3, 6, 8].map((i) => clients[i]).filter(Boolean);
  * after it, and on desktop the stack tilts toward the pointer.
  */
 export default function Hero() {
-  const root = useRef<HTMLElement>(null);
   const type = useRef<HTMLDivElement>(null);
   const title = useRef<HTMLHeadingElement>(null);
-  const line = useRef<HTMLParagraphElement>(null);
   // Set once the type has arrived: the living letters and the rotating word start then.
   const [alive, setAlive] = useState(false);
-  useReveal(line, { trigger: 'load', delay: 1000 });
 
   // "MULTIMEDIA" is justified to the exact width of "THRIVE", like the logo lockup.
   useLayoutEffect(() => {
@@ -73,16 +69,13 @@ export default function Hero() {
     return () => ro.disconnect();
   }, []);
 
-  // Entrance: photos and buttons fade in once fonts are ready; the type is staged by HeroText delays.
+  // The entrance itself is CSS, timed from the first paint (Hero.module.css, HeroText): it never
+  // waits for this script. The living letters take over once it has played.
   useEffect(() => {
-    const el = root.current;
-    if (!el) return;
     let cancelled = false;
     let timer = 0;
     whenFontsReady().then(() => {
       if (cancelled) return;
-      el.setAttribute('data-meta', '');
-      el.setAttribute('data-collage', '');
       timer = window.setTimeout(() => setAlive(true), 2300);
     });
     return () => {
@@ -199,7 +192,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section ref={root} id="top" className={styles.hero} data-section-theme="paper" aria-labelledby="hero-title">
+    <section id="top" className={styles.hero} data-section-theme="paper" aria-labelledby="hero-title">
 
       <div ref={type} className={styles.copy}>
         <p className={`t-meta ${styles.eyebrow}`}>
@@ -211,7 +204,6 @@ export default function Hero() {
             as="span"
             text="Thrive"
             split="chars"
-            trigger="load"
             delay={450}
             stagger={55}
             duration={1300}
@@ -221,14 +213,13 @@ export default function Hero() {
             as="span"
             text="Multimedia"
             split="chars"
-            trigger="load"
             delay={720}
             stagger={30}
             duration={1200}
             className={styles.multimedia}
           />
         </h1>
-        <p ref={line} className={`t-lead ${styles.line}`}>
+        <p className={`t-lead ${styles.line}`}>
           <span className="visually-hidden">{hero.line}</span>
           <span aria-hidden="true">
             {hero.lineLead} <RotatingWord words={hero.rotate} active={alive} /> {hero.lineTail}
@@ -261,9 +252,7 @@ export default function Hero() {
             <div key={p.slug} className={`${styles.card} ${styles[slot]}`} style={{ '--k': i, '--d': d } as CSSProperties}>
               {/* The print itself: floats on its own rhythm and shifts with the pointer. */}
               <div className={styles.print}>
-                <IrisReveal trigger="load">
-                  <Placeholder tone={p.visual.tone} label={p.visual.label} image={p.image} sizes={sizes} priority={i === 2} compact />
-                </IrisReveal>
+                <Placeholder tone={p.visual.tone} label={p.visual.label} image={p.image} sizes={sizes} priority compact />
                 {chip && (
                   <span className={styles.chip}>
                     {p.name} · {p.discipline}
