@@ -12,6 +12,8 @@ export const contact = {
 
 export const site = {
   name: 'Thrive Multimedia',
+  // The production domain: canonical URLs, the sitemap and sharing previews are built on it.
+  url: 'https://www.thrivemultimedialtd.com',
   location: 'Abuja, Nigeria',
   disciplines: ['Print', 'Web', 'Multimedia'],
   description:

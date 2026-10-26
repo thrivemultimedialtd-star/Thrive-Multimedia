@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/metadata';
 import { projects } from '@/content/projects';
 import { clients, identities } from '@/content/clients';
 import PageHeader from '@/components/ui/PageHeader/PageHeader';
@@ -9,10 +9,11 @@ import StudioGallery from '@/components/work/StudioGallery/StudioGallery';
 import { logoHeight, type Logo } from '@/content/brochure';
 import styles from './work.module.css';
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
+  path: '/work',
   title: 'Work',
   description: 'Selected branding, graphic design, website and motion work by Thrive Multimedia, Abuja.',
-};
+});
 
 function LogoGrid({ logos }: { logos: Logo[] }) {
   return (

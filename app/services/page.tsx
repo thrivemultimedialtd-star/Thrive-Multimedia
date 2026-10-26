@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/metadata';
 import { services } from '@/content/services';
 import { projects } from '@/content/projects';
 import PageHeader from '@/components/ui/PageHeader/PageHeader';
@@ -10,11 +10,12 @@ import ProjectCard from '@/components/work/ProjectCard/ProjectCard';
 import ContactSection from '@/components/sections/Contact/ContactSection';
 import styles from './services.module.css';
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
+  path: '/services',
   title: 'Services',
   description:
     'Graphic design, website design & build, logo design & branding, and motion design & production, all in-house at Thrive Multimedia.',
-};
+});
 
 export default function ServicesPage() {
   return (

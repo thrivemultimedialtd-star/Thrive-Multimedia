@@ -10,6 +10,9 @@ import TransitionLink from '@/components/motion/TransitionLink';
 import Placeholder from '@/components/ui/Placeholder/Placeholder';
 import ProjectCard from '@/components/work/ProjectCard/ProjectCard';
 import NextProject from '@/components/work/NextProject/NextProject';
+import JsonLd from '@/components/ui/JsonLd';
+import { site } from '@/content/site';
+import { pageMetadata } from '@/lib/metadata';
 import styles from './project.module.css';
 
 // Project pages are pure content, so the whole route is static. This also means an unknown slug
@@ -23,7 +26,13 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const p = getProject(slug);
-  return p ? { title: p.name, description: `${p.name}: ${p.brief}. ${p.discipline} by Thrive Multimedia.` } : {};
+  if (!p) return {};
+  return pageMetadata({
+    path: `/work/${p.slug}`,
+    title: p.name,
+    description: `${p.name}: ${p.brief}. ${p.discipline} by Thrive Multimedia.`,
+    image: p.image && { url: p.image.src, width: p.image.width, height: p.image.height, alt: p.image.alt },
+  });
 }
 
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -42,6 +51,16 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
   return (
     <article className={styles.project}>
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Work', item: `${site.url}/work` },
+            { '@type': 'ListItem', position: 2, name: project.name, item: `${site.url}/work/${project.slug}` },
+          ],
+        }}
+      />
       <header className={`wrap ${styles.header}`} data-section-theme="paper">
         <Reveal variant="rule" trigger="load" className="section-head">
           <span className="t-meta">
