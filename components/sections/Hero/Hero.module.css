@@ -54,7 +54,8 @@
 .thrive {
   width: max-content;
   /* Desktop: the wordmark owns the left ~60%, the photos the right. */
-  font-size: clamp(4.25rem, 13.5vw, 15rem);
+  /* A confident logo lockup rather than a billboard: about two-thirds of its old size. */
+  font-size: clamp(3.5rem, 9vw, 10rem);
   color: var(--charcoal);
   margin-left: -0.04em;
 }
@@ -65,7 +66,7 @@
   font-family: var(--font-sans);
   font-weight: 500;
   /* Scales with the wordmark so the justified tracking keeps the same proportions at every size. */
-  font-size: clamp(0.9rem, 4.2vw, 5rem);
+  font-size: clamp(0.8rem, 2.8vw, 3.3rem);
   /* --mm-breath (±0.06) is set every frame by Hero.tsx once the entrance has finished. */
   letter-spacing: calc(var(--mm-track, 0.62em) * (1 + var(--mm-breath, 0)));
   margin-right: calc(var(--mm-track, 0.62em) * (1 + var(--mm-breath, 0)) * -1);
@@ -95,7 +96,7 @@
 
 .line {
   max-width: 24ch;
-  margin-top: clamp(1.5rem, 3vw, 2.5rem);
+  margin-top: clamp(1.25rem, 2.4vw, 2rem);
   color: var(--charcoal);
   text-wrap: balance;
 }
@@ -256,12 +257,13 @@
   .title {
     display: flex;
   }
-  /* Fill the content width exactly: THRIVE is about 4.03× its font size wide. */
+  /* About 72% of the content width (THRIVE is about 4.03× its font size wide), left-aligned
+     like the logo, with breathing room on the right. */
   .thrive {
-    font-size: calc((100vw - 2 * var(--margin)) / 4.05);
+    font-size: calc((100vw - 2 * var(--margin)) / 5.6);
   }
   .multimedia {
-    font-size: 4.2vw;
+    font-size: 4vw;
   }
   .line {
     margin-top: 1.25rem;
