@@ -54,7 +54,9 @@ export default function Process({ id = 'process' }: { id?: string }) {
 
       {/* Desktop: expanding panels (hidden on phones, so read only once). */}
       <Reveal className={styles.rowWrap}>
-        <div role="tablist" aria-label="Our approach" className={styles.row} onKeyDown={onKey}>
+        {/* One panel open at a time, each button disclosing its own step (a tablist can't hold the
+            panels themselves). Arrow keys, Home and End still move between steps. */}
+        <div role="group" aria-label="Our approach" className={styles.row} onKeyDown={onKey}>
           {stages.map((st, i) => {
             const on = i === active;
             return (
@@ -65,11 +67,9 @@ export default function Process({ id = 'process' }: { id?: string }) {
                     tabs.current[i] = n;
                   }}
                   type="button"
-                  role="tab"
                   id={`${id}-tab-${i}`}
-                  aria-selected={on}
+                  aria-expanded={on}
                   aria-controls={`${id}-panel-${i}`}
-                  tabIndex={on ? 0 : -1}
                   className={styles.hit}
                   onClick={() => setActive(i)}
                   onFocus={() => setActive(i)}
@@ -93,8 +93,6 @@ export default function Process({ id = 'process' }: { id?: string }) {
                 <div
                   key={on ? 'on' : 'off'}
                   id={`${id}-panel-${i}`}
-                  role="tabpanel"
-                  aria-labelledby={`${id}-tab-${i}`}
                   aria-hidden={!on || undefined}
                   className={styles.body}
                 >
