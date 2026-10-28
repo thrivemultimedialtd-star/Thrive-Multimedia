@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { useRef, type PointerEvent } from 'react';
 import type { MotionCard } from '@/content/animation';
 import { setSpeed, useLoop } from './loops';
@@ -16,9 +15,8 @@ const art = {
 };
 
 /**
- * One capability card. Its art loops quietly; hover or focus speeds the loop up and lights the
- * card, and a highlight follows the pointer. The whole card links to Motion Design on /services.
- * (A plain Link, so the browser lands on the #motion-design anchor.)
+ * One capability card, a showcase rather than a link. Its art loops quietly; hover speeds the
+ * loop up and lights the card, and a highlight follows the pointer.
  */
 export default function FeatureCard({ card }: { card: MotionCard }) {
   const svg = useRef<SVGSVGElement>(null);
@@ -26,7 +24,7 @@ export default function FeatureCard({ card }: { card: MotionCard }) {
   const tl = useLoop(svg, build);
   const fast = () => setSpeed(tl.current, 2.5);
   const slow = () => setSpeed(tl.current, 1);
-  const track = (e: PointerEvent<HTMLAnchorElement>) => {
+  const track = (e: PointerEvent<HTMLDivElement>) => {
     const r = e.currentTarget.getBoundingClientRect();
     e.currentTarget.style.setProperty('--mx', `${(e.clientX - r.left).toFixed(0)}px`);
     e.currentTarget.style.setProperty('--my', `${(e.clientY - r.top).toFixed(0)}px`);
@@ -34,17 +32,7 @@ export default function FeatureCard({ card }: { card: MotionCard }) {
 
   return (
     <li className={styles.cardItem}>
-      <Link
-        href="/services#motion-design"
-        className={styles.card}
-        data-card
-        data-play-cursor
-        onPointerEnter={fast}
-        onPointerLeave={slow}
-        onPointerMove={track}
-        onFocus={fast}
-        onBlur={slow}
-      >
+      <div className={styles.card} data-card onPointerEnter={fast} onPointerLeave={slow} onPointerMove={track}>
         <span className={styles.cardArt}>
           <svg ref={svg} viewBox="0 0 320 220" aria-hidden="true" focusable="false">
             <Art />
@@ -61,7 +49,7 @@ export default function FeatureCard({ card }: { card: MotionCard }) {
             ))}
           </span>
         </span>
-      </Link>
+      </div>
     </li>
   );
 }

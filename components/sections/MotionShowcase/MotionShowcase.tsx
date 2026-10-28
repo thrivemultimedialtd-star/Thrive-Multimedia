@@ -9,7 +9,6 @@ import { LoopRegistry } from './loops';
 import MediaHub from './MediaHub';
 import Satellites from './Satellites';
 import FeatureCard from './FeatureCard';
-import PlayCursor from './PlayCursor';
 import styles from './MotionShowcase.module.css';
 
 const words = animation.headline.split(' ');
@@ -146,7 +145,6 @@ export default function MotionShowcase() {
             ))}
           </ul>
         </div>
-        <PlayCursor scope={root} />
       </section>
     </LoopRegistry.Provider>
   );
