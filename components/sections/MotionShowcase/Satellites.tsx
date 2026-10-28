@@ -50,7 +50,8 @@ function video(root: Element) {
 
 // ── Audio & Podcast: bouncing EQ bars and a flowing waveform ──
 const bars = [18, 30, 22, 38, 26, 34, 16];
-const wave = Array.from({ length: 33 }, (_, i) => `${i ? 'L' : 'M'}${82 + i * 2.4} ${32 + Math.sin(i * 0.8) * 12 * Math.sin((i / 32) * Math.PI)}`).join(' ');
+// Rounded so server and browser print the same path (their Math.sin can differ in the last digits).
+const wave = Array.from({ length: 33 }, (_, i) => `${i ? 'L' : 'M'}${(82 + i * 2.4).toFixed(1)} ${(32 + Math.sin(i * 0.8) * 12 * Math.sin((i / 32) * Math.PI)).toFixed(2)}`).join(' ');
 const AudioArt = () => (
   <>
     {bars.map((h, i) => (

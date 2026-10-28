@@ -10,17 +10,9 @@ import MediaHub from './MediaHub';
 import Satellites from './Satellites';
 import FeatureCard from './FeatureCard';
 import PlayCursor from './PlayCursor';
-import { FilmReel, Headphones, Icon, Lens } from './icons';
 import styles from './MotionShowcase.module.css';
 
 const words = animation.headline.split(' ');
-
-// Media assets that float into place around the hub, nearest the viewer (fastest parallax).
-const floaters = [
-  { Art: FilmReel, pos: 'a', from: { x: -120, y: 60, rotation: -90 } },
-  { Art: Headphones, pos: 'b', from: { x: 120, y: -40, rotation: 30 } },
-  { Art: Lens, pos: 'c', from: { x: 60, y: 120, rotation: 60 } },
-];
 
 /**
  * The motion showcase: a 3D media hub with the four corners of the media ecosystem around it,
@@ -70,20 +62,16 @@ export default function MotionShowcase() {
           .from(q('[data-word]'), { yPercent: 110, rotation: 4, duration: 1, ease: 'power4.out', stagger: 0.06 })
           .from(q('[data-sub]'), { y: 24, opacity: 0, duration: 0.8, ease: 'power3.out' }, 0.35);
 
-        const stage = q('[data-stage]')[0];
-        gsap
-          .timeline({ scrollTrigger: once(stage, 'top 75%') })
-          .from(q('[data-float]'), {
-            x: (i: number) => floaters[i].from.x,
-            y: (i: number) => floaters[i].from.y,
-            rotation: (i: number) => floaters[i].from.rotation,
-            scale: 0.4,
-            opacity: 0,
-            duration: 1.4,
-            ease: 'power3.out',
-            stagger: 0.08,
-          })
-          .from(q('[data-chip]'), { y: 40, opacity: 0, scale: 0.94, duration: 0.9, ease: 'power3.out', stagger: 0.08 }, 0.2);
+        // The hub's media objects float in on their own (hubScene.ts); the chips follow.
+        gsap.from(q('[data-chip]'), {
+          y: 40,
+          opacity: 0,
+          scale: 0.94,
+          duration: 0.9,
+          ease: 'power3.out',
+          stagger: 0.08,
+          scrollTrigger: once(q('[data-stage]')[0], 'top 75%'),
+        });
 
         gsap.from(q('[data-card]'), {
           y: 60,
@@ -149,13 +137,6 @@ export default function MotionShowcase() {
             <div className={styles.hubDepth} data-depth="0.3">
               <MediaHub />
             </div>
-            {floaters.map(({ Art, pos }) => (
-              <div key={pos} className={styles.floater} data-pos={pos} data-depth="1.1">
-                <Icon data-float className={styles.floaterIcon}>
-                  <Art />
-                </Icon>
-              </div>
-            ))}
             <Satellites />
           </div>
 

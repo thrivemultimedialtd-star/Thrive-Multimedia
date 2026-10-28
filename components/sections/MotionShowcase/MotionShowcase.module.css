@@ -148,7 +148,7 @@
   line-height: 1.55;
 }
 
-/* ── Stage: hub, floaters and the ecosystem chips ── */
+/* ── Stage: the hub and the ecosystem chips ── */
 .stage {
   position: relative;
   height: clamp(460px, 58vw, 780px);
@@ -185,48 +185,6 @@
 }
 .hub[data-live] .poster {
   opacity: 0;
-}
-
-.floater {
-  position: absolute;
-  pointer-events: none;
-}
-.floater[data-pos='a'] {
-  left: 6%;
-  top: 44%;
-}
-.floater[data-pos='b'] {
-  right: 9%;
-  top: 30%;
-}
-.floater[data-pos='c'] {
-  left: 52%;
-  bottom: 2%;
-}
-.floaterIcon {
-  display: block;
-  width: clamp(36px, 4.4vw, 64px);
-  color: var(--green-bright);
-  filter: drop-shadow(0 0 12px rgba(127, 181, 63, 0.45));
-  animation: bob 6s ease-in-out infinite alternate;
-}
-.floater[data-pos='b'] .floaterIcon {
-  animation-duration: 7.5s;
-  animation-delay: -2s;
-}
-.floater[data-pos='c'] .floaterIcon {
-  animation-duration: 5.2s;
-  animation-delay: -4s;
-}
-@keyframes bob {
-  from {
-    translate: 0 -8px;
-    rotate: -6deg;
-  }
-  to {
-    translate: 0 8px;
-    rotate: 6deg;
-  }
 }
 
 .satellites {
@@ -476,20 +434,6 @@
     padding: 0.7rem 0.7rem 0.6rem;
     border-radius: 14px;
   }
-  .floater[data-pos='a'] {
-    left: 2%;
-    top: 12%;
-  }
-  .floater[data-pos='b'] {
-    right: 3%;
-    top: 4%;
-  }
-  .floater[data-pos='c'] {
-    left: auto;
-    right: 10%;
-    bottom: auto;
-    top: clamp(260px, 78vw, 400px);
-  }
 }
 
 @media (max-width: 640px) {
@@ -512,8 +456,7 @@
   }
   .blobA,
   .blobB,
-  .blobC,
-  .floaterIcon {
+  .blobC {
     animation: none;
   }
 }

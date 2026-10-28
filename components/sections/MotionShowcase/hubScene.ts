@@ -1,4 +1,4 @@
-// The WebGL media hub: a glowing core that emits broadcast rings, media objects on tilted
+// The WebGL media hub: a glowing core that emits broadcast rings, four media objects on tilted
 // orbits, and a field of pixels that assembles around the core as the section scrolls through.
 // Loaded on demand by MediaHub (dynamic import), so three.js never weighs on first load.
 import * as THREE from 'three';
@@ -150,37 +150,6 @@ function headphones(seg: number) {
   return g;
 }
 
-function playButton(seg: number) {
-  const g = new THREE.Group();
-  const tri = new THREE.Shape();
-  tri.moveTo(-0.13, -0.17);
-  tri.lineTo(0.2, 0);
-  tri.lineTo(-0.13, 0.17);
-  tri.closePath();
-  const play = new THREE.Mesh(
-    new THREE.ExtrudeGeometry(tri, { depth: 0.08, bevelEnabled: true, bevelSize: 0.02, bevelThickness: 0.02, bevelSegments: 2 }),
-    solid(BRIGHT, 0.7),
-  );
-  play.position.z = -0.04;
-  g.add(play);
-  g.add(new THREE.Mesh(new THREE.TorusGeometry(0.38, 0.03, 8, seg), solid(BRAND, 0.3)));
-  return g;
-}
-
-function equaliser() {
-  const g = new THREE.Group();
-  const geo = new THREE.BoxGeometry(0.08, 1, 0.08);
-  geo.translate(0, 0.5, 0); // grow from the base
-  for (let i = 0; i < 5; i++) {
-    const bar = new THREE.Mesh(geo, solid(i % 2 ? BRAND : BRIGHT, 0.5));
-    bar.position.set((i - 2) * 0.13, -0.3, 0);
-    bar.scale.y = 0.4;
-    bar.name = 'bar';
-    g.add(bar);
-  }
-  return g;
-}
-
 // ── Pixel field: scattered points that settle onto a shell around the core ──
 function pixelField(count: number) {
   const start = new Float32Array(count * 3);
@@ -316,17 +285,15 @@ export function createHubScene(canvas: HTMLCanvasElement, { lite }: { lite: bool
 
   const orbiters: Orbiter[] = [
     { obj: filmReel(seg), radius: 3.4, speed: 0.16, phase: 0.2, lift: 0.25, spin: new THREE.Vector3(0, 0, 1.1) },
-    { obj: cameraLens(seg), radius: 2.6, speed: 0.22, phase: 1.5, lift: -0.15, spin: new THREE.Vector3(0.3, 0.6, 0) },
-    { obj: studioMic(seg), radius: 3.4, speed: 0.16, phase: 2.3, lift: 0.1, spin: new THREE.Vector3(0, 0.7, 0) },
-    { obj: headphones(seg), radius: 2.6, speed: 0.22, phase: 3.6, lift: 0.2, spin: new THREE.Vector3(0, 0.8, 0.1) },
-    { obj: playButton(seg), radius: 3.4, speed: 0.16, phase: 4.4, lift: -0.2, spin: new THREE.Vector3(0, 0.9, 0) },
-    { obj: equaliser(), radius: 2.6, speed: 0.22, phase: 5.4, lift: 0, spin: new THREE.Vector3(0, 0.5, 0) },
+    { obj: cameraLens(seg), radius: 2.6, speed: 0.22, phase: 1.8, lift: -0.15, spin: new THREE.Vector3(0.3, 0.6, 0) },
+    { obj: studioMic(seg), radius: 3.4, speed: 0.16, phase: 3.3, lift: 0.1, spin: new THREE.Vector3(0, 0.7, 0) },
+    { obj: headphones(seg), radius: 2.6, speed: 0.22, phase: 4.9, lift: 0.2, spin: new THREE.Vector3(0, 0.8, 0.1) },
   ];
   // Media objects live in the rig (not the tilted plane) so they stay upright; their path follows the plane.
   orbiters.forEach((o) => rig.add(o.obj));
   const tmp = new THREE.Vector3();
 
-  const pixels = pixelField(lite ? 700 : 1800);
+  const pixels = pixelField(lite ? 450 : 900);
   const pixMat = pixels.material as THREE.ShaderMaterial;
   pixMat.uniforms.uPixelRatio.value = dpr;
   rig.add(pixels);
@@ -352,8 +319,9 @@ export function createHubScene(canvas: HTMLCanvasElement, { lite }: { lite: bool
     if (!w || !h) return;
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
-    // Keep the whole system in frame on narrow screens.
-    zBase = w / h < 1 ? 10 / Math.max(w / h, 0.62) : 10;
+    // Keep the outer orbit (and its objects) inside the frame on narrower stages:
+    // at 35° vertical FOV, 12.7 / aspect puts about four units either side of centre.
+    zBase = Math.max(10, 12.7 / (w / h));
     camera.updateProjectionMatrix();
   };
   const ro = new ResizeObserver(resize);
@@ -401,11 +369,7 @@ export function createHubScene(canvas: HTMLCanvasElement, { lite }: { lite: bool
       o.obj.rotation.z += dt * o.spin.z;
     });
 
-    // Rhythm for the equaliser and the mic's pop filter.
-    const eq = orbiters[5].obj.children;
-    eq.forEach((bar, j) => {
-      bar.scale.y = 0.25 + Math.abs(Math.sin(time * (3 + j * 0.7) + j)) * 0.55;
-    });
+    // The mic's pop filter glows in rhythm.
     const mic = orbiters[2].obj;
     const popGlow = 0.6 + Math.sin(time * 3) * 0.3;
     ((mic.getObjectByName('pop') as THREE.Mesh).material as THREE.MeshBasicMaterial).opacity = popGlow;

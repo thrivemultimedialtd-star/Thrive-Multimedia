@@ -1,7 +1,5 @@
 // Line icons for the media ecosystem, drawn on a 24-unit grid in currentColor.
-// They render as <g> so they can sit inside any SVG (the hub poster) or alone via <Icon>.
-import type { SVGProps } from 'react';
-
+// They render as <g> so they can sit inside any SVG (the hub poster).
 const line = { fill: 'none', stroke: 'currentColor', strokeWidth: 1.4, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
 
 export const FilmReel = () => (
@@ -39,27 +37,6 @@ export const Headphones = () => (
     <rect x="16.5" y="14" width="5" height="7" rx="1.6" />
   </g>
 );
-
-export const Play = () => (
-  <g {...line}>
-    <circle cx="12" cy="12" r="9.5" />
-    <path d="M10 8.2v7.6l6-3.8z" fill="currentColor" />
-  </g>
-);
-
-export const Eq = () => (
-  <g {...line}>
-    <path d="M4 20v-6M8 20V8M12 20v-9M16 20V5M20 20v-8" />
-  </g>
-);
-
-export function Icon({ children, ...rest }: SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" {...rest}>
-      {children}
-    </svg>
-  );
-}
 
 /** Filled shapes the broadcast play button morphs between (MorphSVG). */
 export const morph = {
