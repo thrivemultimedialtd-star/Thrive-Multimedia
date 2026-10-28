@@ -82,6 +82,15 @@
   --rule: var(--rule-light);
   --accent: var(--green-bright);
 }
+/* Near-black stage for the motion showcase. */
+[data-theme='night'],
+[data-section-theme='night'] {
+  --bg: #121212;
+  --fg: var(--paper);
+  --fg-muted: rgba(243, 241, 234, 0.64);
+  --rule: var(--rule-light);
+  --accent: var(--green-bright);
+}
 [data-theme='paper'],
 [data-section-theme='paper'] {
   --bg: var(--paper);

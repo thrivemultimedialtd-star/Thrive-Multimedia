@@ -84,7 +84,7 @@ export default function Hero() {
     };
   }, []);
 
-  // On scroll the type lifts a little faster than the page, handing over to the intro.
+  // On scroll the type lifts a little faster than the page, handing over to the motion showcase.
   useEffect(() => {
     if (env.reducedMotion) return;
     return subscribe(() => {

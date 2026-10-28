@@ -1,0 +1,519 @@
+.showcase {
+  position: relative;
+  /* clip, not hidden: hidden would make this a scroll container and break the scroll triggers. */
+  overflow: clip;
+  isolation: isolate;
+  /* Compact top: it follows the hero directly. */
+  padding-block: clamp(2.5rem, 5vw, 4.5rem) var(--section);
+  color: var(--paper);
+}
+
+/* ── Background: a slow green mesh glow, a faint grid and the brochure pattern ── */
+.backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+.mesh {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+@property --tint {
+  syntax: '<color>';
+  inherits: false;
+  initial-value: #7fb53f;
+}
+.blobA,
+.blobB,
+.blobC {
+  position: absolute;
+  width: 70vmax;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, var(--tint), transparent);
+  will-change: transform;
+  animation:
+    drift 34s ease-in-out infinite alternate,
+    tint 26s ease-in-out infinite alternate;
+}
+.blobA {
+  top: -35vmax;
+  left: -20vmax;
+  --tint: #7fb53f;
+  opacity: 0.2;
+}
+.blobB {
+  top: 10%;
+  right: -35vmax;
+  --tint: #24391a;
+  opacity: 0.55;
+  animation-duration: 40s, 30s;
+  animation-direction: alternate-reverse;
+}
+.blobC {
+  bottom: -40vmax;
+  left: 20%;
+  --tint: #6a9a36;
+  opacity: 0.16;
+  animation-duration: 28s, 22s;
+}
+@keyframes drift {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(12vmax, 8vmax) scale(1.15);
+  }
+  100% {
+    transform: translate(-6vmax, 14vmax) scale(0.92);
+  }
+}
+@keyframes tint {
+  0% {
+    --tint: #7fb53f;
+  }
+  50% {
+    --tint: #6a9a36;
+  }
+  100% {
+    --tint: #24391a;
+  }
+}
+.grid {
+  position: absolute;
+  inset: -12vh 0;
+  background-image:
+    linear-gradient(rgba(243, 241, 234, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(243, 241, 234, 0.05) 1px, transparent 1px);
+  background-size: 64px 64px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 45%, #000 20%, transparent 80%);
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 45%, #000 20%, transparent 80%);
+}
+.texture {
+  position: absolute;
+  inset: 0;
+  color: var(--green-bright);
+  opacity: 0.06;
+}
+
+.inner {
+  position: relative;
+}
+.sectionHead {
+  border-top-color: var(--rule-light);
+}
+.eyebrow {
+  color: var(--green-bright);
+}
+
+/* ── Headline ── */
+.head {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gutter);
+  row-gap: 1.5rem;
+  align-items: end;
+}
+.title {
+  grid-column: 1 / span 9;
+  font-family: var(--font-display);
+  font-weight: var(--heading-weight);
+  font-stretch: var(--display-stretch);
+  font-size: clamp(2.3rem, 6vw, 6.4rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+/* Each word rises out of its own mask. Padding keeps descenders inside it. */
+.mask {
+  display: inline-block;
+  overflow: clip;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+  vertical-align: top;
+}
+.mask > span {
+  display: inline-block;
+  transform-origin: 0 100%;
+}
+.accent {
+  color: var(--green-bright);
+}
+.sub {
+  grid-column: 10 / -1;
+  color: rgba(243, 241, 234, 0.74);
+  font-size: clamp(1rem, 1.2vw, 1.15rem);
+  line-height: 1.55;
+}
+
+/* ── Stage: hub, floaters and the ecosystem chips ── */
+.stage {
+  position: relative;
+  height: clamp(460px, 58vw, 780px);
+  margin-block: var(--space-l);
+}
+.hubDepth {
+  position: absolute;
+  inset: 0;
+}
+.hub {
+  position: absolute;
+  inset: 0;
+}
+.poster,
+.canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transition: opacity 1.2s var(--ease-out);
+}
+.poster {
+  color: var(--green-bright);
+}
+.posterIcon {
+  color: var(--paper);
+  opacity: 0.85;
+}
+.canvas {
+  opacity: 0;
+}
+.hub[data-live] .canvas {
+  opacity: 1;
+}
+.hub[data-live] .poster {
+  opacity: 0;
+}
+
+.floater {
+  position: absolute;
+  pointer-events: none;
+}
+.floater[data-pos='a'] {
+  left: 6%;
+  top: 44%;
+}
+.floater[data-pos='b'] {
+  right: 9%;
+  top: 30%;
+}
+.floater[data-pos='c'] {
+  left: 52%;
+  bottom: 2%;
+}
+.floaterIcon {
+  display: block;
+  width: clamp(36px, 4.4vw, 64px);
+  color: var(--green-bright);
+  filter: drop-shadow(0 0 12px rgba(127, 181, 63, 0.45));
+  animation: bob 6s ease-in-out infinite alternate;
+}
+.floater[data-pos='b'] .floaterIcon {
+  animation-duration: 7.5s;
+  animation-delay: -2s;
+}
+.floater[data-pos='c'] .floaterIcon {
+  animation-duration: 5.2s;
+  animation-delay: -4s;
+}
+@keyframes bob {
+  from {
+    translate: 0 -8px;
+    rotate: -6deg;
+  }
+  to {
+    translate: 0 8px;
+    rotate: 6deg;
+  }
+}
+
+.satellites {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.chipDepth {
+  position: absolute;
+  width: clamp(190px, 17vw, 240px);
+}
+.chipDepth[data-pos='0'] {
+  left: 0;
+  top: 4%;
+}
+.chipDepth[data-pos='1'] {
+  right: 0;
+  top: 8%;
+}
+.chipDepth[data-pos='2'] {
+  left: 2%;
+  bottom: 6%;
+}
+.chipDepth[data-pos='3'] {
+  right: 2%;
+  bottom: 10%;
+}
+.chip {
+  margin: 0;
+  padding: 0.85rem 0.9rem 0.75rem;
+  border: 1px solid rgba(243, 241, 234, 0.12);
+  border-radius: 16px;
+  background: rgba(18, 18, 18, 0.55);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 20px 50px -24px rgba(0, 0, 0, 0.8);
+}
+.chip svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.chip figcaption {
+  margin-top: 0.6rem;
+  font-size: 0.62rem;
+  color: rgba(243, 241, 234, 0.7);
+}
+
+/* ── Cards ── */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gutter);
+}
+.cardItem {
+  display: flex;
+}
+.card {
+  --mx: 50%;
+  --my: 0%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid rgba(243, 241, 234, 0.1);
+  border-radius: 20px;
+  background: rgba(243, 241, 234, 0.03);
+  transition:
+    border-color 0.3s ease-out,
+    box-shadow 0.3s ease-out,
+    transform 0.3s var(--ease-out);
+}
+/* Highlight that follows the pointer. */
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(420px circle at var(--mx) var(--my), rgba(127, 181, 63, 0.16), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+}
+.card:hover,
+.card:focus-visible {
+  border-color: rgba(127, 181, 63, 0.55);
+  box-shadow:
+    0 0 0 1px rgba(127, 181, 63, 0.25),
+    0 30px 80px -30px rgba(127, 181, 63, 0.5);
+  transform: translateY(-4px);
+}
+.card:focus-visible {
+  outline-offset: 6px;
+  border-radius: 20px;
+}
+.card:hover::before,
+.card:focus-visible::before {
+  opacity: 1;
+}
+.cardArt {
+  display: block;
+  aspect-ratio: 16 / 11;
+  background:
+    radial-gradient(ellipse 70% 70% at 50% 40%, rgba(36, 57, 26, 0.7), transparent 75%),
+    #0f0f0f;
+  border-bottom: 1px solid rgba(243, 241, 234, 0.08);
+}
+.cardArt svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  color: var(--paper);
+}
+/* The rig shows faintly, then fully on hover. */
+.card [data-rig] {
+  opacity: 0.22;
+  transition: opacity 0.3s ease-out;
+}
+.card:hover [data-rig],
+.card:focus-visible [data-rig] {
+  opacity: 1;
+}
+.cardMeta {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: 0.6rem;
+  padding: clamp(1.1rem, 1.8vw, 1.6rem);
+}
+.cardNum {
+  color: var(--green-bright);
+}
+.cardTitle {
+  font-family: var(--font-display);
+  font-weight: var(--heading-weight);
+  font-stretch: var(--display-stretch);
+  font-size: clamp(1.25rem, 1.7vw, 1.65rem);
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+}
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.tags > span {
+  padding: 0.35rem 0.6rem;
+  border: 1px solid rgba(243, 241, 234, 0.14);
+  border-radius: 99px;
+  font-size: 0.6rem;
+  color: rgba(243, 241, 234, 0.7);
+}
+
+/* The play-button cursor over the cards (only with a fine pointer; PlayCursor.tsx). */
+.showcase[data-play-cursor] [data-play-cursor] {
+  cursor: none;
+}
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 900;
+  width: 84px;
+  height: 84px;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  opacity: 0;
+  color: #0b120a;
+}
+.cursor svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.cursor path {
+  fill: #0b120a;
+  transform-origin: 43px 40px;
+  animation: playPulse 1.4s ease-in-out infinite;
+}
+.cursorRing {
+  fill: var(--green-bright);
+  stroke: rgba(243, 241, 234, 0.9);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 6;
+  transform-origin: 40px 40px;
+  animation: spin 8s linear infinite;
+  filter: drop-shadow(0 0 18px rgba(127, 181, 63, 0.6));
+}
+.cursor span {
+  position: absolute;
+  top: calc(100% + 6px);
+  font-size: 0.58rem;
+  color: var(--green-bright);
+}
+@keyframes spin {
+  to {
+    rotate: 360deg;
+  }
+}
+@keyframes playPulse {
+  50% {
+    scale: 0.86;
+  }
+}
+
+/* ── Smaller screens ── */
+@media (max-width: 1100px) {
+  .title {
+    grid-column: 1 / -1;
+  }
+  .sub {
+    grid-column: 1 / span 8;
+  }
+  .cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .sub {
+    grid-column: 1 / -1;
+  }
+  /* The hub keeps the stage; the chips move below it, two by two. */
+  .stage {
+    height: auto;
+  }
+  .hubDepth {
+    position: relative;
+    height: clamp(320px, 92vw, 460px);
+  }
+  .satellites {
+    position: static;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 1rem;
+  }
+  .chipDepth {
+    position: static;
+    width: auto;
+  }
+  .chip {
+    padding: 0.7rem 0.7rem 0.6rem;
+    border-radius: 14px;
+  }
+  .floater[data-pos='a'] {
+    left: 2%;
+    top: 12%;
+  }
+  .floater[data-pos='b'] {
+    right: 3%;
+    top: 4%;
+  }
+  .floater[data-pos='c'] {
+    left: auto;
+    right: 10%;
+    bottom: auto;
+    top: clamp(260px, 78vw, 400px);
+  }
+}
+
+@media (max-width: 640px) {
+  .cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .card::before,
+  .card [data-rig],
+  .poster,
+  .canvas {
+    transition: none;
+  }
+  .card:hover,
+  .card:focus-visible {
+    transform: none;
+  }
+  .blobA,
+  .blobB,
+  .blobC,
+  .floaterIcon {
+    animation: none;
+  }
+}

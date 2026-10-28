@@ -1,7 +1,7 @@
 import { site } from '@/content/site';
 import { pageMetadata } from '@/lib/metadata';
 import Hero from '@/components/sections/Hero/Hero';
-import Intro from '@/components/sections/Intro/Intro';
+import MotionShowcase from '@/components/sections/MotionShowcase/MotionShowcase';
 import Process from '@/components/sections/Process/Process';
 import SelectedWork from '@/components/sections/SelectedWork/SelectedWork';
 import ServiceList from '@/components/sections/ServiceList/ServiceList';
@@ -15,7 +15,7 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <Intro />
+      <MotionShowcase />
       <Process />
       <SelectedWork />
       <ServiceList />
