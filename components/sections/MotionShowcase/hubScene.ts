@@ -1,4 +1,4 @@
-// The WebGL media hub: a glowing core that emits broadcast rings, four media objects on tilted
+// The WebGL hub: a glowing core that emits broadcast rings, one object per service on tilted
 // orbits, and a field of pixels that assembles around the core as the section scrolls through.
 // Loaded on demand by MediaHub (dynamic import), so three.js never weighs on first load.
 import * as THREE from 'three';
@@ -70,7 +70,8 @@ function fresnel(color: THREE.Color, power: number, intensity: number) {
   });
 }
 
-// ── Media objects (each about one unit across, facing +z) ──
+// ── One object per service (each about one unit across, facing +z) ──
+// Motion design & production: a film reel.
 function filmReel(seg: number) {
   const g = new THREE.Group();
   const disc = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.42, 0.08, seg), solid(DEEP, 0.1));
@@ -92,61 +93,96 @@ function filmReel(seg: number) {
   return g;
 }
 
-function cameraLens(seg: number) {
+// Graphic design: a pen nib.
+function penNib() {
+  const nib = new THREE.Shape();
+  nib.moveTo(0, 0.46);
+  nib.lineTo(0.27, 0.04);
+  nib.lineTo(0.15, -0.36);
+  nib.lineTo(-0.15, -0.36);
+  nib.lineTo(-0.27, 0.04);
+  nib.closePath();
+  const hole = new THREE.Path();
+  hole.absarc(0, 0, 0.065, 0, Math.PI * 2, true);
+  nib.holes.push(hole);
+  const geo = new THREE.ExtrudeGeometry(nib, { depth: 0.07, bevelEnabled: true, bevelSize: 0.02, bevelThickness: 0.02, bevelSegments: 2 });
+  geo.center();
   const g = new THREE.Group();
-  g.add(new THREE.Mesh(new THREE.TorusGeometry(0.4, 0.08, 10, seg), solid(DEEP, 0.15)));
-  const inner = new THREE.Mesh(new THREE.TorusGeometry(0.29, 0.035, 8, seg), solid(BRIGHT, 0.6));
-  inner.position.z = 0.04;
-  g.add(inner);
-  const glass = new THREE.Mesh(
-    new THREE.CircleGeometry(0.3, seg),
-    new THREE.MeshStandardMaterial({ color: INK, metalness: 0.9, roughness: 0.08 }),
-  );
-  glass.position.z = 0.02;
-  g.add(glass);
-  const glint = new THREE.Mesh(new THREE.RingGeometry(0.12, 0.15, 24, 1, 0.4, 1.3), glow(PAPER, 0.8));
-  glint.position.z = 0.05;
-  g.add(glint);
+  g.add(new THREE.Mesh(geo, solid(BRIGHT, 0.45)));
+  const slit = new THREE.Mesh(new THREE.BoxGeometry(0.018, 0.42, 0.12), solid(INK));
+  slit.position.y = 0.23;
+  g.add(slit);
+  const collar = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.08, 0.12), solid(DEEP, 0.15));
+  collar.position.y = -0.4;
+  g.add(collar);
   return g;
 }
 
-function studioMic(seg: number) {
+function roundedRect(w: number, h: number, r: number) {
+  const s = new THREE.Shape();
+  s.moveTo(-w / 2 + r, -h / 2);
+  s.lineTo(w / 2 - r, -h / 2);
+  s.quadraticCurveTo(w / 2, -h / 2, w / 2, -h / 2 + r);
+  s.lineTo(w / 2, h / 2 - r);
+  s.quadraticCurveTo(w / 2, h / 2, w / 2 - r, h / 2);
+  s.lineTo(-w / 2 + r, h / 2);
+  s.quadraticCurveTo(-w / 2, h / 2, -w / 2, h / 2 - r);
+  s.lineTo(-w / 2, -h / 2 + r);
+  s.quadraticCurveTo(-w / 2, -h / 2, -w / 2 + r, -h / 2);
+  return s;
+}
+
+// Website design & build: a browser window with a page inside.
+function browserWindow() {
   const g = new THREE.Group();
-  const head = new THREE.Mesh(new THREE.CapsuleGeometry(0.15, 0.22, 6, seg / 2), solid(DEEP, 0.15));
-  head.position.y = 0.18;
-  g.add(head);
-  const grille = new THREE.Mesh(
-    new THREE.CapsuleGeometry(0.16, 0.22, 6, seg / 3),
-    new THREE.MeshBasicMaterial({ color: BRIGHT, wireframe: true, transparent: true, opacity: 0.35 }),
-  );
-  grille.position.y = 0.18;
-  g.add(grille);
-  const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.32, 8), solid(BRAND));
-  stem.position.y = -0.18;
-  g.add(stem);
-  // The pop filter: a glowing ring in front of the capsule.
-  const pop = new THREE.Mesh(new THREE.TorusGeometry(0.26, 0.012, 6, seg), glow(BRIGHT, 0.85));
-  pop.position.set(0, 0.18, 0.24);
-  pop.name = 'pop';
-  g.add(pop);
-  const popFill = new THREE.Mesh(new THREE.CircleGeometry(0.26, seg), glow(BRIGHT, 0.12));
-  popFill.position.set(0, 0.18, 0.24);
-  popFill.name = 'popFill';
-  g.add(popFill);
+  const plate = new THREE.Mesh(new THREE.ExtrudeGeometry(roundedRect(0.92, 0.64, 0.07), { depth: 0.05, bevelEnabled: false }), solid(DEEP, 0.12));
+  plate.position.z = -0.025;
+  g.add(plate);
+  const front = (w: number, h: number, x: number, y: number, mat: THREE.Material) => {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, 0.03), mat);
+    m.position.set(x, y, 0.035);
+    g.add(m);
+  };
+  front(0.92, 0.012, 0, 0.21, glow(BRIGHT, 0.7)); // under the tab bar
+  const dot = new THREE.CircleGeometry(0.022, 12);
+  [-0.38, -0.32, -0.26].forEach((x) => {
+    const d = new THREE.Mesh(dot, glow(PAPER, 0.8));
+    d.position.set(x, 0.26, 0.03);
+    g.add(d);
+  });
+  front(0.36, 0.05, -0.2, 0.13, solid(BRIGHT, 0.5)); // headline
+  front(0.26, 0.03, -0.25, 0.05, solid(PAPER, 0)); // text line
+  front(0.32, 0.2, 0.22, 0.07, solid(BRAND, 0.3)); // hero image
+  [-0.28, 0, 0.28].forEach((x) => front(0.22, 0.14, x, -0.18, solid(BRAND, 0.15))); // cards
   return g;
 }
 
-function headphones(seg: number) {
+// Logo design & branding: an abstract mark in a glowing ring.
+function brandMark(seg: number) {
   const g = new THREE.Group();
-  const band = new THREE.Mesh(new THREE.TorusGeometry(0.32, 0.04, 8, seg, Math.PI), solid(BRIGHT, 0.4));
-  g.add(band);
-  const cupGeo = new THREE.CylinderGeometry(0.12, 0.12, 0.1, seg / 2);
-  for (const side of [-1, 1]) {
-    const cup = new THREE.Mesh(cupGeo, solid(DEEP, 0.15));
-    cup.rotation.z = Math.PI / 2;
-    cup.position.set(side * 0.32, -0.04, 0);
-    g.add(cup);
-  }
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(0.42, 0.016, 6, seg), glow(BRIGHT, 0.85));
+  ring.name = 'glow';
+  g.add(ring);
+  const diamond = new THREE.Shape();
+  diamond.moveTo(0, 0.32);
+  diamond.lineTo(0.26, 0);
+  diamond.lineTo(0, -0.32);
+  diamond.lineTo(-0.26, 0);
+  diamond.closePath();
+  const geo = new THREE.ExtrudeGeometry(diamond, { depth: 0.08, bevelEnabled: true, bevelSize: 0.015, bevelThickness: 0.015, bevelSegments: 1 });
+  geo.center();
+  g.add(new THREE.Mesh(geo, solid(BRAND, 0.3)));
+  const half = new THREE.Shape();
+  half.moveTo(0, 0.32);
+  half.lineTo(0.26, 0);
+  half.lineTo(0, 0);
+  half.closePath();
+  const facet = new THREE.Mesh(new THREE.ShapeGeometry(half), glow(BRIGHT, 0.9));
+  facet.position.z = 0.06;
+  g.add(facet);
+  const core = new THREE.Mesh(new THREE.SphereGeometry(0.06, 16, 12), solid(PAPER, 0.2));
+  core.position.z = 0.06;
+  g.add(core);
   return g;
 }
 
@@ -284,12 +320,13 @@ export function createHubScene(canvas: HTMLCanvasElement, { lite }: { lite: bool
   });
 
   const orbiters: Orbiter[] = [
-    { obj: filmReel(seg), radius: 3.4, speed: 0.16, phase: 0.2, lift: 0.25, spin: new THREE.Vector3(0, 0, 1.1) },
-    { obj: cameraLens(seg), radius: 2.6, speed: 0.22, phase: 1.8, lift: -0.15, spin: new THREE.Vector3(0.3, 0.6, 0) },
-    { obj: studioMic(seg), radius: 3.4, speed: 0.16, phase: 3.3, lift: 0.1, spin: new THREE.Vector3(0, 0.7, 0) },
-    { obj: headphones(seg), radius: 2.6, speed: 0.22, phase: 4.9, lift: 0.2, spin: new THREE.Vector3(0, 0.8, 0.1) },
+    { obj: penNib(), radius: 3.4, speed: 0.16, phase: 0.2, lift: 0.25, spin: new THREE.Vector3(0.3, 0.7, 0) },
+    { obj: browserWindow(), radius: 2.6, speed: 0.22, phase: 1.8, lift: -0.15, spin: new THREE.Vector3(0.25, 0.5, 0) },
+    { obj: brandMark(seg), radius: 3.4, speed: 0.16, phase: 3.3, lift: 0.1, spin: new THREE.Vector3(0, 0.8, 0) },
+    { obj: filmReel(seg), radius: 2.6, speed: 0.22, phase: 4.9, lift: 0.2, spin: new THREE.Vector3(0, 0, 1.1) },
   ];
-  // Media objects live in the rig (not the tilted plane) so they stay upright; their path follows the plane.
+  const brandGlow = (orbiters[2].obj.getObjectByName('glow') as THREE.Mesh).material as THREE.MeshBasicMaterial;
+  // Service objects live in the rig (not the tilted plane) so they stay upright; their path follows the plane.
   orbiters.forEach((o) => rig.add(o.obj));
   const tmp = new THREE.Vector3();
 
@@ -369,11 +406,8 @@ export function createHubScene(canvas: HTMLCanvasElement, { lite }: { lite: bool
       o.obj.rotation.z += dt * o.spin.z;
     });
 
-    // The mic's pop filter glows in rhythm.
-    const mic = orbiters[2].obj;
-    const popGlow = 0.6 + Math.sin(time * 3) * 0.3;
-    ((mic.getObjectByName('pop') as THREE.Mesh).material as THREE.MeshBasicMaterial).opacity = popGlow;
-    ((mic.getObjectByName('popFill') as THREE.Mesh).material as THREE.MeshBasicMaterial).opacity = popGlow * 0.15;
+    // The brand mark's ring glows in rhythm.
+    brandGlow.opacity = 0.6 + Math.sin(time * 3) * 0.3;
 
     pixMat.uniforms.uTime.value = time;
     // Pixels assemble as the section scrolls up toward the middle of the screen.

@@ -4,15 +4,15 @@ import { useEffect, useRef } from 'react';
 import { env, observe, onceInView } from '@/lib/motion';
 import { ScrollTrigger } from './gsap';
 import type { HubScene } from './hubScene';
-import { FilmReel, Headphones, Lens, Mic } from './icons';
+import { Browser, FilmReel, Mark, Pen } from './icons';
 import styles from './MotionShowcase.module.css';
 
 // Poster positions on the two orbits (viewBox 800 × 600), matching the 3D layout loosely.
 const posterIcons = [
-  { Art: FilmReel, x: 160, y: 250 },
-  { Art: Lens, x: 560, y: 175 },
-  { Art: Mic, x: 640, y: 330 },
-  { Art: Headphones, x: 300, y: 430 },
+  { Art: Pen, x: 160, y: 250 },
+  { Art: Browser, x: 560, y: 175 },
+  { Art: Mark, x: 640, y: 330 },
+  { Art: FilmReel, x: 300, y: 430 },
 ];
 
 const webgl = () => {

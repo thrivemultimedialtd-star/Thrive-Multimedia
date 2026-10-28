@@ -1,22 +1,24 @@
-// The motion showcase on the homepage. Supplied by Thrive (brief, Oct 28 2026), not the brochure.
+// The motion showcase on the homepage. It depicts only the four services the brochure names
+// (content/services.ts). The headline was supplied by Thrive (Oct 28 2026); the sub is the
+// /services lede, and every card tag and chip label is one of a service's brochure capabilities.
+import type { Service } from './services';
+
 export interface MotionCard {
-  id: 'character' | 'vfx' | 'broadcast';
-  number: string;
-  title: string;
+  service: Service['id'];
   tags: string[];
 }
 
 export const animation = {
-  eyebrow: 'Animation',
   headline: 'Bringing Stories to Life Through Motion',
   // Shown in green in the headline.
   accent: 'Motion',
-  sub: 'From 2D/3D animation and visual effects to dynamic motion graphics—we power the visual universe of Thrive Multimedia Ltd.',
-  // The four corners of the media ecosystem around the hub.
-  ecosystem: ['Video & Film', 'Audio & Podcast', 'Design & Digital Media', 'Broadcast & Motion'],
+  sub: 'Four disciplines under one roof, so a brand looks and sounds the same everywhere it appears.',
+  // One capability per service, in service order, on the chips around the hub.
+  chips: ['Print & editorial', 'Responsive sites', 'Corporate identity', 'Filming & editing'],
   cards: [
-    { id: 'character', number: '01', title: '2D & 3D Character Animation', tags: ['Idle loops', 'Rigging'] },
-    { id: 'vfx', number: '02', title: 'Motion Graphics & VFX', tags: ['Light leaks', 'Keyframes'] },
-    { id: 'broadcast', number: '03', title: 'Commercial & Broadcast Motion', tags: ['Lens', 'Playback'] },
+    { service: 'graphic-design', tags: ['Print & editorial', 'Illustration', 'Campaign design'] },
+    { service: 'website-design', tags: ['Responsive sites', 'E-commerce', 'SEO'] },
+    { service: 'branding', tags: ['Logo design', 'Corporate identity', 'Brand guidelines'] },
+    { service: 'motion-design', tags: ['Animation', 'Filming', 'Editing'] },
   ] satisfies MotionCard[],
 };

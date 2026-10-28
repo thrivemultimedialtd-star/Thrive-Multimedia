@@ -9,7 +9,7 @@ import styles from './MotionShowcase.module.css';
 
 // Each chip is 160 × 64 of SVG art with its own loop. The markup is a good resting frame.
 
-// ── Video & Film: rolling film strip, REC light, timeline with keyframes ──
+// ── Filming & editing: rolling film strip, REC light, timeline with keyframes ──
 const keys = [44, 88, 126];
 const VideoArt = () => (
   <>
@@ -48,30 +48,51 @@ function video(root: Element) {
   return tl;
 }
 
-// ── Audio & Podcast: bouncing EQ bars and a flowing waveform ──
-const bars = [18, 30, 22, 38, 26, 34, 16];
-// Rounded so server and browser print the same path (their Math.sin can differ in the last digits).
-const wave = Array.from({ length: 33 }, (_, i) => `${i ? 'L' : 'M'}${(82 + i * 2.4).toFixed(1)} ${(32 + Math.sin(i * 0.8) * 12 * Math.sin((i / 32) * Math.PI)).toFixed(2)}`).join(' ');
-const AudioArt = () => (
+// ── Responsive sites: a desktop and a phone frame whose pages load in, block by block ──
+const SitesArt = () => (
   <>
-    {bars.map((h, i) => (
-      <rect key={i} data-bar x={4 + i * 10} y={58 - h} width="6" height={h} rx="2" fill={i % 2 ? '#6a9a36' : '#7fb53f'} />
-    ))}
-    <path data-wave d={wave} fill="none" stroke="#7fb53f" strokeWidth="1.6" strokeLinecap="round" />
-    <path d={wave} fill="none" stroke="currentColor" strokeOpacity="0.18" strokeWidth="1" transform="translate(0 4)" />
+    <rect x="3.5" y="4.5" width="96" height="55" rx="4" fill="#161f12" stroke="currentColor" strokeOpacity="0.25" />
+    <path d="M3.5 12.5h96" stroke="currentColor" strokeOpacity="0.25" />
+    <g fill="currentColor" fillOpacity="0.35">
+      <circle cx="9" cy="8.5" r="1.4" />
+      <circle cx="13.5" cy="8.5" r="1.4" />
+      <circle cx="18" cy="8.5" r="1.4" />
+    </g>
+    <g data-desk>
+      <rect x="9" y="17" width="44" height="4" rx="2" fill="#7fb53f" />
+      <rect x="9" y="25" width="30" height="3" rx="1.5" fill="currentColor" fillOpacity="0.3" />
+      <rect x="62" y="17" width="31" height="17" rx="2" fill="#6a9a36" />
+      <rect x="9" y="39" width="25" height="15" rx="2" fill="#24391a" stroke="#6a9a36" />
+      <rect x="38.5" y="39" width="25" height="15" rx="2" fill="#24391a" stroke="#6a9a36" />
+      <rect x="68" y="39" width="25" height="15" rx="2" fill="#24391a" stroke="#6a9a36" />
+    </g>
+    <rect x="115.5" y="2.5" width="33" height="59" rx="6" fill="#161f12" stroke="currentColor" strokeOpacity="0.25" />
+    <rect x="127" y="6" width="10" height="2" rx="1" fill="currentColor" fillOpacity="0.3" />
+    <g data-phone>
+      <rect x="120" y="12" width="20" height="3" rx="1.5" fill="#7fb53f" />
+      <rect x="120" y="18" width="24" height="13" rx="2" fill="#6a9a36" />
+      <rect x="120" y="34" width="24" height="9" rx="2" fill="#24391a" stroke="#6a9a36" />
+      <rect x="120" y="46" width="24" height="9" rx="2" fill="#24391a" stroke="#6a9a36" />
+    </g>
+    <g data-pointer>
+      <circle data-click cx="77" cy="26" r="4" fill="none" stroke="#7fb53f" opacity="0" />
+      <path d="M77 26v10l3-3 2.4 4.4 1.8-1-2.4-4.3h4.2z" fill="#f3f1ea" />
+    </g>
   </>
 );
-function audio(root: Element) {
+function sites(root: Element) {
   const q = gsap.utils.selector(root);
-  const tl = gsap.timeline();
-  q('[data-bar]').forEach((bar, i) => {
-    tl.to(bar, { scaleY: 0.25 + ((i * 37) % 10) / 14, transformOrigin: '50% 100%', duration: 0.28 + (i % 3) * 0.09, ease: 'sine.inOut', repeat: -1, yoyo: true }, 0);
-  });
-  tl.to(q('[data-wave]'), { scaleY: 0.35, transformOrigin: '50% 50%', duration: 0.6, ease: 'sine.inOut', repeat: -1, yoyo: true }, 0);
+  const tl = gsap.timeline({ repeat: -1, repeatDelay: 0.6 });
+  tl.from(q('[data-desk] > *'), { opacity: 0, scale: 0.85, transformOrigin: '50% 50%', duration: 0.4, ease: 'power2.out', stagger: 0.12 }, 0);
+  tl.from(q('[data-phone] > *'), { opacity: 0, y: 6, duration: 0.4, ease: 'power2.out', stagger: 0.12 }, 0.5);
+  tl.fromTo(q('[data-pointer]'), { x: -30, y: 20 }, { x: 0, y: 0, duration: 0.9, ease: 'power2.inOut' }, 0.6);
+  tl.fromTo(q('[data-click]'), { attr: { r: 2 }, opacity: 0.9 }, { attr: { r: 10 }, opacity: 0, duration: 0.5, ease: 'power1.out' }, 1.5);
+  tl.to(q('[data-desk] > *, [data-phone] > *'), { opacity: 0, duration: 0.3, stagger: 0.02 }, 2.8);
+  tl.to(q('[data-pointer]'), { x: -30, y: 20, duration: 0.5, ease: 'power2.in' }, 2.8);
   return tl;
 }
 
-// ── Design & Digital Media: a path drawing itself, pixels assembling, canvas layers ──
+// ── Print & editorial: a path drawing itself, pixels assembling, stacked pages ──
 const pixels = Array.from({ length: 16 }, (_, i) => ({ x: 114 + (i % 4) * 9, y: 14 + Math.floor(i / 4) * 9, on: [1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14].includes(i) }));
 const DesignArt = () => (
   <>
@@ -101,40 +122,41 @@ function design(root: Element) {
   return tl;
 }
 
-// ── Broadcast & Motion: a play button morphing through media icons, emitting signal ──
-const BroadcastArt = () => (
+// ── Corporate identity: a mark sketched through shapes, with its palette and type ──
+const swatches = ['#7fb53f', '#6a9a36', '#24391a', '#f3f1ea'];
+const IdentityArt = () => (
   <>
-    {[0, 1, 2].map((i) => (
-      <circle key={i} data-arc cx="40" cy="32" r="14" fill="none" stroke="#7fb53f" strokeWidth="1.4" opacity="0" />
-    ))}
-    <circle cx="40" cy="32" r="14" fill="#24391a" stroke="#7fb53f" />
-    <svg x="29" y="21" width="22" height="22" viewBox="0 0 24 24">
-      <path data-morph d={morph.play} fill="#f3f1ea" />
+    <circle cx="28" cy="32" r="24" fill="none" stroke="currentColor" strokeOpacity="0.15" strokeDasharray="2 4" />
+    <path d="M4 32h48M28 8v48" stroke="currentColor" strokeOpacity="0.12" />
+    <svg x="12" y="16" width="32" height="32" viewBox="0 0 24 24">
+      <path data-morph d={morph.circle} fill="#7fb53f" />
     </svg>
-    <g fill="currentColor" fillOpacity="0.5">
-      <rect x="70" y="24" width="82" height="3" rx="1.5" fillOpacity="0.2" />
-      <rect data-bar2 x="70" y="24" width="82" height="3" rx="1.5" fill="#7fb53f" fillOpacity="1" />
-      <rect x="70" y="36" width="54" height="3" rx="1.5" fillOpacity="0.2" />
-    </g>
+    <text x="64" y="28" fontSize="17" fontWeight="800" fill="currentColor">
+      Aa
+    </text>
+    <rect x="94" y="17" width="54" height="3" rx="1.5" fill="currentColor" fillOpacity="0.3" />
+    <rect x="94" y="24" width="38" height="3" rx="1.5" fill="currentColor" fillOpacity="0.2" />
+    {swatches.map((c, i) => (
+      <rect key={c} data-swatch x={64 + i * 21} y="38" width="17" height="17" rx="3" fill={c} stroke="#f3f1ea" strokeOpacity="0.15" />
+    ))}
   </>
 );
-function broadcast(root: Element) {
+function identity(root: Element) {
   const q = gsap.utils.selector(root);
   const tl = gsap.timeline({ repeat: -1 });
-  const shapes = [morph.camera, morph.mic, morph.headphones, morph.pen, morph.play];
-  shapes.forEach((d, i) => tl.to(q('[data-morph]'), { morphSVG: d, duration: 0.6, ease: 'power3.inOut' }, i * 1.2 + 0.6));
-  q('[data-arc]').forEach((arc, i) =>
-    tl.fromTo(arc, { attr: { r: 14 }, opacity: 0.8 }, { attr: { r: 32 }, opacity: 0, duration: 2, ease: 'power1.out', repeat: 2 }, i * 0.66),
-  );
-  tl.fromTo(q('[data-bar2]'), { scaleX: 0 }, { scaleX: 1, transformOrigin: '0% 50%', duration: 6, ease: 'none' }, 0);
+  const shapes = [morph.hexagon, morph.diamond, morph.leaf, morph.circle];
+  shapes.forEach((d, i) => tl.to(q('[data-morph]'), { morphSVG: d, duration: 0.7, ease: 'power3.inOut' }, i * 1.4 + 0.7));
+  tl.from(q('[data-swatch]'), { scale: 0, transformOrigin: '50% 50%', duration: 0.45, ease: 'back.out(2.2)', stagger: 0.1 }, 0);
+  tl.to(q('[data-swatch]'), { y: -3, duration: 0.3, ease: 'sine.inOut', yoyo: true, repeat: 1, stagger: 0.18 }, 2.6);
   return tl;
 }
 
+// In service order: Graphic Design, Website, Branding, Motion.
 const chips: Array<{ Art: () => ReactNode; build: (root: Element) => gsap.core.Timeline }> = [
-  { Art: VideoArt, build: video },
-  { Art: AudioArt, build: audio },
   { Art: DesignArt, build: design },
-  { Art: BroadcastArt, build: broadcast },
+  { Art: SitesArt, build: sites },
+  { Art: IdentityArt, build: identity },
+  { Art: VideoArt, build: video },
 ];
 
 function Chip({ label, index }: { label: string; index: number }) {
@@ -153,11 +175,11 @@ function Chip({ label, index }: { label: string; index: number }) {
   );
 }
 
-/** The four corners of the media ecosystem around the hub. */
+/** Four chips around the hub, one capability from each service. */
 export default function Satellites() {
   return (
     <div className={styles.satellites}>
-      {animation.ecosystem.map((label, i) => (
+      {animation.chips.map((label, i) => (
         <Chip key={label} label={label} index={i} />
       ))}
     </div>

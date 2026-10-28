@@ -101,12 +101,6 @@
 .inner {
   position: relative;
 }
-.sectionHead {
-  border-top-color: var(--rule-light);
-}
-.eyebrow {
-  color: var(--green-bright);
-}
 
 /* ── Headline ── */
 .head {
@@ -236,7 +230,8 @@
 /* ── Cards ── */
 .cards {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  /* One card per service: four across, then two, then one. */
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: var(--gutter);
 }
 .cardItem {
@@ -333,15 +328,18 @@
 }
 
 /* ── Smaller screens ── */
+@media (max-width: 1199px) {
+  .cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 1100px) {
   .title {
     grid-column: 1 / -1;
   }
   .sub {
     grid-column: 1 / span 8;
-  }
-  .cards {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 

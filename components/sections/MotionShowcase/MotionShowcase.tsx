@@ -14,8 +14,8 @@ import styles from './MotionShowcase.module.css';
 const words = animation.headline.split(' ');
 
 /**
- * The motion showcase: a 3D media hub with the four corners of the media ecosystem around it,
- * then three capability cards. Its entrance, depth and loops are GSAP-driven; every loop sleeps
+ * The motion showcase: Thrive's four services in motion. A 3D hub with one object per service,
+ * a capability chip from each service around it, then one card per service. Its entrance, depth and loops are GSAP-driven; every loop sleeps
  * while the section is off screen, and reduced motion gets the static frames.
  */
 export default function MotionShowcase() {
@@ -110,10 +110,6 @@ export default function MotionShowcase() {
         </div>
 
         <div className={`wrap ${styles.inner}`}>
-          <div className={`section-head ${styles.sectionHead}`}>
-            <span className={`t-meta ${styles.eyebrow}`}>{animation.eyebrow}</span>
-          </div>
-
           <header className={styles.head} data-head>
             <h2 id="motion-title" className={styles.title}>
               {words.map((w, i) => (
@@ -141,7 +137,7 @@ export default function MotionShowcase() {
 
           <ul className={styles.cards} data-cards>
             {animation.cards.map((c) => (
-              <FeatureCard key={c.id} card={c} />
+              <FeatureCard key={c.service} card={c} />
             ))}
           </ul>
         </div>
